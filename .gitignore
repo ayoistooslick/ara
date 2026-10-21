@@ -1,0 +1,21 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.coverage
+build/
+dist/
+# User data and machine-specific configuration
+ara.sqlite3
+ara.sqlite3-wal
+ara.sqlite3-shm
+*.sqlite3
+config.toml
+backups/
+memories.json
+ara-memories*.json
+models/
+*.gguf
+.env
