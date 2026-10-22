@@ -127,12 +127,17 @@ class Store:
             cur = db.execute("INSERT INTO memories(kind,content,source,confidence,created_at,updated_at,evidence) VALUES(?,?,?,?,?,?,?)", (kind, content, source, confidence, stamp, stamp, json.dumps([source])))
             return int(cur.lastrowid), conflicts
 
-    def search_memories(self, query: str, limit: int = 8) -> list[dict[str, Any]]:
+    def search_memories(self, query: str, limit: int = 8, kind: str | None = None) -> list[dict[str, Any]]:
         terms = {t.casefold().strip(".,!?;:'\"()[]{}") for t in query.split() if len(t.strip(".,!?;:'\"()[]{}")) > 2}
         if not terms:
             return []
         with self.connect() as db:
-            rows = db.execute("SELECT * FROM memories WHERE status='active'").fetchall()
+            sql = "SELECT * FROM memories WHERE status='active'"
+            params: list[Any] = []
+            if kind:
+                sql += " AND kind=?"
+                params.append(kind)
+            rows = db.execute(sql, params).fetchall()
             scored = []
             for row in rows:
                 tokens = {t.casefold().strip(".,!?;:'\"()[]{}") for t in row["content"].split()}

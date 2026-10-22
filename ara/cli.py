@@ -10,7 +10,7 @@ from pathlib import Path
 
 from . import __version__
 from .config import load_config, write_default_config
-from .engine import ConversationEngine, evaluate_options, identify_learning
+from .engine import BoundedActionLoop, ConversationEngine, evaluate_options, identify_learning, select_goal
 from .model import LocalChatModel, ModelError, runtime_diagnostics
 from .safety import redact_sensitive
 from .store import Store
@@ -55,6 +55,7 @@ def build_parser() -> argparse.ArgumentParser:
     gd = gsub.add_parser("status"); gd.add_argument("id", type=int); gd.add_argument("value", choices=["active", "done", "paused", "cancelled"])
     decide = sub.add_parser("decide", help="Compare explicit scored options and record the decision")
     decide.add_argument("--context", required=True); decide.add_argument("--option", action="append", required=True); decide.add_argument("--score", action="append", default=[], metavar="OPTION=NUMBER")
+    sub.add_parser("autonomous", help="Run a bounded goal-directed action loop")
     decisions = sub.add_parser("decisions", help="Inspect recorded decisions")
     decisions.add_argument("--limit", type=int, default=20)
     tools = sub.add_parser("tools", help="List available local tools")
@@ -74,6 +75,7 @@ def build_parser() -> argparse.ArgumentParser:
     sa = ssub.add_parser("add"); sa.add_argument("name"); sa.add_argument("description"); sa.add_argument("procedure_json", help='JSON list, e.g. \'[{"action":"..."}]\''); sa.add_argument("--conditions", default="")
     sshow = ssub.add_parser("show"); sshow.add_argument("name")
     sr = ssub.add_parser("remove"); sr.add_argument("name")
+    srun = ssub.add_parser("run"); srun.add_argument("name"); srun.add_argument("--yes", action="store_true", help="Approve this skill execution")
     return parser
 
 
@@ -287,24 +289,66 @@ def main(argv: list[str] | None = None) -> int:
                     if input("Type 'write' to approve: ") != "write": print("Write cancelled."); return 1
             print(registry.run(name, inputs, approved=(name != "write_file" or args.yes or sys.stdin.isatty())))
             return 0
-        if args.command == "skill":
-            if args.skill_command == "list":
-                rows = store.skills()
-                for skill in rows: print(f"{skill['name']} v{skill['version']}: {skill['description']} ({len(skill['procedure'])} steps)")
-                if not rows: print("No documented procedures.")
-            elif args.skill_command == "add":
-                try: steps = json.loads(args.procedure_json)
-                except json.JSONDecodeError as exc: print(f"Invalid procedure JSON: {exc}", file=sys.stderr); return 2
-                sid = store.save_skill(args.name, args.description, steps, args.conditions); print(f"Saved skill version as record #{sid}.")
-            elif args.skill_command == "show":
-                matches = [item for item in store.skills() if item["name"] == args.name]
-                if not matches: print("No skill with that name.", file=sys.stderr); return 1
-                item = matches[0]
-                print(f"{item['name']} v{item['version']}: {item['description']}\nConditions: {item['conditions'] or '(none documented)'}\nProcedure:")
-                for index, step in enumerate(item["procedure"], 1): print(f"{index}. {step}")
-            else:
-                if not store.remove_skill(args.name): print("No skill with that name.", file=sys.stderr); return 1
-                print(f"Removed all versions of skill '{args.name}'.")
+        if args.command == "autonomous":
+            if not sys.stdin.isatty():
+                print("autonomous needs an interactive terminal for approvals.", file=sys.stderr)
+                return 2
+            model = _model(config)
+            engine = ConversationEngine(config, store, model)
+            loop = BoundedActionLoop(config, store, model, ToolRegistry(config, store))
+            goals = store.goals("active")
+            if not goals:
+                print("No active goals. Add one with ara goal add.")
+                return 1
+            goal = select_goal(goals)
+            print(f"Active goal: {goal['title']} (priority {goal['priority']}/5)")
+            print("This is a bounded loop. Ara will propose steps, ask before running anything that modifies files, and stop when the goal is done or stuck.")
+            print("Type 'plan' to propose steps, 'run' to execute the next approved step, 'approve' to allow the next file-modifying step, 'status' to see progress, 'stop' to quit.")
+            while True:
+                try:
+                    text = input("autonomous> ").strip()
+                except (EOFError, KeyboardInterrupt):
+                    print("\nAutonomous loop stopped.")
+                    return 0
+                if text in {"stop", "exit", "/quit"}:
+                    print("Autonomous loop stopped.")
+                    return 0
+                if text == "plan":
+                    idea = engine.respond(f"I have an active goal: {goal['title']}. Suggest 2-4 concrete read-only or reversible steps to make progress on it. Return each step as ACTION: <action label> | TOOL: <tool name> | ARGS: <json> | REASON: <why> | PERMISSION: read-only or reversible. Do not suggest destructive actions.")[0]
+                    print("Ara's suggested plan:")
+                    print(idea)
+                    continue
+                if text == "status":
+                    if not loop.log:
+                        print("No steps executed yet.")
+                        continue
+                    for entry in loop.log[-5:]:
+                        print(f"-{entry.get('name','?')} [{entry.get('status','?')}] {entry.get('result') or entry.get('error') or ''}")
+                    continue
+                if text in {"run", "next"}:
+                    step = loop.execute_next(approved=False)
+                    if step is None:
+                        if loop.plan_done():
+                            print("All steps completed.")
+                        else:
+                            print("No pending steps. Use 'plan' first.")
+                    else:
+                        print(f"Step '{step.name}': {step.status}" + (f" -> {step.result}" if step.result else f" - {step.error}"))
+                    continue
+                if text == "approve":
+                    step = loop.execute_next(approved=True)
+                    if step is None:
+                        print("No pending steps need approval.")
+                    else:
+                        print(f"Approved step '{step.name}': {step.status}" + (f" -> {step.result}" if step.result else f" - {step.error}"))
+                    continue
+                if text.startswith("/calc "):
+                    try:
+                        print(ToolRegistry(config, store).run("calculate", {"expression": text[6:]}))
+                    except ToolError as exc:
+                        print(f"Tool error: {exc}", file=sys.stderr)
+                    continue
+                print("Commands: plan, run, approve, status, stop, /calc EXPR")
             return 0
         parser.print_help(); return 0
     except (ValueError, RuntimeError, OSError, ToolError, ModelError) as exc:

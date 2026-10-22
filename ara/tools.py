@@ -50,6 +50,10 @@ def calculate(expression: str) -> int | float:
         raise ToolError(f"Invalid calculation: {exc}") from exc
 
 
+class SkillExecutionError(RuntimeError):
+    pass
+
+
 class ToolRegistry:
     def __init__(self, config: Config, store: Store):
         self.config, self.store = config, store
@@ -58,6 +62,7 @@ class ToolRegistry:
             "read_file": {"description": "Read a UTF-8 text file under an allowed root", "permission": "read-only"},
             "list_directory": {"description": "List entries under an allowed root", "permission": "read-only"},
             "write_file": {"description": "Create or replace a text file under an allowed root", "permission": "reversible; explicit approval required"},
+            "run_skill": {"description": "Execute a documented reusable procedure step by step", "permission": "reversible; explicit approval required"},
         }
 
     def _resolve(self, path: str) -> Path:
@@ -95,6 +100,8 @@ class ToolRegistry:
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_text(content, encoding="utf-8")
                 result = f"Wrote {len(content)} characters to {path}"
+            elif name == "run_skill":
+                result = self._run_skill(str(arguments["skill_name"]), approved)
             else:
                 raise ToolError(f"Unknown tool: {name}")
             audit_arguments = arguments
@@ -108,6 +115,8 @@ class ToolRegistry:
             elif name == "write_file":
                 audit_arguments = {"path": arguments.get("path"), "content_length": len(str(arguments.get("content", "")))}
                 audit_result = result
+            elif name == "run_skill":
+                audit_arguments = {"skill_name": arguments.get("skill_name"), "approved": approved}
             self.store.record_tool(name, audit_arguments, "success", audit_result)
             return result
         except Exception as exc:
@@ -116,7 +125,76 @@ class ToolRegistry:
                 audit_arguments = {"path": arguments.get("path"), "content_length": len(str(arguments.get("content", "")))}
             elif name in {"read_file", "list_directory"}:
                 audit_arguments = {"path": arguments.get("path")}
+            elif name == "run_skill":
+                audit_arguments = {"skill_name": arguments.get("skill_name"), "approved": approved}
             self.store.record_tool(name, audit_arguments, "error", str(exc))
             if isinstance(exc, ToolError):
                 raise
             raise ToolError(str(exc)) from exc
+
+    def _run_skill(self, skill_name: str, approved: bool) -> str:
+        """Execute a documented procedure step by step.
+
+        Each step must declare an action that maps to a registered tool. Steps are run
+        in order; the first failure stops the procedure. This does not grant the skill
+        any permissions beyond what the caller already approved.
+        """
+        if not approved:
+            raise ToolError("Running a skill modifies state and needs explicit approval.")
+        matches = [item for item in self.store.skills() if item["name"] == skill_name]
+        if not matches:
+            raise ToolError(f"No skill named {skill_name!r}")
+        skill = matches[-1]
+        procedure = skill["procedure"]
+        if not procedure:
+            raise ToolError(f"Skill {skill_name!r} has no documented steps")
+        results: list[str] = []
+        for index, step in enumerate(procedure, 1):
+            action = str(step.get("action", "")).strip()
+            if not action:
+                results.append(f"Step {index}: skipped (no action)")
+                continue
+            tool_name = _action_to_tool(action)
+            inputs = {k: v for k, v in step.items() if k not in {"action", "verify", "on_failure"}}
+            try:
+                step_approved = approved or (skill.get("permission", "read-only") != "read-only")
+                step_result = self.run(tool_name, inputs, approved=step_approved)
+                results.append(f"Step {index} [{action}]: ok - {step_result}")
+            except ToolError as exc:
+                on_failure = str(step.get("on_failure", "stop")).strip()
+                results.append(f"Step {index} [{action}]: failed - {exc}")
+                if on_failure == "stop":
+                    return "\n".join(results) + f"\n\nProcedure stopped at step {index}."
+                results.append(f"  on_failure={on_failure}; continuing.")
+        return "\n".join(results) + "\n\nProcedure completed."
+
+
+def _action_to_tool(action: str) -> str:
+    """Map a human-readable action label to a registered tool name.
+
+    This is deliberately narrow. Skills cannot invent new tools; they reuse the
+    actions Ara already exposes.
+    """
+    mapping = {
+        "read a file": "read_file",
+        "read file": "read_file",
+        "list a directory": "list_directory",
+        "list directory": "list_directory",
+        "list a folder": "list_directory",
+        "list folder": "list_directory",
+        "write a file": "write_file",
+        "write file": "write_file",
+        "create a file": "write_file",
+        "create file": "write_file",
+        "calculate": "calculate",
+        "do arithmetic": "calculate",
+    }
+    lowered = action.lower().strip()
+    if lowered in mapping:
+        return mapping[lowered]
+    for key, tool in mapping.items():
+        if lowered.startswith(key):
+            return tool
+    known = ', '.join(sorted(mapping.keys()))
+    raise ToolError('Unknown skill action ' + repr(action) + '; known actions: ' + known)
+

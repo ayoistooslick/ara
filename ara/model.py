@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import urllib.error
 import urllib.request
 from urllib.parse import urlparse
@@ -12,8 +13,28 @@ class ModelError(RuntimeError):
     pass
 
 
-class LocalChatModel:
-    """Client for a local OpenAI-compatible inference server, including llama.cpp."""
+class ModelAdapter:
+    """Abstract interface for language model backends.
+
+    Ara's identity is separate from any specific model. The adapter translates
+    between Ara's prompt format and the backend's API. Swap the backend without
+    changing the rest of the application.
+    """
+
+    def status(self) -> tuple[bool, str]:
+        raise NotImplementedError
+
+    def generate(self, messages: list[dict[str, str]]) -> str:
+        raise NotImplementedError
+
+
+class LocalChatModel(ModelAdapter):
+    """Client for a local OpenAI-compatible inference server, including llama.cpp.
+
+    The configured model_name is sent as a label to the server; the server decides
+    which loaded model actually responds. Ara does not care whether the weights are
+    Qwen, Mistral, Llama, or another supported model.
+    """
 
     def __init__(self, config: Config):
         self.config = config
@@ -38,8 +59,19 @@ class LocalChatModel:
             return False, f"No compatible model server responded at {self.config.model_url}: {exc}"
 
     def generate(self, messages: list[dict[str, str]]) -> str:
-        body = json.dumps({"model": self.config.model_name, "messages": messages, "temperature": 0.7, "max_tokens": self.config.max_tokens, "stream": False}).encode("utf-8")
-        req = urllib.request.Request(self.config.model_url + "/chat/completions", data=body, headers={"Content-Type": "application/json", "Accept": "application/json"}, method="POST")
+        body = json.dumps({
+            "model": self.config.model_name,
+            "messages": messages,
+            "temperature": 0.7,
+            "max_tokens": self.config.max_tokens,
+            "stream": False,
+        }).encode("utf-8")
+        req = urllib.request.Request(
+            self.config.model_url + "/chat/completions",
+            data=body,
+            headers={"Content-Type": "application/json", "Accept": "application/json"},
+            method="POST",
+        )
         try:
             with urllib.request.urlopen(req, timeout=self.config.request_timeout) as response:
                 result = json.loads(response.read(8_000_000).decode("utf-8"))
@@ -59,7 +91,6 @@ class LocalChatModel:
 def runtime_diagnostics(config: Config) -> list[str]:
     available = None
     try:
-        import os
         available = os.sysconf("SC_PAGE_SIZE") * os.sysconf("SC_AVPHYS_PAGES")
     except (AttributeError, OSError, ValueError):
         pass

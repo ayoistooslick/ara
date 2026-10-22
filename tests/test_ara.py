@@ -165,7 +165,9 @@ class AraTests(unittest.TestCase):
     def test_model_rejects_remote_by_default_and_handles_offline(self):
         cfg = Config(home=self.home, model_url="https://example.org/v1")
         with self.assertRaises(ModelError): LocalChatModel(cfg)
-        local = LocalChatModel(self.config)
+        # Use a port that is not running a model server
+        offline_config = Config(home=self.home, model_url="http://127.0.0.1:19999/v1")
+        local = LocalChatModel(offline_config)
         ok, message = local.status()
         self.assertFalse(ok)
         self.assertIn("No compatible model server", message)
@@ -206,6 +208,349 @@ class AraTests(unittest.TestCase):
 
     def test_skill_json_failure_is_not_hidden(self):
         with self.assertRaises(ValueError): self.store.save_skill("x", "bad", [{"not-action": "none"}])
+
+
+class TestModelErrorHandling(AraTests):
+    """Test model error paths without needing a real server."""
+
+    def test_model_rejects_invalid_url(self):
+        with self.assertRaises(ModelError):
+            LocalChatModel(Config(home=self.home, model_url="not-a-url"))
+
+    def test_model_rejects_remote_by_default(self):
+        with self.assertRaises(ModelError):
+            LocalChatModel(Config(home=self.home, model_url="http://192.168.1.1:8080/v1"))
+
+    def test_model_accepts_remote_when_allowed(self):
+        model = LocalChatModel(Config(home=self.home, model_url="http://192.168.1.1:8080/v1", allow_remote_model=True))
+        self.assertIsInstance(model, LocalChatModel)
+
+    def test_model_rejects_https_localhost(self):
+        with self.assertRaises(ModelError):
+            LocalChatModel(Config(home=self.home, model_url="https://127.0.0.1:8080/v1"))
+
+
+class TestConversationContinuity(AraTests):
+    """Test multi-turn conversation with a fake model to verify context flow."""
+
+    def test_multi_turn_context_accumulating(self):
+        model = FakeModel("reply")
+        engine = ConversationEngine(self.config, self.store, model, "ctx-test")
+        engine.respond("First user message")
+        engine.respond("Second user message")
+        engine.respond("Third user message")
+        history = self.store.recent_messages("ctx-test", 10)
+        self.assertEqual(len(history), 6)
+        self.assertEqual(history[0]["role"], "user")
+        self.assertEqual(history[0]["content"], "First user message")
+
+    def test_system_message_includes_identity_and_memories(self):
+        self.store.set_identity("temperament", "test-temperament")
+        self.store.add_memory("fact", "User likes tea", confidence=0.9)
+        model = FakeModel("ok")
+        engine = ConversationEngine(self.config, self.store, model, "sys-test")
+        engine.respond("Do I like tea?")
+        system = model.received[0]["content"]
+        self.assertIn("test-temperament", system)
+        self.assertIn("User likes tea", system)
+
+    def test_correction_surfaces_in_system_message(self):
+        self.store.add_memory("fact", "User works days", confidence=0.8)
+        self.store.add_memory("correction", "User actually works nights", confidence=1.0)
+        model = FakeModel("ok")
+        engine = ConversationEngine(self.config, self.store, model, "corr-test")
+        engine.respond("When does the user work?")
+        system = model.received[0]["content"]
+        self.assertIn("User actually works nights", system)
+
+
+class TestMemoryLearningApplication(AraTests):
+    """Test that learned information is retrieved and applied in later turns."""
+
+    def test_preference_is_retrieved_and_included_in_context(self):
+        self.store.add_memory("preference", "User prefers concise answers", confidence=0.9)
+        model = FakeModel("reply")
+        engine = ConversationEngine(self.config, self.store, model, "pref-test")
+        engine.respond("I prefer concise answers in our chat")
+        system = model.received[0]["content"]
+        self.assertIn("User prefers concise answers", system)
+
+    def test_forgotten_memory_not_included(self):
+        mid, _ = self.store.add_memory("fact", "Secret detail", confidence=0.8)
+        self.store.forget_memory(mid)
+        model = FakeModel("reply")
+        engine = ConversationEngine(self.config, self.store, model, "forget-test")
+        engine.respond("Tell me the secret")
+        system = model.received[0]["content"]
+        self.assertNotIn("Secret detail", system)
+
+    def test_sensitivity_rejection_prevents_memory_storage(self):
+        model = FakeModel("reply")
+        engine = ConversationEngine(self.config, self.store, model, "sens-test")
+        _, learning = engine.respond("My password is SecretPass123 and remember it")
+        self.assertTrue(learning.sensitive_rejected)
+        self.assertIsNone(learning.saved_id)
+
+
+class TestIdentityPersistence(AraTests):
+    """Test that identity fields survive restarts."""
+
+    def test_identity_fields_persist(self):
+        self.store.set_identity("temperament", "warm and direct")
+        self.store.set_identity("values", "privacy first")
+        reopened = Store(self.config.db_path)
+        ident = reopened.get_identity()
+        self.assertEqual(ident["temperament"], "warm and direct")
+        self.assertEqual(ident["values"], "privacy first")
+
+    def test_default_identity_fields_exist(self):
+        ident = self.store.get_identity()
+        self.assertIn("temperament", ident)
+        self.assertIn("values", ident)
+        self.assertIn("communication", ident)
+
+
+class TestGoalPersistence(AraTests):
+    """Test that goals survive restarts and can be tracked."""
+
+    def test_goals_persist_and_can_be_closed(self):
+        gid = self.store.add_goal("Learn Python", "Study every evening", priority=4)
+        reopened = Store(self.config.db_path)
+        goals = reopened.goals()
+        self.assertEqual(len(goals), 1)
+        self.assertEqual(goals[0]["title"], "Learn Python")
+        self.assertTrue(reopened.set_goal_status(gid, "done"))
+
+    def test_select_goal_returns_highest_priority(self):
+        low = self.store.add_goal("Low", priority=1)
+        high = self.store.add_goal("High", priority=5)
+        selected = select_goal(self.store.goals())
+        self.assertEqual(selected["id"], high)
+
+
+class TestActionSelection(AraTests):
+    """Test the decision and action selection mechanisms."""
+
+    def test_evaluate_options_selects_highest_score(self):
+        chosen, rationale = evaluate_options(["A", "B", "C"], {"A": 1.0, "B": 5.0, "C": 3.0})
+        self.assertEqual(chosen, "B")
+        self.assertIn("5", rationale)
+
+    def test_select_goal_returns_none_for_empty_list(self):
+        self.assertIsNone(select_goal([]))
+
+
+class TestOutcomeReplanning(AraTests):
+    """Test the bounded action loop's replanning behavior."""
+
+    def test_execute_next_runs_pending_step(self):
+        from ara.tools import ToolRegistry
+        from ara.engine import BoundedActionLoop, PlannedAction
+        loop = BoundedActionLoop(self.config, self.store, FakeModel("done"), ToolRegistry(self.config, self.store))
+        step = PlannedAction("calc", "calculate", {"expression": "1+1"}, "test", "read-only")
+        loop.plan_for("test goal", [step])
+        executed = loop.execute_next()
+        self.assertEqual(executed.status, "ok")
+        self.assertEqual(executed.result, "2")
+
+    def test_execute_next_blocks_unapproved_writes(self):
+        from ara.tools import ToolRegistry
+        from ara.engine import BoundedActionLoop, PlannedAction
+        loop = BoundedActionLoop(self.config, self.store, FakeModel("done"), ToolRegistry(self.config, self.store))
+        step = PlannedAction("write", "write_file", {"path": str(self.root / "x.txt"), "content": "x"}, "test", "destructive")
+        loop.plan_for("test", [step])
+        executed = loop.execute_next(approved=False)
+        self.assertEqual(executed.status, "blocked")
+        self.assertIn("approval", executed.error)
+
+    def test_needs_replan_after_failure(self):
+        from ara.tools import ToolRegistry
+        from ara.engine import BoundedActionLoop, PlannedAction
+        loop = BoundedActionLoop(self.config, self.store, FakeModel("done"), ToolRegistry(self.config, self.store))
+        step1 = PlannedAction("bad", "calculate", {"expression": "bad"}, "test", "read-only")
+        step2 = PlannedAction("good", "calculate", {"expression": "1+1"}, "test", "read-only")
+        loop.plan_for("test", [step1, step2])
+        loop.execute_next()  # step1 fails
+        self.assertTrue(loop.needs_replan())
+
+    def test_plan_done_when_all_complete(self):
+        from ara.tools import ToolRegistry
+        from ara.engine import BoundedActionLoop, PlannedAction
+        loop = BoundedActionLoop(self.config, self.store, FakeModel("done"), ToolRegistry(self.config, self.store))
+        step = PlannedAction("calc", "calculate", {"expression": "1+1"}, "test", "read-only")
+        loop.plan_for("test", [step])
+        loop.execute_next()
+        self.assertTrue(loop.plan_done())
+
+
+class TestSkillExecution(AraTests):
+    """Test that skills can be saved and executed."""
+
+    def test_execute_simple_skill(self):
+        steps = [{"action": "calculate", "expression": "6 * 7"}]
+        self.store.save_skill("multiply-demo", "A simple calculation", steps)
+        from ara.tools import ToolRegistry
+        result = ToolRegistry(self.config, self.store).run("run_skill", {"skill_name": "multiply-demo"}, approved=True)
+        self.assertIn("42", result)
+        self.assertIn("Procedure completed", result)
+
+    def test_execute_skill_with_file_operations(self):
+        steps = [
+            {"action": "write a file", "path": str(self.root / "from-skill.txt"), "content": "written by skill", "permission": "reversible"},
+            {"action": "read a file", "path": str(self.root / "from-skill.txt")},
+        ]
+        self.store.save_skill("write-and-read", "Write then read", steps, "Only with approval")
+        from ara.tools import ToolRegistry
+        result = ToolRegistry(self.config, self.store).run("run_skill", {"skill_name": "write-and-read"}, approved=True)
+        self.assertIn("written by skill", result)
+        self.assertIn("Procedure completed", result)
+
+    def test_skill_execution_fails_on_unknown_action(self):
+        steps = [{"action": "teleport to mars"}]
+        self.store.save_skill("impossible", "A useless skill", steps)
+        from ara.tools import ToolRegistry
+        with self.assertRaises(ToolError) as ctx:
+            ToolRegistry(self.config, self.store).run("run_skill", {"skill_name": "impossible"}, approved=True)
+        self.assertIn("Unknown skill action", str(ctx.exception))
+
+    def test_skill_stops_on_failure_with_stop_policy(self):
+        steps = [
+            {"action": "calculate", "expression": "1 / 0"},
+            {"action": "calculate", "expression": "1 + 1"},
+        ]
+        self.store.save_skill("failing", "Will fail", steps)
+        from ara.tools import ToolRegistry
+        result = ToolRegistry(self.config, self.store).run("run_skill", {"skill_name": "failing"}, approved=True)
+        self.assertIn("Procedure stopped", result)
+        self.assertNotIn("Procedure completed", result)
+
+    def test_skill_requires_approval(self):
+        steps = [{"action": "calculate", "expression": "1+1"}]
+        self.store.save_skill("needs-approval", "Needs ok", steps)
+        from ara.tools import ToolRegistry
+        with self.assertRaises(ToolError) as ctx:
+            ToolRegistry(self.config, self.store).run("run_skill", {"skill_name": "needs-approval"}, approved=False)
+        self.assertIn("needs explicit approval", str(ctx.exception))
+
+
+class TestPermissionBoundaries(AraTests):
+    """Test that tool permissions are enforced correctly."""
+
+    def test_read_only_operation_works_without_approval(self):
+        registry = ToolRegistry(self.config, self.store)
+        self.assertEqual(registry.run("calculate", {"expression": "10 + 5"}), "15")
+
+    def test_write_file_without_approval_fails(self):
+        registry = ToolRegistry(self.config, self.store)
+        target = self.root / "unapproved.txt"
+        with self.assertRaises(ToolError) as ctx:
+            registry.run("write_file", {"path": str(target), "content": "x"})
+        self.assertIn("needs explicit approval", str(ctx.exception))
+        self.assertFalse(target.exists())
+
+    def test_audit_log_redacts_file_contents(self):
+        registry = ToolRegistry(self.config, self.store)
+        target = self.root / "secret.txt"
+        registry.run("write_file", {"path": str(target), "content": "password=secret123"}, approved=True)
+        registry.run("read_file", {"path": str(target)})
+        with self.store.connect() as db:
+            rows = db.execute("SELECT input_json, output FROM tool_runs").fetchall()
+            audit = " ".join(str(r[0]) + str(r[1]) for r in rows)
+        self.assertNotIn("secret123", audit)
+
+
+class TestBackupAndRestore(AraTests):
+    """Test backup integrity and restoration."""
+
+    def test_backup_contains_all_tables(self):
+        self.store.add_memory("fact", "backup test content")
+        self.store.add_goal("Test goal", priority=3)
+        backup_path = self.root / "full-backup.sqlite3"
+        self.store.backup_to(backup_path)
+        self.assertTrue(Store.check_backup(backup_path))
+        restored = Store(backup_path)
+        self.assertEqual(restored.list_memories()[0]["content"], "backup test content")
+
+    def test_backup_rejects_same_path(self):
+        with self.assertRaises(ValueError):
+            self.store.backup_to(self.config.db_path)
+
+    def test_check_backup_fails_for_corrupt_file(self):
+        corrupt = self.root / "corrupt.sqlite3"
+        corrupt.write_bytes(b"not a database")
+        self.assertFalse(Store.check_backup(corrupt))
+
+
+class TestOfflineOperation(AraTests):
+    """Test that Ara works without network access for local operations."""
+
+    def test_memory_commands_work_offline(self):
+        result = subprocess.run(
+            [sys.executable, "-m", "ara", "memory", "add", "offline fact", "--kind", "fact"],
+            cwd=ROOT, env=dict(os.environ, ARA_HOME=str(self.home), PYTHONPATH=str(ROOT)),
+            text=True, capture_output=True, timeout=10,
+        )
+        self.assertEqual(result.returncode, 0)
+        self.assertIn("Stored memory", result.stdout)
+
+    def test_goal_commands_work_offline(self):
+        result = subprocess.run(
+            [sys.executable, "-m", "ara", "goal", "add", "Offline goal", "--priority", "3"],
+            cwd=ROOT, env=dict(os.environ, ARA_HOME=str(self.home), PYTHONPATH=str(ROOT)),
+            text=True, capture_output=True, timeout=10,
+        )
+        self.assertEqual(result.returncode, 0)
+        self.assertIn("Added goal", result.stdout)
+
+    def test_tool_calculate_works_offline(self):
+        result = subprocess.run(
+            [sys.executable, "-m", "ara", "tool", "calculate", "10*2"],
+            cwd=ROOT, env=dict(os.environ, ARA_HOME=str(self.home), PYTHONPATH=str(ROOT)),
+            text=True, capture_output=True, timeout=10,
+        )
+        self.assertEqual(result.returncode, 0)
+        self.assertIn("20", result.stdout)
+
+
+class TestConfigurationFailures(AraTests):
+    """Test that bad configuration is caught early."""
+
+    def test_invalid_toml_reports_error(self):
+        (self.home / "config.toml").write_text("[model\nbad syntax")
+        with self.assertRaises(ValueError) as ctx:
+            load_config(self.home)
+        self.assertIn("Cannot read", str(ctx.exception))
+
+    def test_negative_max_tokens_rejected(self):
+        (self.home / "config.toml").write_text("[model\nmax_tokens = -1\n")
+        with self.assertRaises(ValueError):
+            load_config(self.home)
+
+
+class TestDataIntegrityAcrossRestarts(AraTests):
+    """Test that data survives store re-openings."""
+
+    def test_messages_persist(self):
+        self.store.add_message("conv1", "user", "Hello")
+        self.store.add_message("conv1", "assistant", "Hi there")
+        reopened = Store(self.config.db_path)
+        msgs = reopened.recent_messages("conv1", 10)
+        self.assertEqual(len(msgs), 2)
+
+    def test_memories_persist(self):
+        self.store.add_memory("fact", "Persistent fact", confidence=0.9)
+        reopened = Store(self.config.db_path)
+        rows = reopened.list_memories()
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]["content"], "Persistent fact")
+
+    def test_active_conversation_resumes(self):
+        first = Store(self.config.db_path)
+        first_id = first.active_conversation_id()
+        second = Store(self.config.db_path)
+        self.assertEqual(second.active_conversation_id(), first_id)
+
+
 
 
 if __name__ == "__main__":
