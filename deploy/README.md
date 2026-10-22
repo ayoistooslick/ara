@@ -7,7 +7,7 @@ This is a Linux deployment example for a small VPS or home server. The web serve
 ## Requirements
 
 - A Linux host with Python 3.10+, systemd, and a public DNS name.
-- A local OpenAI-compatible model server reachable at `127.0.0.1:8080` (or your own private address with `allow_remote = true`).
+- One inference backend: a hosted ara-ng endpoint (`ARA_HOSTED_URL`, HTTPS, optional `ARA_HOSTED_API_KEY`) or a local OpenAI-compatible server reachable at `127.0.0.1:8080` (or a private address with `allow_remote = true`). Without either, chat still works but every reply is labelled retrieval-only.
 - Caddy 2 for TLS.
 - Enough RAM/disk for the model and the SQLite database. The model and Ara do not have to run as the same user.
 
@@ -107,7 +107,7 @@ SQLite backups include conversations and memories. Store them encrypted and acce
 
 Run the model server under its own service or container, bound to loopback. Configure the model URL and name in `/etc/ara/ara.env`. Vision and transcription are separate services; leave them unset if unavailable so the web UI shows clear 503 errors instead of fake results.
 
-Do not set `model.allow_remote = true` unless the remote endpoint is under your control and the privacy trade-off is intentional. Do not point Ara at a public AI API by default.
+Do not set `model.allow_remote = true` unless the remote endpoint is under your control and the privacy trade-off is intentional. A hosted ara-ng endpoint is configured separately through `ARA_HOSTED_URL` and is used only when set; keep its key in `/etc/ara/ara.env`, never in `config.toml`.
 
 ## What this setup does not provide
 

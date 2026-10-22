@@ -203,8 +203,11 @@
     await Promise.all([loadState(), loadConversation()]);
     setView(targetView);
     dom.message.focus();
-    if (state.stateData && state.stateData.model && !state.stateData.model.reachable) {
-      toast("The model server is not reachable yet. Ara can show news and memory, but replies need the local model.", "warn", 8000);
+    const active = state.stateData && state.stateData.model ? state.stateData.model.active : "local";
+    if (active === "retrieval-only") {
+      toast("No language model is connected. Replies are retrieved notes, labelled retrieval-only — not generated text.", "warn", 9000);
+    } else if (state.stateData && state.stateData.model && !state.stateData.model.reachable) {
+      toast("The configured model is not reachable yet. Replies will fall back to labelled retrieval until it answers.", "warn", 9000);
     }
   }
 
@@ -281,19 +284,33 @@
     }
   }
 
+  function shortModel(name) {
+    if (!name) return "";
+    const base = String(name).split(/[\\/]/).pop().replace(/\.gguf$/i, "");
+    return base.length > 30 ? `${base.slice(0, 29)}…` : base;
+  }
+
   function renderState(data) {
     const model = data.model || {};
+    const active = model.active || "local";
     const reachable = Boolean(model.reachable);
-    dom.modelPill.textContent = reachable
-      ? `model · ${model.models && model.models[0] ? model.models[0] : data.profile ? data.profile.effective : "local"}`
-      : "model · offline";
-    dom.modelPill.classList.toggle("ok", reachable);
-    dom.modelPill.classList.toggle("bad", !reachable);
+    const hosted = active === "hosted";
+    const retrieval = active === "retrieval-only";
+    const name = shortModel(model.served_model || (model.models && model.models[0]) || (model.configured_model !== "none" ? model.configured_model : null));
+    dom.modelPill.textContent = retrieval
+      ? "retrieval-only"
+      : reachable
+        ? `${hosted ? "hosted" : "local"} · ${name || "model"}`
+        : `${hosted ? "hosted" : "local"} · offline`;
+    dom.modelPill.classList.toggle("ok", reachable && !retrieval);
+    dom.modelPill.classList.toggle("bad", !reachable || retrieval);
     dom.modelPill.title = model.message || "";
-    dom.railDot.className = "status-dot " + (reachable ? "ok" : "bad");
-    dom.railStatus.textContent = reachable
-      ? `Local model ready · ${data.profile ? data.profile.effective : "standard"} profile`
-      : "Model server unreachable";
+    dom.railDot.className = "status-dot " + (reachable && !retrieval ? "ok" : "bad");
+    dom.railStatus.textContent = retrieval
+      ? "Retrieval-only · no model connected"
+      : reachable
+        ? `${hosted ? "Hosted ara-ng" : "Local model"} ready · ${data.profile ? data.profile.effective : "standard"} profile`
+        : "Model configured, not reachable";
 
     renderAbout(data);
     if (state.memory.length || state.view === "memory") renderMemory(state.memory);
@@ -308,8 +325,9 @@
     runtime.replaceChildren();
     const runtimeRows = [
       ["Version", data.version],
-      ["Model", model.configured_model || "not configured"],
-      ["Reachable", model.reachable ? "yes" : "no — start the local model server"],
+      ["Backend", model.active || "local"],
+      ["Model", shortModel(model.served_model || (model.configured_model !== "none" ? model.configured_model : null)) || "none — retrieval-only"],
+      ["Reachable", model.reachable ? "yes" : "no — replies fall back to labelled retrieval"],
       ["Models served", (model.models || []).join(", ") || "none reported"],
       ["Context", model.context_length ? `${model.context_length} tokens` : "not reported by the server"],
       ["Profile", `${profile.effective || "standard"} (requested: ${profile.requested || "auto"})`],
@@ -567,6 +585,14 @@
           }
           interpretation = payload.interpretation;
           learning = payload.learning;
+          if (payload.answer_kind === "retrieval") {
+            addMeta(target.meta, "retrieval-only · not model text", "amber");
+          } else if (payload.backend === "hosted") {
+            addMeta(target.meta, "hosted ara-ng", "green");
+          }
+          if (payload.backend_error) {
+            toast(payload.backend_error, "warn", 9000);
+          }
         } else if (payload.type === "error") {
           failure = payload.message || "Ara could not finish this reply.";
         }

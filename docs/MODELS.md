@@ -1,23 +1,25 @@
 # Models, adapters, and hardware
 
-Ara separates its identity and behaviour from the underlying language model. The model is a replaceable component reached through `ara.model.ModelAdapter`; the current production adapter is an OpenAI-compatible HTTP client.
+Ara separates its identity and behaviour from the underlying language model. The model is a replaceable component reached through `ara.model.ModelAdapter`; the adapters are OpenAI-compatible HTTP clients for a hosted ara-ng endpoint or a local server.
 
 ## What Ara does and does not do
 
 Ara:
 
-- sends prompts to an explicitly configured inference server;
+- picks the first configured backend: hosted ara-ng, then a local server, then retrieval-only;
 - discovers whether that server is reachable and which model IDs it serves;
 - fits messages into a character budget and enforces `max_tokens`, a request timeout, and cooperative streaming cancellation;
-- refuses non-loopback endpoints unless `model.allow_remote = true`;
-- reports the configured weights file's size when `model.path` is set.
+- refuses non-loopback local endpoints unless `model.allow_remote = true`;
+- requires HTTPS for a hosted endpoint (HTTP is allowed only on loopback, for a local test server);
+- reports the configured weights file's size when `model.path` is set;
+- downloads optional weights only when you run `ara model download`, with size, disk, RAM, licence, resumable transfer, and a checksum check.
 
 Ara does not:
 
 - load weights, run a tokenizer, or perform inference in-process;
-- download models automatically;
+- download anything during install or a normal chat start;
 - assume a text endpoint can process images or audio;
-- expose cloud inference by default.
+- silently enable cloud inference.
 
 `model.path` is used for diagnostics and fit warnings. The server owns the actual weights. If the path and the server's loaded model disagree, the server wins.
 
@@ -27,6 +29,10 @@ Ara does not:
 
 ```toml
 [model]
+# auto = hosted when hosted_url is set, else the local server.
+backend = "auto"          # auto | hosted | local | retrieval
+# hosted_url = "https://your-ara-ng-endpoint.example/v1"
+hosted_model = "ara-ng"
 url = "http://127.0.0.1:8080/v1"
 name = "the-model-id-your-server-serves"
 # Optional: used only for size diagnostics.
@@ -42,7 +48,19 @@ max_context_chars = 12000
 request_timeout = 120
 ```
 
-Environment overrides: `ARA_MODEL_URL`, `ARA_MODEL_NAME`, `ARA_MODEL_PATH`, `ARA_MAX_TOKENS`, `ARA_TEMPERATURE`, `ARA_MODEL_PROFILE`, `ARA_EMBEDDING_URL`, `ARA_EMBEDDING_MODEL`, `ARA_VISION_URL`, `ARA_VISION_MODEL`, `ARA_AUDIO_URL`, `ARA_AUDIO_MODEL`, `ARA_HOME`.
+Environment overrides: `ARA_BACKEND`, `ARA_HOSTED_URL`, `ARA_HOSTED_API_KEY`, `ARA_HOSTED_MODEL`, `ARA_MODEL_URL`, `ARA_MODEL_NAME`, `ARA_MODEL_PATH`, `ARA_MAX_TOKENS`, `ARA_TEMPERATURE`, `ARA_MODEL_PROFILE`, `ARA_EMBEDDING_URL`, `ARA_EMBEDDING_MODEL`, `ARA_VISION_URL`, `ARA_VISION_MODEL`, `ARA_AUDIO_URL`, `ARA_AUDIO_MODEL`, `ARA_HOME`.
+
+The hosted API key is deliberately environment-only. It is never written to `config.toml`, a backup, or a log line.
+
+## Hosted ara-ng
+
+```sh
+ARA_HOSTED_URL="https://your-endpoint.example/v1" \
+ARA_HOSTED_API_KEY="…" \
+ara ask "How far?"
+```
+
+With `backend = "auto"`, a configured `hosted_url` wins over the local server. Force a backend with `ARA_BACKEND=hosted`, `local`, or `retrieval`. Hosted requests use the OpenAI chat-completions shape with `model: "ara-ng"`, a 60-second ceiling, and the same streaming parser as the local adapter. HTTP 401/403/429 produce short, non-secret error messages. No hosted service ships with this repository, so that path is tested against a local protocol stub, not a live ara-ng deployment.
 
 The model `name` is sent as the API `model` field. Many single-model servers ignore it or expect a specific alias; check `ara model status` and the server's `/v1/models` response.
 
@@ -67,7 +85,18 @@ ara model status
 ara ask "Explain a Nigerian mortgage in simple English."
 ```
 
-Ara's test suite uses a local stub server to exercise request encoding, streaming, malformed responses, timeouts, and unreachable servers. Those tests do **not** establish answer quality, African-language fluency, or speed on real weights.
+## Optional local downloads
+
+```sh
+ara model download qwen3-1.7b     # about 1.1 GB, about 2 GB free RAM
+ara model download qwen3-4b       # about 2.5 GB, about 4 GB free RAM
+```
+
+Ara prints the size, required free storage, RAM guidance, and licence before asking. It resumes an interrupted `.part` file with a Range request, hashes as it writes, verifies against the publisher's SHA-256 (`x-linked-etag`) when available, and renames the file only after verification. A lock file prevents two downloads of the same target; a bad checksum deletes the partial file. Use `--out` and `--sha256` to supply your own URL and expected digest. Weights land in `$ARA_HOME/models` and are never committed.
+
+On this sandbox, a real Qwen3-0.6B Q8_0 server answered a two-sentence NEPA question with a 23.5 s first token and 32 s completion at 2,048 context on 2 vCPU. This is a measurement of one small model, not a general speed or quality claim.
+
+Ara's test suite uses local stub servers to exercise request encoding, streaming, malformed responses, timeouts, unreachable servers, hosted auth, and downloads. Those tests do **not** establish answer quality, African-language fluency, or speed on larger weights.
 
 ## Hardware profiles
 

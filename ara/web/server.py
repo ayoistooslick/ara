@@ -32,7 +32,7 @@ from ..brand import static_frog
 from ..config import Config, effective_profile
 from ..embeddings import Embedder, get_embedder, retrieval_report
 from ..engine import ConversationEngine
-from ..model import LocalChatModel, ModelError
+from ..model import ModelError, backend_name, get_model
 from ..news import news_report
 from ..nigeria import KnowledgeBase
 from ..perception import (
@@ -149,10 +149,32 @@ class AraServer(ThreadingHTTPServer):
             if cached and time.time() - cached[0] < 15:
                 return cached[1]
         try:
-            model = LocalChatModel(self.config)
-            state = model.capabilities()
+            model = get_model(self.config)
+            if model is None:
+                state = {
+                    "backend": "retrieval-only",
+                    "active": "retrieval-only",
+                    "reachable": False,
+                    "message": "No model is configured. Replies use stored notes and the Nigerian knowledge base, and are labelled retrieval-only.",
+                    "models": [],
+                    "vision": False,
+                    "streaming": False,
+                    "configured_model": "none",
+                }
+            else:
+                state = model.capabilities()
+                state["active"] = backend_name(model)
+                if not state.get("reachable"):
+                    state["message"] = str(state.get("message", "")) + " Replies fall back to labelled retrieval until the model is reachable."
         except ModelError as exc:
-            state = {"backend": "openai-compatible", "reachable": False, "message": str(exc), "models": [], "vision": False, "streaming": False}
+            state = {
+                "backend": self.config.active_backend,
+                "active": "retrieval-only",
+                "reachable": False,
+                "message": str(exc),
+                "models": [], "vision": False, "streaming": False,
+                "configured_model": self.config.hosted_model,
+            }
         with self._lock:
             self._model_cache = (time.time(), state)
         return state
@@ -452,7 +474,8 @@ class AraRequestHandler(BaseHTTPRequestHandler):
             "knowledge": self.server.knowledge.stats(),
             "news": {"cached": self.server.store.news_items(1) != [], "last_fetch": self.server.store.news_last_fetch()},
             "privacy": {
-                "local_by_default": not self.server.config.allow_remote_model,
+                "local_by_default": not (self.server.config.hosted_url or self.server.config.allow_remote_model),
+                "hosted_configured": bool(self.server.config.hosted_url),
                 "uploads_stored": False,
                 "vision_endpoint": "configured" if self.server.config.vision_url else "not configured",
                 "audio_endpoint": "configured" if self.server.config.audio_url else "not configured",
@@ -485,11 +508,8 @@ class AraRequestHandler(BaseHTTPRequestHandler):
         mode = str(payload.get("mode", "chat"))
         if mode not in {"chat", "learn"}:
             raise ApiError(400, "Unknown mode", "bad_mode")
-        model_state = self.server.model_state()
-        if not model_state.get("reachable"):
-            raise ApiError(503, "The configured local model server is not reachable. Start it, then try again.", "model_unavailable")
         try:
-            model = LocalChatModel(self.server.config)
+            model = get_model(self.server.config)
             engine = ConversationEngine(
                 self.server.config, self.server.store, model,
                 conversation_id=session["conversation_id"],
@@ -497,9 +517,10 @@ class AraRequestHandler(BaseHTTPRequestHandler):
                 activate=False,
             )
         except ModelError as exc:
-            raise ApiError(503, f"The model is not available: {exc}", "model_unavailable") from exc
+            raise ApiError(503, f"The model configuration is invalid: {exc}", "model_unavailable") from exc
         except Exception as exc:
             raise ApiError(500, f"Ara could not prepare this conversation: {exc}", "startup_error") from exc
+        backend = backend_name(model)
 
         self.send_response(200)
         headers = self._security_headers()
@@ -520,7 +541,7 @@ class AraRequestHandler(BaseHTTPRequestHandler):
 
         full = []
         try:
-            event({"type": "start", "conversation_id": session["conversation_id"]})
+            event({"type": "start", "conversation_id": session["conversation_id"], "backend": backend})
             for piece in engine.stream_response(message, mode=mode):
                 full.append(piece)
                 event({"type": "delta", "text": piece})
@@ -529,6 +550,9 @@ class AraRequestHandler(BaseHTTPRequestHandler):
             event({
                 "type": "done",
                 "text": "".join(full),
+                "backend": engine.last_backend,
+                "backend_error": engine.last_backend_error,
+                "answer_kind": "retrieval" if engine.last_backend == "retrieval-only" else "model",
                 "learning": {
                     "saved": bool(learning.saved_id),
                     "kind": learning.kind,

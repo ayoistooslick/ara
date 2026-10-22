@@ -419,6 +419,7 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 600; letter-spacing: -.03em
   background: var(--sand); border-radius: 999px; padding: 4px 8px;
 }
 .meta-chip.green { background: var(--mint); color: var(--green-deep); }
+.meta-chip.amber { background: #f6ecd4; color: #775b1a; }
 .message-error .bubble { border-color: #e5bdb5; background: #fff6f3; color: #7a2d22; }
 .suggestion-ask {
   border: 1px solid var(--line); background: var(--paper); color: var(--green-deep);

@@ -18,9 +18,15 @@ DEFAULT_MODEL_URL = "http://127.0.0.1:8080/v1"
 @dataclass(frozen=True)
 class Config:
     home: Path
+    # auto: hosted when a hosted endpoint is configured, else the local server.
+    model_backend: str = "auto"
     model_url: str = DEFAULT_MODEL_URL
     model_name: str = "Qwen3-8B"
     model_path: Path | None = None
+    # Hosted OpenAI-compatible "ara-ng" service. The key is read from the
+    # environment only, so it never lands in config.toml or a backup.
+    hosted_url: str | None = None
+    hosted_model: str = "ara-ng"
     max_tokens: int = 512
     context_messages: int = 12
     max_context_chars: int = 12000
@@ -62,6 +68,24 @@ class Config:
     @property
     def config_path(self) -> Path:
         return self.home / "config.toml"
+
+    @property
+    def local_models_dir(self) -> Path:
+        return self.home / "models"
+
+    @property
+    def hosted_api_key(self) -> str | None:
+        value = os.environ.get("ARA_HOSTED_API_KEY") or os.environ.get("ARA_API_KEY")
+        return value if value and value.strip() else None
+
+    @property
+    def active_backend(self) -> str:
+        """Which backend a chat turn will try first, without opening a connection."""
+        if self.model_backend == "retrieval":
+            return "retrieval-only"
+        if self.model_backend == "hosted" or (self.model_backend == "auto" and self.hosted_url):
+            return "hosted"
+        return "local"
 
     @property
     def news_cache_path(self) -> Path:
@@ -158,11 +182,17 @@ def load_config(home: str | Path | None = None) -> Config:
     profile = str(_env("ARA_MODEL_PROFILE", model.get("profile", "auto"))).strip().lower()
     if profile not in {"auto", "constrained", "standard", "powerful"}:
         raise ValueError("model.profile must be auto, constrained, standard, or powerful")
+    backend = str(_env("ARA_BACKEND", model.get("backend", "auto"))).strip().lower()
+    if backend not in {"auto", "hosted", "local", "retrieval"}:
+        raise ValueError("model.backend must be auto, hosted, local, or retrieval")
     knowledge_dir = knowledge.get("dir")
     cfg = Config(
         home=base,
+        model_backend=backend,
         model_url=str(_env("ARA_MODEL_URL", model.get("url", DEFAULT_MODEL_URL))).rstrip("/"),
         model_name=str(_env("ARA_MODEL_NAME", model.get("name", "Qwen3-8B"))),
+        hosted_url=_optional_url(_env("ARA_HOSTED_URL", model.get("hosted_url")), "model.hosted_url"),
+        hosted_model=str(_env("ARA_HOSTED_MODEL", model.get("hosted_model", "ara-ng"))).strip() or "ara-ng",
         model_path=Path(_env("ARA_MODEL_PATH", model_path_value)).expanduser().resolve() if _env("ARA_MODEL_PATH", model_path_value) else None,
         max_tokens=_int(_env("ARA_MAX_TOKENS", model.get("max_tokens", 512)), "model.max_tokens"),
         context_messages=_int(_env("ARA_CONTEXT_MESSAGES", runtime.get("context_messages", 12)), "runtime.context_messages"),
@@ -201,8 +231,13 @@ def write_default_config(config: Config, overwrite: bool = False) -> Path:
         return config.config_path
     root = config.allowed_roots[0] if config.allowed_roots else Path.cwd()
     text = f'''# Ara configuration. Model weights and runtimes are installed separately.
-# Every value can be overridden with an ARA_* environment variable; see docs/CONFIGURATION.md.
+# Every value can be overridden with an ARA_* environment variable; see docs/MODELS.md.
 [model]
+# auto uses hosted "ara-ng" when hosted_url is set, else the local server.
+backend = {json.dumps(config.model_backend)}
+# hosted_url = "https://your-ara-ng-endpoint.example/v1"
+# The hosted API key is read from ARA_HOSTED_API_KEY, never from this file.
+hosted_model = {json.dumps(config.hosted_model)}
 url = {json.dumps(config.model_url)}
 name = {json.dumps(config.model_name)}
 # path = "/path/to/model.gguf"

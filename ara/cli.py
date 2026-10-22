@@ -13,9 +13,10 @@ from pathlib import Path
 from . import __version__
 from .brand import hop, static_frog
 from .config import compatibility_report, effective_profile, load_config, write_default_config
+from .downloads import MODELS, DownloadError, catalog_entry, download, human_size, probe
 from .embeddings import backfill_vectors, get_embedder, retrieval_report
 from .engine import BoundedActionLoop, ConversationEngine, evaluate_options, identify_learning, select_goal
-from .model import LocalChatModel, ModelError, runtime_diagnostics
+from .model import ModelError, backend_summary, get_model, runtime_diagnostics
 from .news import format_news, news_report
 from .nigeria import KnowledgeBase, evaluate
 from .nigeria_pipeline import ingest_jsonl, validate_corpus, write_manifest
@@ -35,8 +36,14 @@ def build_parser() -> argparse.ArgumentParser:
     history.add_argument("--limit", type=int, default=30)
     history.add_argument("--conversation-id", help="Show a specific conversation")
     sub.add_parser("conversations", help="List saved conversation threads")
-    model = sub.add_parser("model", help="Inspect the configured local model")
-    model.add_subparsers(dest="model_command", required=True).add_parser("status", help="Check model server and configured weights")
+    model = sub.add_parser("model", help="Inspect the backend and download optional local weights")
+    model_sub = model.add_subparsers(dest="model_command", required=True)
+    model_sub.add_parser("status", help="Check the active backend and the configured weights")
+    download_model = model_sub.add_parser("download", help="Download optional local weights (resumable, checksum-verified)")
+    download_model.add_argument("name", help="A catalog name (qwen3-1.7b, qwen3-4b) or a .gguf URL")
+    download_model.add_argument("--out", help="Destination file (default: Ara's models folder)")
+    download_model.add_argument("--sha256", help="Expected SHA-256 from the publisher")
+    download_model.add_argument("--yes", action="store_true", help="Start without asking for confirmation")
     ask = sub.add_parser("ask", help="Send one message and print Ara's reply")
     ask.add_argument("message", nargs="+")
     ask.add_argument("--mode", choices=["chat", "learn"], default="chat")
@@ -115,13 +122,104 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def _model(config):
-    return LocalChatModel(config)
+    """Return the configured backend, or None for honest retrieval-only mode."""
+    return get_model(config)
 
 
 def _print_wrapped(text: str) -> None:
     width = max(40, min(100, shutil.get_terminal_size((80, 24)).columns - 2))
     for paragraph in text.splitlines() or [""]:
         print(textwrap.fill(paragraph, width=width, break_long_words=False, break_on_hyphens=False) if paragraph else "")
+
+
+def _size(path: Path) -> int:
+    if path.is_file():
+        return path.stat().st_size
+    if not path.is_dir():
+        return 0
+    return sum(item.stat().st_size for item in path.rglob("*") if item.is_file())
+
+
+def storage_lines(config) -> list[str]:
+    """Show where disk goes so users can decide what to clear."""
+    database = _size(config.db_path) + _size(Path(str(config.db_path) + "-wal"))
+    caches = _size(config.news_cache_path) + _size(config.embedding_cache_path)
+    return [
+        f"Storage: database {human_size(database)}, backups {human_size(_size(config.backup_dir))}, "
+        f"models {human_size(_size(config.local_models_dir))}, caches {human_size(caches)}",
+        f"  data: {config.home} (local; 'ara backup' copies it, 'ara restore FILE' replaces it safely)",
+    ]
+
+
+def download_model(config, args) -> int:
+    """Optional weights. Never called during install or a normal chat start."""
+    if args.name in MODELS:
+        entry = catalog_entry(args.name)
+        url = str(entry["url"])
+        label = str(entry["label"])
+        hint_size = int(entry.get("bytes") or 0)
+        ram = str(entry.get("ram") or "")
+        licence = str(entry.get("license") or "check the publisher")
+        note = str(entry.get("note") or "")
+        default_name = url.rsplit("/", 1)[-1]
+    elif args.name.startswith(("http://", "https://")):
+        url = args.name
+        label = url.rsplit("/", 1)[-1] or "model.gguf"
+        hint_size = 0
+        ram = "at least the file size plus context memory"
+        licence = "check the publisher"
+        note = "Downloaded from a URL you supplied; Ara has no catalogue entry for it."
+        default_name = label.split("?", 1)[0]
+    else:
+        raise DownloadError(f"Unknown model '{args.name}'. Choose one of: {', '.join(sorted(MODELS))}, or pass a .gguf URL.")
+
+    destination = Path(args.out).expanduser().resolve() if args.out else config.local_models_dir / default_name
+    if destination.suffix.lower() != ".gguf":
+        raise DownloadError("The destination must end in .gguf")
+    print(f"Optional local model: {label}")
+    print(f"  source:  {url}")
+    print(f"  target:  {destination}")
+    print("Checking size and checksum with the publisher...")
+    info = probe(url)
+    size = info["size"] if isinstance(info["size"], int) else hint_size or None
+    print(f"  download: {human_size(size)} (server-reported)" if size else "  download: size not reported by the server")
+    if size:
+        print(f"  storage:  about {human_size(size * 1.05)} free where you save it")
+    print(f"  hardware: {ram}; CPU inference, no GPU required")
+    print(f"  licence:  {licence}")
+    if note:
+        print(f"  note:     {note}")
+    print("This is optional. Ara chats without it; only offline local inference needs these weights.")
+    if not args.yes:
+        if not sys.stdin.isatty():
+            print("Not downloading without confirmation. Re-run with --yes in a non-interactive shell.", file=sys.stderr)
+            return 2
+        if input("Type 'download' to start (anything else cancels): ").strip().lower() != "download":
+            print("Download cancelled. Nothing was changed.")
+            return 1
+    last = [0.0]
+
+    def progress(done: int, total: int) -> None:
+        import time
+
+        if total and done < total and time.monotonic() - last[0] < 0.2:
+            return
+        last[0] = time.monotonic()
+        share = f" ({done * 100 // total}%)" if total else ""
+        print(f"\r  {human_size(done)} / {human_size(total) if total else 'unknown'}{share}", end="", flush=True)
+
+    try:
+        result = download(url, destination, expected_size=size, expected_sha256=args.sha256, on_progress=progress)
+    except KeyboardInterrupt:
+        print("\nStopped. Re-run the same command to resume from the partial file.")
+        return 130
+    print()
+    print(f"Saved {human_size(result['bytes'])} to {result['path']}")
+    print(f"SHA-256: {result['sha256']}" + (" (verified against the publisher)" if result["checksum_verified"] else " (no publisher checksum available; recorded for your own check)"))
+    print("To use it offline, start a llama.cpp server yourself:")
+    print(f'  llama-server -m "{result["path"]}" --host 127.0.0.1 --port 8080 -c 4096')
+    print("Then run 'ara model status'. Ara does not start or download servers for you.")
+    return 0
 
 
 def interactive(config, store: Store, conversation_id: str | None = None) -> int:
@@ -133,11 +231,16 @@ def interactive(config, store: Store, conversation_id: str | None = None) -> int
     engine = ConversationEngine(config, store, model, conversation_id)
     if sys.stdout.isatty():
         print(static_frog(color=True))
-    print(f"Ara {__version__} is ready. Type /help for local commands, or /exit to leave.")
+    print(f"Ara {__version__} · {backend_summary(config, model)}")
+    print("Type your message and press Enter. /help lists commands, /exit leaves. End a line with \\ for a second line.")
+    if model is None:
+        print("No model is configured, so replies are retrieved notes labelled retrieval-only, never fake model text.")
     mode = "chat"
     while True:
         try:
             text = input("you> ").strip()
+            while text.endswith("\\"):
+                text = text[:-1].rstrip() + "\n" + input("...> ").strip()
         except (EOFError, KeyboardInterrupt):
             print("\nAra session ended.")
             return 0
@@ -146,10 +249,26 @@ def interactive(config, store: Store, conversation_id: str | None = None) -> int
         if text in {"/exit", "/quit"}:
             print("Ara session ended.")
             return 0
-        if text == "/help":
-            print("/memory  /history  /new  /skills  /calc EXPR  /remember TEXT")
+        if text in {"/help", "/?"}:
+            print("/model  /memory  /history  /new  /clear  /skills  /remember TEXT")
             print("/news [refresh]  /explain TEXT  /image PATH  /audio PATH  /study  /animate")
-            print("/embed  /doctor  /exit")
+            print("/calc EXPR  /embed  /doctor  /exit")
+            continue
+        if text == "/clear":
+            if sys.stdout.isatty():
+                print("\033[2J\033[H", end="")
+            print("Screen cleared. Your history is still saved; /new starts a fresh thread.")
+            continue
+        if text == "/model":
+            print(f"Backend: {engine.last_backend} · {backend_summary(config, model)}")
+            if model is not None:
+                ok, message = model.status()
+                print(message)
+                if not ok:
+                    print("Replies will fall back to labelled retrieval until the model is reachable.")
+            print("Hosted: set ARA_HOSTED_URL (and ARA_HOSTED_API_KEY if needed).")
+            print("Local: run a llama.cpp server on 127.0.0.1:8080, or 'ara model download qwen3-1.7b'.")
+            print("Retrieval-only: 'ara model' never downloads anything; use /model to check again.")
             continue
         if text == "/study":
             mode = "learn" if mode == "chat" else "chat"
@@ -162,8 +281,9 @@ def interactive(config, store: Store, conversation_id: str | None = None) -> int
             print(f"Database schema: {SCHEMA_VERSION}; knowledge entries: {len(engine.knowledge.entries)}")
             for line in compatibility_report(config):
                 print(line)
-            ok, message = model.status()
-            print(message)
+            if model is not None:
+                ok, message = model.status()
+                print(message)
             print(f"Retrieval: {json.dumps(retrieval_report(store, engine.embedder))}")
             continue
         if text == "/embed":
@@ -247,7 +367,7 @@ def interactive(config, store: Store, conversation_id: str | None = None) -> int
             continue
         try:
             answer, learning = engine.respond(text, mode=mode)
-            print("ara> ", end="")
+            print("ara (retrieval-only)> " if engine.last_backend == "retrieval-only" else "ara> ", end="")
             _print_wrapped(answer)
             if engine.last_interpretation and engine.last_interpretation.detected:
                 terms = ", ".join(entry.term for entry in engine.last_interpretation.detected[:3])
@@ -258,8 +378,6 @@ def interactive(config, store: Store, conversation_id: str | None = None) -> int
                 print(f"[Stored {learning.kind} as memory #{learning.saved_id}.]" + (" Related memories may conflict; use ara memory inspect." if learning.conflicts else ""))
             if learning.sensitive_rejected:
                 print("[Credential-looking text was redacted from saved conversation history and was not stored as a memory.]")
-        except ModelError as exc:
-            print(f"ara> I could not reach the configured local model. Your message is in this conversation history. {exc}", file=sys.stderr)
         except (OSError, RuntimeError, ValueError) as exc:
             print(f"Ara error: {exc}", file=sys.stderr)
 
@@ -309,9 +427,11 @@ def main(argv: list[str] | None = None) -> int:
             return 0
         store = Store(config.db_path)
         if args.command == "status":
-            ok, message = _model(config).status()
+            model = _model(config)
+            ok, message = (model.status() if model is not None else (True, "No model configured; replies are labelled retrieval-only."))
             knowledge = KnowledgeBase.load(config.knowledge_dir)
-            print(f"Ara {__version__}\nData: {config.home}\nDatabase: {config.db_path}\nSchema: {SCHEMA_VERSION}\nCounts: {json.dumps(store.counts())}\nKnowledge: {json.dumps(knowledge.stats()['by_kind'])}\nNews cached: {len(store.news_items(1))}\nProfile: {effective_profile(config)}\nModel: {message}")
+            print(f"Ara {__version__}\nData: {config.home}\nDatabase: {config.db_path}\nSchema: {SCHEMA_VERSION}\nCounts: {json.dumps(store.counts())}\nKnowledge: {json.dumps(knowledge.stats()['by_kind'])}\nNews cached: {len(store.news_items(1))}\nProfile: {effective_profile(config)}\nBackend: {config.active_backend}\nModel: {message}")
+            for line in storage_lines(config): print(line)
             return 0 if ok else 1
         if args.command == "doctor":
             print(f"Ara {__version__}; Python {sys.version.split()[0]}; database: OK ({config.db_path}); schema {SCHEMA_VERSION}")
@@ -326,12 +446,24 @@ def main(argv: list[str] | None = None) -> int:
             print(f"Transcription: {state['transcription']['note']}")
             print(f"Web password: {'set' if config.web_password else 'not set (local-only binding)'}")
             print(f"News cache: {len(store.news_items(1))} stories")
-            ok, message = _model(config).status(); print(message)
+            for line in storage_lines(config): print(line)
+            model = _model(config)
+            if model is None:
+                print("No model configured; retrieval-only is available.")
+                return 0
+            ok, message = model.status(); print(message)
             return 0 if ok else 1
         if args.command == "model":
+            if args.model_command == "download":
+                return download_model(config, args)
             for line in runtime_diagnostics(config): print(line)
             for line in compatibility_report(config): print(line)
             model = _model(config)
+            if model is None:
+                print("Active backend: retrieval-only (no model configured).")
+                print("Hosted: set ARA_HOSTED_URL (and ARA_HOSTED_API_KEY).")
+                print("Local: 'ara model download qwen3-1.7b' then run a llama.cpp server, or point [model].url at one.")
+                return 0
             print(json.dumps(model.capabilities(), indent=2))
             ok, message = model.status(); print(message)
             return 0 if ok else 1
@@ -342,6 +474,8 @@ def main(argv: list[str] | None = None) -> int:
             if args.json:
                 print(json.dumps({
                     "answer": answer,
+                    "backend": engine.last_backend,
+                    "backend_error": engine.last_backend_error,
                     "conversation_id": engine.conversation_id,
                     "learning": {"saved": bool(learning.saved_id), "kind": learning.kind, "id": learning.saved_id},
                     "interpretation": engine.last_interpretation.as_dict() if engine.last_interpretation else None,
@@ -380,6 +514,9 @@ def main(argv: list[str] | None = None) -> int:
                 answer_fn = None
                 if args.model:
                     model = _model(config)
+                    if model is None:
+                        print("No model is configured, so --model cannot score generated answers. Run the offline evaluation without it.", file=sys.stderr)
+                        return 2
                     engine = ConversationEngine(config, store, model, conversation_id=f"evaluation-{datetime.now().strftime('%Y%m%d%H%M%S')}", knowledge=knowledge, activate=False)
                     answer_fn = lambda question: model.generate(engine.preview_prompt(question))
                 report = evaluate(knowledge, answer_fn)
@@ -552,6 +689,9 @@ def main(argv: list[str] | None = None) -> int:
                 print("autonomous needs an interactive terminal for approvals.", file=sys.stderr)
                 return 2
             model = _model(config)
+            if model is None:
+                print("The autonomous loop needs a model backend. Start one or configure hosted ara-ng first.")
+                return 2
             engine = ConversationEngine(config, store, model)
             loop = BoundedActionLoop(config, store, model, ToolRegistry(config, store))
             goals = store.goals("active")
@@ -609,7 +749,7 @@ def main(argv: list[str] | None = None) -> int:
                 print("Commands: plan, run, approve, status, stop, /calc EXPR")
             return 0
         parser.print_help(); return 0
-    except (ValueError, RuntimeError, OSError, ToolError, ModelError) as exc:
+    except (ValueError, RuntimeError, OSError, ToolError, ModelError, DownloadError) as exc:
         print(f"ara: {exc}", file=sys.stderr)
         return 2
 

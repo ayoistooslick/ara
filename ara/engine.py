@@ -7,7 +7,7 @@ from typing import Any, Callable, Iterator
 
 from .config import Config
 from .embeddings import Embedder, HashingEmbedder, backfill_vectors, get_embedder
-from .model import ModelAdapter, fit_messages
+from .model import ModelAdapter, ModelError, backend_name, fit_messages
 from .nigeria import Interpretation, KnowledgeBase
 from .safety import redact_sensitive
 from .store import Store
@@ -68,6 +68,8 @@ class ConversationEngine:
         self.embedder = embedder or get_embedder(config)
         self.last_learning = LearningResult()
         self.last_interpretation: Interpretation | None = None
+        self.last_backend = backend_name(model)
+        self.last_backend_error: str | None = None
         # Hash vectors are cheap and local. Server embeddings are indexed explicitly
         # with 'ara memory embed' so a normal chat turn never waits on many requests.
         if isinstance(self.embedder, HashingEmbedder):
@@ -195,9 +197,56 @@ class ConversationEngine:
         if answer and answer.strip():
             self.store.add_message(self.conversation_id, "assistant", answer.strip())
 
+    def retrieval_reply(self, user_text: str) -> str:
+        """Answer without a model, and say so in the first line.
+
+        This is deliberately labelled retrieval: it is not generated text and it
+        must never be presented as model inference.
+        """
+        interpretation = self.last_interpretation or self.knowledge.interpret(user_text)
+        try:
+            memories = self.store.search_memories_hybrid(
+                user_text, embedder=self.embedder.embed, limit=3, model=self.embedder.name
+            )
+        except Exception:
+            # A down embedding service must not turn a labelled fallback into a crash.
+            memories = []
+        lines = [
+            "[retrieval-only] No model answer was produced, so this is retrieved context, not a generated answer.",
+        ]
+        if interpretation.detected:
+            lines.append("What the knowledge base has:")
+            for entry in interpretation.detected[:3]:
+                lines.append(f"- {entry.term} ({entry.register}; confidence {entry.confidence:.2f}): {entry.summary}")
+            if interpretation.clarify:
+                lines.append("This expression is genuinely ambiguous. Which sense did you mean?")
+        if memories:
+            lines.append("From your saved notes:")
+            lines.extend(f"- {memory['content']}" for memory in memories)
+        if len(lines) == 1:
+            lines.append("Nothing in the local knowledge base or your notes matches this message closely.")
+        if self.last_backend_error:
+            lines.append(f"Backend detail: {self.last_backend_error}")
+        lines.append("To get real generated answers, start a local model server or set ARA_HOSTED_URL for hosted ara-ng, then ask again. /model shows the options.")
+        return "\n".join(lines)
+
     def respond(self, user_text: str, mode: str = "chat") -> tuple[str, LearningResult]:
         prompt, learning = self.build_prompt(user_text, mode)
-        answer = self.model.generate(prompt)
+        self.last_backend_error = None
+        if self.model is None:
+            self.last_backend = "retrieval-only"
+            answer = self.retrieval_reply(user_text)
+            self.finish(answer)
+            return answer, learning
+        try:
+            answer = self.model.generate(prompt)
+        except ModelError as exc:
+            self.last_backend = "retrieval-only"
+            self.last_backend_error = str(exc)
+            answer = self.retrieval_reply(user_text)
+            self.finish(answer)
+            return answer, learning
+        self.last_backend = backend_name(self.model)
         self.finish(answer)
         return answer, learning
 
@@ -208,6 +257,13 @@ class ConversationEngine:
         cancel: Callable[[], bool] | None = None,
     ) -> Iterator[str]:
         prompt, learning = self.build_prompt(user_text, mode)
+        self.last_backend_error = None
+        if self.model is None:
+            self.last_backend = "retrieval-only"
+            answer = self.retrieval_reply(user_text)
+            self.finish(answer)
+            yield answer
+            return
         pieces: list[str] = []
         try:
             streamer = getattr(self.model, "stream", None)
@@ -215,11 +271,32 @@ class ConversationEngine:
                 for piece in streamer(prompt, cancel=cancel):
                     if piece:
                         pieces.append(piece)
+                        self.last_backend = backend_name(self.model)
                         yield piece
             else:
                 answer = self.model.generate(prompt)
                 pieces.append(answer)
+                self.last_backend = backend_name(self.model)
                 yield answer
+            if not pieces and not (cancel and cancel()):
+                # A reachable server that yields no text (for example a reasoning
+                # model that used its whole budget on hidden tokens) is not an answer.
+                self.last_backend = "retrieval-only"
+                self.last_backend_error = "The model returned no text."
+                answer = self.retrieval_reply(user_text)
+                pieces.append(answer)
+                yield answer
+        except ModelError as exc:
+            if pieces:
+                # Some model text already reached the user; label it, do not
+                # replace it with retrieval output mid-conversation.
+                self.last_backend_error = str(exc)
+                return
+            self.last_backend = "retrieval-only"
+            self.last_backend_error = str(exc)
+            answer = self.retrieval_reply(user_text)
+            pieces.append(answer)
+            yield answer
         finally:
             self.finish("".join(pieces))
 

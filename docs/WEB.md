@@ -29,7 +29,7 @@ Keep the password in the service environment, not in `config.toml` or client cod
 
 ## What the interface does
 
-- **Chat:** streaming Server-Sent Events with a visible typing state, stop control, Markdown-free safe text rendering (`textContent`, never `innerHTML`), and error states for an unreachable model.
+- **Chat:** streaming Server-Sent Events with a visible typing state, stop control, and Markdown-free safe text rendering (`textContent`, never `innerHTML`). If no model answers, the reply is still useful but begins with `[retrieval-only]` and the UI marks it as retrieved context, not generated text.
 - **Study mode:** sends `mode: "learn"` to the same engine.
 - **History:** loads the session's conversation; "New chat" starts a new thread without deleting the old one.
 - **Memory:** add, correct, delete, forget all, and export the shared memories. Credential-looking content is rejected.
@@ -39,7 +39,7 @@ Keep the password in the service environment, not in `config.toml` or client cod
 - **Camera:** explicit button, live preview inside a dialog, one frame captured only when **Analyse** is pressed.
 - **Microphone:** explicit button, recording indicator and timer, 60-second cap, stop control, transcription into the composer for review before sending.
 - **Speech output:** optional browser speech synthesis; can be stopped independently.
-- **Diagnostics:** model reachability, configured endpoints, counts, and retrieval mode (`semantic: true/false`).
+- **Diagnostics:** active backend (hosted, local, or retrieval-only), model reachability, configured endpoints, counts, and retrieval mode (`semantic: true/false`).
 
 ## Browser permissions
 
@@ -121,7 +121,7 @@ Health check: `GET /api/health` returns `ok`, version, database status, and mode
 Automated tests cover:
 
 - session creation, password gate, Secure cookie with forwarded HTTPS, logout, CSRF, origin checks, rate limits;
-- SSE streaming and persistence, session isolation, model-unreachable errors;
+- SSE streaming and persistence, session isolation, model-unreachable retrieval fallback;
 - upload validation and 503s when perception is unconfigured;
 - vision and transcription request contracts against local stub servers;
 - static traversal, security headers, unknown routes, body limits;

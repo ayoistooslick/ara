@@ -289,13 +289,19 @@ class WebTests(unittest.TestCase):
         first_messages = json.loads(self.h.request("/api/conversation")[2])["messages"]
         self.assertNotIn("Second session", [message["content"] for message in first_messages])
 
-    def test_model_unreachable_returns_explicit_error(self):
+    def test_model_unreachable_falls_back_to_labelled_retrieval(self):
         harness = Harness(dead_model=True)
         try:
             harness.session()
-            status, _, body = harness.request("/api/chat", "POST", {"message": "hello"}, timeout=10)
-            self.assertEqual(status, 503)
-            self.assertIn("model", json.loads(body)["error"].casefold())
+            status, _, body = harness.request("/api/chat", "POST", {"message": "hello"}, timeout=30)
+            self.assertEqual(status, 200)
+            parsed = events(body)
+            done = next(event for event in parsed if event["type"] == "done")
+            self.assertEqual(done["backend"], "retrieval-only")
+            self.assertEqual(done["answer_kind"], "retrieval")
+            self.assertTrue(done["text"].startswith("[retrieval-only]"))
+            self.assertIn("not a generated answer", done["text"])
+            self.assertTrue(done["backend_error"])
         finally:
             harness.close()
 

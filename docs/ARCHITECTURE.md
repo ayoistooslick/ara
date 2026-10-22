@@ -9,7 +9,8 @@ Ara is one local-first application with two interfaces. The terminal and the web
 | `ara/config.py` | TOML loading, `ARA_*` environment overrides, validation, hardware profiles |
 | `ara/store.py` | SQLite schema, versioned migrations, conversations, memories, news, web sessions |
 | `ara/engine.py` | Prompt assembly, conservative learning, memory retrieval, streaming, bounded action loop |
-| `ara/model.py` | `ModelAdapter`, OpenAI-compatible local client, context fitting, timeout/streaming |
+| `ara/model.py` | `ModelAdapter`, OpenAI-compatible hosted and local clients, backend selection, context fitting, timeout/streaming |
+| `ara/downloads.py` | Optional resumable, checksum-verified local weight downloads |
 | `ara/nigeria.py` | Curated knowledge loading, interpretation, retrieval, evaluation |
 | `ara/nigeria_pipeline.py` | Corpus validation, manifest hashing, guarded JSONL ingestion |
 | `ara/embeddings.py` | Local embedding client, deterministic hashed fallback, hybrid retrieval scoring |
@@ -27,8 +28,8 @@ Ara is one local-first application with two interfaces. The terminal and the web
 
 ### Terminal
 
-1. `ara` loads `Config`, opens `Store` (migrating if needed), and builds `LocalChatModel`.
-2. `ConversationEngine.respond` or `stream_response` saves the user message, detects explicitly signalled learning, and retrieves relevant memories.
+1. `ara` loads `Config`, opens `Store` (migrating if needed), and calls `get_model`: hosted ara-ng when configured, else the local server, else no model.
+2. `ConversationEngine.respond` or `stream_response` saves the user message, detects explicitly signalled learning, and retrieves relevant memories. If no model is reachable, it returns a reply that starts with `[retrieval-only]` and records that backend, instead of pretending retrieval is generated text.
 3. `KnowledgeBase.interpret` and `context_for` add only relevant Nigerian-context entries; news context is added when the message clearly asks about current events and a cache exists.
 4. The system prompt, bounded history, memories, corrections, and user turn go through the adapter.
 5. The answer is saved, learning is applied, and the interactive loop continues. Cancellation stops streaming without deleting the stored turn.
@@ -37,7 +38,7 @@ Ara is one local-first application with two interfaces. The terminal and the web
 
 1. `ara web` starts `AraServer`, which owns one `Store`, `KnowledgeBase`, and embedder.
 2. `POST /api/session` creates a random session token and stores only its SHA-256 hash in `web_sessions`, with a CSRF token and a per-session conversation ID.
-3. `POST /api/chat` validates the cookie, CSRF header, origin, body size, rate limit, and model reachability. It then builds the same `ConversationEngine` with `activate=False` so a web session cannot hijack the terminal's active conversation.
+3. `POST /api/chat` validates the cookie, CSRF header, origin, body size, and rate limit. It then builds the same `ConversationEngine` with `activate=False` so a web session cannot hijack the terminal's active conversation. An unreachable model does not fail the request: the stream carries a labelled retrieval reply and the `done` event includes `backend` and `answer_kind`.
 4. The engine streams text chunks as Server-Sent Events (`start`, `delta`, `done`, `error`). The final event carries the stored learning result and interpretation.
 5. Uploads (`/api/vision`, `/api/transcribe`) are validated as data URLs, size-limited, held in memory, sent to the configured local endpoint, and never written to SQLite.
 6. Memory endpoints operate on the same shared memory table with per-request validation and CSRF.
@@ -78,7 +79,7 @@ Closing the database on every operation keeps each public write atomic. Schema c
 
 ## Model boundary
 
-`ModelAdapter` is the only interface the engine needs. `LocalChatModel` speaks the OpenAI chat-completions protocol over HTTP. The configured model name is a label sent to the server; Ara's identity does not depend on it. Capability discovery reads `/models` and, where available, llama.cpp `/props`. Vision and transcription are separate endpoints because a text model must not be assumed to see images or hear audio.
+`ModelAdapter` is the only interface the engine needs. `HostedChatModel` and `LocalChatModel` share one OpenAI chat-completions client; the hosted one requires HTTPS (except loopback), reads its key from `ARA_HOSTED_API_KEY`, and sends the model name `ara-ng`. The configured model name is a label sent to the server; Ara's identity does not depend on it. Capability discovery reads `/models` and, where available, llama.cpp `/props`. Vision and transcription are separate endpoints because a text model must not be assumed to see images or hear audio.
 
 `fit_messages` keeps the newest turns within `runtime.max_context_chars`, preserving one system prompt. It truncates a single oversized message from the left. This is a character budget, not an exact tokenizer count.
 
