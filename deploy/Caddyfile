@@ -1,0 +1,13 @@
+# Replace ara.example.ng with your domain. Caddy obtains and renews TLS.
+ara.example.ng {
+	# No compression on this route: SSE must stay unbuffered.
+	# flush_interval -1 keeps Server-Sent Event deltas flowing immediately.
+	reverse_proxy 127.0.0.1:8787 {
+		flush_interval -1
+	}
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		-Server
+	}
+}

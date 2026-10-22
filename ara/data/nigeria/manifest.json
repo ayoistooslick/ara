@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "generated_at": "2026-10-22T21:32:22+00:00",
+  "license": "Same licence as the Ara repository",
+  "provenance": "Curated seed corpus; see each file and docs/NIGERIAN_KNOWLEDGE.md",
+  "files": [
+    {
+      "file": "expressions.json",
+      "sha256": "1d1ad84926713956f0fdd35f53dec610bcaaf4d6777e5c8226c5f9f61d6aa977",
+      "entries": 65
+    },
+    {
+      "file": "history.json",
+      "sha256": "8cb1da1ad7d2b89b6f3a896ec447c51a79d629a536c392a5488389c49a31954b",
+      "entries": 23
+    },
+    {
+      "file": "culture.json",
+      "sha256": "1e749b68b5abfd448627fb2004906fe08d27eaf07bb88b4257df4df6fb2b7ab5",
+      "entries": 23
+    }
+  ],
+  "counts": {
+    "expressions": 65,
+    "history": 23,
+    "culture": 23
+  },
+  "evaluation_cases": 36,
+  "warnings": 17,
+  "sha256": "9b48475145a3e5f6172f6252890388af0945fc655d7abc735b313274af99a94c"
+}

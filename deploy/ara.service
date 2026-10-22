@@ -1,0 +1,31 @@
+[Unit]
+Description=Ara local-first AI web interface
+After=network.target
+
+[Service]
+Type=simple
+User=ara
+Group=ara
+WorkingDirectory=/opt/ara
+EnvironmentFile=/etc/ara/ara.env
+ExecStart=/opt/ara/.venv/bin/ara web --host 127.0.0.1 --port 8787
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=20
+
+# The service only needs its data directory and its own code.
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+ReadWritePaths=/var/lib/ara
+
+[Install]
+WantedBy=multi-user.target

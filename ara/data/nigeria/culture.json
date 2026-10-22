@@ -1,0 +1,359 @@
+{
+  "version": 1,
+  "kind": "culture",
+  "license": "Same licence as the Ara repository (see LICENSE).",
+  "provenance": "Maintainer-authored descriptions of everyday Nigerian life from widely observable public practice. These are patterns, not rules: region, religion, class, generation, and family shape whether and how any practice applies. Community review is ongoing.",
+  "entries": [
+    {
+      "id": "greetings-respect",
+      "title": "Greetings and respect",
+      "summary": "Greetings carry social weight. Younger people often greet elders first, may use titles such as 'ma', 'sir', 'oga', 'aunty', or 'uncle', and in some cultures show respect through a bow, curtsy, kneeling, or prostration.",
+      "details": "Yoruba boys may prostrate and girls may kneel when greeting elders; Igbo girls may kneel; Hausa greetings often include multiple exchanges and 'sannu'. Practices vary by family, religion, and city, and many young people use a handshake or a simple spoken greeting instead.",
+      "caution": "Do not tell a Nigerian they are greeting wrongly based on one region's custom. Ask or follow the family's lead.",
+      "confidence": 0.9,
+      "tags": [
+        "greeting",
+        "respect",
+        "elder",
+        "prostrate",
+        "kneel"
+      ]
+    },
+    {
+      "id": "nigerian-english",
+      "title": "Nigerian English is its own variety",
+      "summary": "Nigerian English has systematic vocabulary, grammar, and pragmatics. It is not 'broken English' and it is not Pidgin.",
+      "details": "Examples include 'I'm coming' for 'I am on my way', 'sorry' as sympathy, 'well done' as appreciation for work, 'please' to soften requests, and 'you're welcome' used differently from British English. Educated speakers switch between Nigerian English, standard international English, and Pidgin by context.",
+      "caution": "Never correct a Nigerian's English into American or British usage unless they ask for editing. Describe differences neutrally.",
+      "confidence": 0.93,
+      "tags": [
+        "language",
+        "english",
+        "register",
+        "sorry",
+        "well done"
+      ]
+    },
+    {
+      "id": "pidgin-context",
+      "title": "When Pidgin is appropriate",
+      "summary": "Nigerian Pidgin is a widely spoken lingua franca, especially in cities, informal settings, music, comedy, and online. It is not everyone's first language and not every Nigerian speaks it.",
+      "details": "Many Nigerians move between Pidgin, English, and one or more indigenous languages in the same conversation. Pidgin can signal warmth, humour, or solidarity, but using it with a stranger can also feel like assuming too much.",
+      "caution": "Do not open every conversation in Pidgin or sprinkle slang to sound Nigerian. Mirror the user's register; when unsure, use clear English.",
+      "confidence": 0.95,
+      "tags": [
+        "pidgin",
+        "language",
+        "stereotype",
+        "all nigerians",
+        "speak",
+        "register"
+      ]
+    },
+    {
+      "id": "food-swallow",
+      "title": "Swallow and soup",
+      "summary": "'Swallow' refers to starchy staples eaten with soup by hand: eba (garri), amala, pounded yam, fufu, semo, and tuwo in the north.",
+      "details": "A typical meal is a ball of swallow dipped in soup such as egusi, ogbono, efo riro, oha, or pepper soup. Eating with the right hand is common; some families pray before eating. Portions are often generous and guests are urged to eat more.",
+      "caution": "Do not reduce Nigerian food to jollof rice. Regional staples differ, and 'swallow' is a category, not one dish.",
+      "confidence": 0.94,
+      "tags": [
+        "food",
+        "swallow",
+        "eba",
+        "amala",
+        "pounded yam",
+        "soup"
+      ]
+    },
+    {
+      "id": "jollof-pride",
+      "title": "Jollof and food pride",
+      "summary": "Jollof rice is a everyday celebration dish, and the Nigeria-Ghana 'jollof wars' are a long-running playful rivalry.",
+      "details": "Recipes differ by family and region: parboiled rice cooked in a pepper-tomato base, often with bay leaf, thyme, and smoky party-style finish. Arguments about whose jollof is best are usually banter.",
+      "caution": "The rivalry is not a serious diplomatic dispute, but food claims can still touch pride. Keep it light.",
+      "confidence": 0.93,
+      "tags": [
+        "jollof",
+        "food",
+        "ghana",
+        "rice"
+      ]
+    },
+    {
+      "id": "family-titles",
+      "title": "Family and 'aunty/uncle'",
+      "summary": "Extended family is central, and 'aunty', 'uncle', 'brother', and 'sister' are often used for people who are not relatives.",
+      "details": "Church members, neighbours, and family friends may be called aunty or uncle as a sign of respect and closeness. Age hierarchies matter, and older siblings or cousins may take on caretaking roles. Naming ceremonies and weddings are major family events.",
+      "caution": "Do not assume a kinship term proves a biological relationship. Ask if it matters.",
+      "confidence": 0.92,
+      "tags": [
+        "family",
+        "aunty",
+        "uncle",
+        "extended family"
+      ]
+    },
+    {
+      "id": "names",
+      "title": "Names carry meaning",
+      "summary": "Nigerian names often carry religious, family, or aspirational meaning and reflect language and region, but you cannot reliably infer ethnicity or religion from a name.",
+      "details": "Yoruba names may include prefixes such as Ade, Ola, or Olu; Igbo names often begin with Chi or N; Hausa names may be Arabic-derived. Many people use English first names, nicknames, or anglicised spellings. Surnames can be shared across groups.",
+      "caution": "Never guess someone's ethnicity, state, or religion from their name. Ask only when relevant.",
+      "confidence": 0.93,
+      "tags": [
+        "name",
+        "naming",
+        "ethnicity",
+        "religion"
+      ]
+    },
+    {
+      "id": "school-life",
+      "title": "School life",
+      "summary": "School experiences range from crowded public schools to elite private boarding schools. Boarding school culture, seniority, and exam pressure are common reference points.",
+      "details": "Students may call teachers 'aunty' or 'uncle', attend 'extra lesson' after school, and prepare for WAEC/NECO and JAMB. Boarding schools have prefects, 'seniors' and 'juniors', prep time, and house competitions. University students deal with carryovers, GPA, and sometimes ASUU strikes.",
+      "caution": "Do not portray every Nigerian school as chaotic or every student as a genius. Experiences differ sharply by income and state.",
+      "confidence": 0.9,
+      "tags": [
+        "school",
+        "boarding",
+        "student",
+        "university",
+        "asuu"
+      ]
+    },
+    {
+      "id": "jamb-waec",
+      "title": "JAMB, WAEC, and admission",
+      "summary": "WAEC and NECO certify secondary school completion; JAMB's UTME is the main university entrance exam, often followed by post-UTME screening.",
+      "details": "Students usually take WAEC in SSS3. JAMB results are combined with O'Level grades and school cut-off marks. Admission is competitive, and many students apply more than once or consider polytechnics and colleges of education.",
+      "caution": "Cut-off marks and exam formats change yearly. Direct users to JAMB or their institution for current rules.",
+      "confidence": 0.93,
+      "tags": [
+        "jamb",
+        "waec",
+        "neco",
+        "admission",
+        "utme"
+      ]
+    },
+    {
+      "id": "internet-culture",
+      "title": "Nigerian internet culture",
+      "summary": "Nigerian X (Twitter), Instagram, TikTok, and WhatsApp communities are fast, funny, and argumentative, with slang that spreads quickly and ages quickly.",
+      "details": "Common patterns include exaggerated comparisons, call-out threads, 'God when' jokes, skits, and playful insults. WhatsApp groups are central for family, work, church, and alumni networks, and forwarded messages are common.",
+      "caution": "Slang dates fast and varies by platform and age. Do not use it to mock or to pretend to be younger than you are.",
+      "confidence": 0.9,
+      "tags": [
+        "internet",
+        "twitter",
+        "tiktok",
+        "whatsapp",
+        "slang",
+        "gen z"
+      ]
+    },
+    {
+      "id": "humour-yabbing",
+      "title": "Humour, teasing, and yabbing",
+      "summary": "Nigerian humour often runs on exaggeration, self-deprecation, religious references, and 'yabbing' - playful mockery of friends.",
+      "details": "Yabbing is a sign of closeness among peers; it can be sharp and political. Comedy skits and stand-up draw on family, church, transport, and hustle. Sarcasm is common, and a straight face does not always mean seriousness.",
+      "caution": "Yabbing depends on relationship and tone. Do not yab a stranger, an elder, or someone's family, ethnicity, religion, or body. Never use humour to dodge accountability.",
+      "confidence": 0.92,
+      "tags": [
+        "humour",
+        "teasing",
+        "yab",
+        "joke",
+        "sarcasm"
+      ]
+    },
+    {
+      "id": "religion",
+      "title": "Religion in daily life",
+      "summary": "Islam and Christianity are both widespread, with substantial traditional religious practices and a constitutionally secular state. Religious language is common in ordinary conversation.",
+      "details": "Phrases like 'by God's grace', 'insha Allah', 'God dey', and 'we thank God' appear in everyday speech, sometimes devoutly and sometimes as habit. Fridays and Sundays shape schedules; Ramadan and Lent are observed by many.",
+      "caution": "Never assume a Nigerian's religion, and do not treat religious language as hypocrisy or as a joke. Avoid theological claims presented as settled fact.",
+      "confidence": 0.93,
+      "tags": [
+        "religion",
+        "islam",
+        "christianity",
+        "muslim",
+        "church",
+        "mosque"
+      ]
+    },
+    {
+      "id": "ethnic-diversity",
+      "title": "Ethnic and linguistic diversity",
+      "summary": "Nigeria has more than 250 ethnic groups and over 500 languages. Hausa, Yoruba, and Igbo are the largest, but no group is 'the default Nigerian'.",
+      "details": "The colonial-era 'Wazobia' shorthand (Wa for Hausa, Zo for Yoruba, Bia for Igbo) is used in NYSC and some pop culture but erases many other groups. Middle Belt, Niger Delta, and minority communities have distinct histories and politics.",
+      "caution": "Do not ask 'which part are you from' as a proxy for character, and do not explain Nigerian politics as simply three ethnic blocs.",
+      "confidence": 0.94,
+      "tags": [
+        "ethnicity",
+        "ethnic",
+        "igbo",
+        "yoruba",
+        "hausa",
+        "stereotype",
+        "all nigerians",
+        "diversity",
+        "tribe"
+      ]
+    },
+    {
+      "id": "transport",
+      "title": "Getting around",
+      "summary": "Everyday transport includes danfo minibuses, keke tricycles, okada motorcycles, shared taxis, ride-hailing apps, and long-distance buses.",
+      "details": "In Lagos, danfo conductors shout routes; BRT buses use dedicated lanes; okada is restricted in many areas. In other cities, keke and shared taxis dominate. Fares rise with fuel prices and rain, and 'go slow' traffic can consume hours.",
+      "caution": "Safety and legality vary by state. Mention helmets and local restrictions for motorcycles; never present one-chance robbery as a joke.",
+      "confidence": 0.92,
+      "tags": [
+        "transport",
+        "danfo",
+        "keke",
+        "okada",
+        "bus",
+        "traffic"
+      ]
+    },
+    {
+      "id": "markets-bargaining",
+      "title": "Markets and bargaining",
+      "summary": "Open markets are still central to shopping, especially for food, fabric, and household goods. Bargaining is normal in many markets but not in supermarkets or fixed-price shops.",
+      "details": "Asking 'last price' is a standard opening. Vendors may start high, and walking away is part of the dance. 'Oga' and 'madam' are common calls to attract customers. Haggling is less expected in malls and online stores.",
+      "caution": "Bargaining is not universal; do not assume a fixed price is a scam or that a vendor is dishonest for starting high.",
+      "confidence": 0.9,
+      "tags": [
+        "market",
+        "bargaining",
+        "price",
+        "haggle"
+      ]
+    },
+    {
+      "id": "money-payments",
+      "title": "Money and payments",
+      "summary": "Cash, bank transfers, USSD, cards, and POS agents coexist. Many people rely on mobile transfers and agent banking, especially where ATMs are scarce or unreliable.",
+      "details": "Naira notes include 5, 10, 20, 50, 100, 200, 500, and 1,000 naira; coins are rarely used. 'POS' often means an agent who withdraws or sends money for a fee. 'Network' problems and failed transfers are common frustrations. Ajo/esusu are informal rotating savings groups.",
+      "caution": "Fees, limits, and note designs change. Never state a current exchange rate without a dated source. Warn about transfer fraud without implying that all agents are dishonest.",
+      "confidence": 0.92,
+      "tags": [
+        "money",
+        "pos",
+        "transfer",
+        "naira",
+        "ajo",
+        "esusu",
+        "payment"
+      ]
+    },
+    {
+      "id": "power",
+      "title": "Power supply",
+      "summary": "Grid electricity is unreliable for many households and businesses, so inverters, generators, and solar systems are common.",
+      "details": "People still say 'NEPA' for the grid. 'Light' means electricity, and 'up NEPA' celebrates its return. Generator fuel and noise are everyday concerns, and 'I better pass my neighbour' is a joking name for small generators.",
+      "caution": "Generator fumes and electrical work can be dangerous. Do not give unsafe repair or wiring instructions; direct users to qualified electricians.",
+      "confidence": 0.94,
+      "tags": [
+        "nepa",
+        "light",
+        "electricity",
+        "generator",
+        "power"
+      ]
+    },
+    {
+      "id": "housing",
+      "title": "Housing terms",
+      "summary": "Common housing terms include 'self-contained', 'face-me-I-face-you', 'boys' quarters', 'compound', and 'caution' (a deposit).",
+      "details": "Rent is often paid yearly, and agents charge fees. In dense areas, several households share a compound, kitchen, or toilet. 'Self-contained' means a single room with its own bathroom and kitchenette. Landlord-tenant disputes are common.",
+      "caution": "Rent practices and tenancy laws differ by state. Do not give legal advice; point to a tenant rights body or lawyer.",
+      "confidence": 0.9,
+      "tags": [
+        "housing",
+        "rent",
+        "landlord",
+        "self contained",
+        "compound"
+      ]
+    },
+    {
+      "id": "health-practices",
+      "title": "Health talk",
+      "summary": "Malaria is a common concern, and people may visit a 'chemist' (pharmacy) before a hospital. Herbal remedies such as agbo are widely used alongside or instead of clinic care.",
+      "details": "Health insurance coverage is uneven; many pay out of pocket. Traditional birth attendants and patent medicine vendors are part of the landscape. 'Hospital' can mean a small clinic or a teaching hospital.",
+      "caution": "Ara must not diagnose or prescribe. For fever, chest pain, pregnancy complications, or suspected poisoning, advise prompt professional care. Do not endorse unproven cures.",
+      "confidence": 0.92,
+      "tags": [
+        "health",
+        "malaria",
+        "chemist",
+        "hospital",
+        "agbo",
+        "doctor"
+      ]
+    },
+    {
+      "id": "football",
+      "title": "Football",
+      "summary": "The Super Eagles are a shared national reference point. Nigeria has won the Africa Cup of Nations three times (1980, 1994, 2013) and Olympic gold in 1996.",
+      "details": "Match days empty streets and fill viewing centres. Club loyalties (Arsenal, Chelsea, Manchester United, Barcelona, Real Madrid) are intense. The women's team, the Super Falcons, is one of Africa's most successful.",
+      "caution": "Squad lists, rankings, and tournament results change. Verify current results rather than recalling from memory.",
+      "confidence": 0.94,
+      "tags": [
+        "football",
+        "super eagles",
+        "afcon",
+        "soccer"
+      ]
+    },
+    {
+      "id": "generations",
+      "title": "Generational differences",
+      "summary": "Older Nigerians often expect formal greetings and deference; younger Nigerians may use internet slang, question authority more openly, and mix global and local culture.",
+      "details": "Gen Z slang such as 'sapa', 'japa', 'soft life', and 'e choke' spreads online, while older generations may use different Pidgin idioms. Not every young person uses the same slang, and not every older person is conservative.",
+      "caution": "Do not stereotype either generation. Age, class, region, and education matter more than a birth-year label.",
+      "confidence": 0.9,
+      "tags": [
+        "generation",
+        "gen z",
+        "millennial",
+        "age"
+      ]
+    },
+    {
+      "id": "nigerian-time",
+      "title": "The 'African time' stereotype",
+      "summary": "The idea that Nigerians are always late is a stereotype, not a cultural rule. Punctuality varies by person, profession, occasion, and city.",
+      "details": "Weddings and parties often start later than the printed time, while flights, exams, and offices may be strict. Traffic and unreliable transport genuinely affect arrival times, but individuals differ.",
+      "caution": "Do not use 'African time' to excuse your own lateness or to mock Nigerians. Treat it as a stereotype when it appears.",
+      "confidence": 0.89,
+      "tags": [
+        "time",
+        "late",
+        "punctuality",
+        "stereotype",
+        "african time"
+      ]
+    },
+    {
+      "id": "formality-switching",
+      "title": "Switching register",
+      "summary": "Nigerians switch between formal English, Nigerian English, Pidgin, and indigenous languages depending on setting, audience, and emotion.",
+      "details": "A job interview, a church service, a market, and a group chat may use different registers. Switching can build solidarity or signal seriousness. Writing often mixes English with Pidgin for emphasis.",
+      "caution": "Do not assume informal speech means low intelligence or low education. Match the user's chosen register instead of 'correcting' it.",
+      "confidence": 0.93,
+      "tags": [
+        "register",
+        "formal",
+        "informal",
+        "language",
+        "code switching"
+      ]
+    }
+  ]
+}

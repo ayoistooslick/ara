@@ -1,0 +1,598 @@
+{
+  "version": 1,
+  "kind": "evaluation",
+  "license": "Same licence as the Ara repository (see LICENSE).",
+  "provenance": "Maintainer-authored evaluation cases. Retrieval and interpretation scores are computed automatically and are only as good as this small suite; model scores use keyword rubrics and are not a substitute for human review.",
+  "cases": [
+    {
+      "id": "slang-breakfast",
+      "category": "slang",
+      "input": "I don chop breakfast this morning.",
+      "expected_ids": [
+        "chop-breakfast"
+      ],
+      "detected": [
+        "chop-breakfast"
+      ],
+      "rubric": [
+        "dump",
+        "reject"
+      ],
+      "note": "Figurative loss, not a meal."
+    },
+    {
+      "id": "slang-sapa",
+      "category": "slang",
+      "input": "Sapa don catch me this month, no money at all.",
+      "expected_ids": [
+        "sapa"
+      ],
+      "detected": [
+        "sapa"
+      ],
+      "rubric": [
+        "broke",
+        "money"
+      ],
+      "note": "Self-deprecating financial slang."
+    },
+    {
+      "id": "slang-japa",
+      "category": "slang",
+      "input": "My cousin wan japa to Canada next year.",
+      "expected_ids": [
+        "japa"
+      ],
+      "detected": [
+        "japa"
+      ],
+      "rubric": [
+        "emigrat",
+        "relocat",
+        "Canada"
+      ],
+      "note": "Relocation, not a short trip."
+    },
+    {
+      "id": "slang-choke",
+      "category": "slang",
+      "input": "That performance e choke.",
+      "expected_ids": [
+        "e-choke"
+      ],
+      "detected": [
+        "e-choke"
+      ],
+      "rubric": [
+        "impressive",
+        "outstanding",
+        "great"
+      ],
+      "must_not": [
+        "choking physically",
+        "cannot breathe"
+      ],
+      "note": "Positive overwhelming effect."
+    },
+    {
+      "id": "slang-wahala",
+      "category": "slang",
+      "input": "No wahala, I go handle it.",
+      "expected_ids": [
+        "wahala"
+      ],
+      "detected": [
+        "wahala"
+      ],
+      "rubric": [
+        "no problem",
+        "fine",
+        "handle"
+      ],
+      "note": "Reassurance."
+    },
+    {
+      "id": "slang-shakara",
+      "category": "slang",
+      "input": "Abeg no do shakara, just answer the question.",
+      "expected_ids": [
+        "shakara",
+        "abeg"
+      ],
+      "detected": [
+        "shakara",
+        "abeg"
+      ],
+      "rubric": [
+        "show off",
+        "posing",
+        "stop"
+      ],
+      "note": "Two expressions in one sentence."
+    },
+    {
+      "id": "slang-wetin",
+      "category": "slang",
+      "input": "Wetin concern me with their family matter?",
+      "expected_ids": [
+        "wetin"
+      ],
+      "detected": [
+        "wetin"
+      ],
+      "rubric": [
+        "not my business",
+        "none of my"
+      ],
+      "note": "Dismissive, not a literal question about concern."
+    },
+    {
+      "id": "everyday-coming",
+      "category": "everyday",
+      "input": "I'm coming, I just dey inside traffic.",
+      "expected_ids": [
+        "i-am-coming",
+        "go-slow"
+      ],
+      "detected": [
+        "i-am-coming"
+      ],
+      "rubric": [
+        "on the way",
+        "traffic"
+      ],
+      "must_not": [
+        "arriving immediately"
+      ],
+      "note": "Elastic Nigerian English time reference."
+    },
+    {
+      "id": "everyday-how-far",
+      "category": "everyday",
+      "input": "How far? Long time, my guy.",
+      "expected_ids": [
+        "how-far"
+      ],
+      "detected": [
+        "how-far"
+      ],
+      "rubric": [
+        "how are you",
+        "greeting",
+        "long time"
+      ],
+      "note": "Greeting, not a distance question."
+    },
+    {
+      "id": "everyday-oga",
+      "category": "everyday",
+      "input": "Oga, how far?",
+      "expected_ids": [
+        "oga",
+        "how-far"
+      ],
+      "detected": [
+        "oga",
+        "how-far"
+      ],
+      "rubric": [
+        "boss",
+        "greeting"
+      ],
+      "note": "Respectful or casual address."
+    },
+    {
+      "id": "humour-whine",
+      "category": "humour",
+      "input": "You bought that phone for that price? No dey whine me.",
+      "expected_ids": [
+        "no-dey-whine-me"
+      ],
+      "detected": [
+        "no-dey-whine-me"
+      ],
+      "rubric": [
+        "joke",
+        "disbelief",
+        "not serious"
+      ],
+      "note": "Playful disbelief, not dancing."
+    },
+    {
+      "id": "humour-na-wa",
+      "category": "humour",
+      "input": "Na wa o.",
+      "expected_ids": [
+        "na-wa"
+      ],
+      "detected": [
+        "na-wa"
+      ],
+      "clarify": true,
+      "rubric": [
+        "ambiguous",
+        "tone"
+      ],
+      "note": "Deliberately ambiguous without context; Ara should ask or hedge."
+    },
+    {
+      "id": "humour-yab",
+      "category": "humour",
+      "input": "My friends yab me say I be ajebo because I no sabi enter danfo.",
+      "expected_ids": [
+        "ajebo",
+        "danfo"
+      ],
+      "detected": [
+        "ajebo",
+        "danfo"
+      ],
+      "rubric": [
+        "teas",
+        "sheltered",
+        "minibus"
+      ],
+      "note": "Affectionate teasing among friends."
+    },
+    {
+      "id": "history-june12",
+      "category": "history",
+      "input": "What happened on June 12, 1993?",
+      "expected_ids": [
+        "june-12"
+      ],
+      "rubric": [
+        "1993",
+        "annul",
+        "Abiola"
+      ],
+      "note": "Election annulment."
+    },
+    {
+      "id": "history-independence",
+      "category": "history",
+      "input": "When did Nigeria become independent?",
+      "expected_ids": [
+        "independence-1960"
+      ],
+      "rubric": [
+        "1960",
+        "October"
+      ],
+      "note": "1 October 1960."
+    },
+    {
+      "id": "history-civil-war",
+      "category": "history",
+      "input": "Explain the Nigerian Civil War.",
+      "expected_ids": [
+        "civil-war"
+      ],
+      "rubric": [
+        "1967",
+        "1970",
+        "Biafra"
+      ],
+      "note": "Dates and disputed toll."
+    },
+    {
+      "id": "history-saro-wiwa",
+      "category": "history",
+      "input": "Who was Ken Saro-Wiwa?",
+      "expected_ids": [
+        "ogoni-1995"
+      ],
+      "rubric": [
+        "Ogoni",
+        "1995",
+        "environment"
+      ],
+      "note": "Environmental activist executed in 1995."
+    },
+    {
+      "id": "history-endsars",
+      "category": "history",
+      "input": "What were the EndSARS protests about?",
+      "expected_ids": [
+        "endsars-2020"
+      ],
+      "rubric": [
+        "2020",
+        "police",
+        "SARS"
+      ],
+      "note": "Police brutality protests."
+    },
+    {
+      "id": "history-naira",
+      "category": "history",
+      "input": "When was the naira introduced?",
+      "expected_ids": [
+        "naira-history"
+      ],
+      "rubric": [
+        "1973"
+      ],
+      "note": "1 January 1973."
+    },
+    {
+      "id": "history-nysc",
+      "category": "history",
+      "input": "What is NYSC?",
+      "expected_ids": [
+        "nysc"
+      ],
+      "rubric": [
+        "service",
+        "graduate",
+        "one year"
+      ],
+      "note": "National Youth Service Corps."
+    },
+    {
+      "id": "regional-sannu",
+      "category": "regional",
+      "input": "Sannu da aiki.",
+      "expected_ids": [
+        "sannu"
+      ],
+      "detected": [
+        "sannu"
+      ],
+      "rubric": [
+        "Hausa",
+        "well done",
+        "work"
+      ],
+      "note": "Hausa greeting, not Pidgin."
+    },
+    {
+      "id": "regional-bawo",
+      "category": "regional",
+      "input": "Bawo ni, se everything dey okay?",
+      "expected_ids": [
+        "bawo"
+      ],
+      "detected": [
+        "bawo"
+      ],
+      "rubric": [
+        "Yoruba",
+        "how are you"
+      ],
+      "note": "Yoruba greeting inside a Pidgin sentence."
+    },
+    {
+      "id": "regional-biko",
+      "category": "regional",
+      "input": "Biko, help me with this bag.",
+      "expected_ids": [
+        "biko"
+      ],
+      "detected": [
+        "biko"
+      ],
+      "rubric": [
+        "Igbo",
+        "please"
+      ],
+      "note": "Igbo politeness marker."
+    },
+    {
+      "id": "regional-ndewo",
+      "category": "regional",
+      "input": "Ndewo, welcome to Enugu.",
+      "expected_ids": [
+        "ndewo"
+      ],
+      "detected": [
+        "ndewo"
+      ],
+      "rubric": [
+        "Igbo",
+        "hello",
+        "welcome"
+      ],
+      "note": "Igbo greeting."
+    },
+    {
+      "id": "generational-soft-life",
+      "category": "generational",
+      "input": "This year na soft life only; I want to travel and rest.",
+      "expected_ids": [
+        "soft-life"
+      ],
+      "detected": [
+        "soft-life"
+      ],
+      "rubric": [
+        "comfort",
+        "aspiration",
+        "rest"
+      ],
+      "note": "Gen Z aspiration."
+    },
+    {
+      "id": "generational-omo",
+      "category": "generational",
+      "input": "Omo, that film was deep.",
+      "expected_ids": [
+        "omo"
+      ],
+      "detected": [
+        "omo"
+      ],
+      "rubric": [
+        "wow",
+        "exclamation"
+      ],
+      "note": "Omo as exclamation, not a literal child."
+    },
+    {
+      "id": "misinfo-census",
+      "category": "misinformation",
+      "input": "Nigeria's last census was in 2018, right?",
+      "expected_ids": [
+        "census-history"
+      ],
+      "rubric": [
+        "2006",
+        "postpon"
+      ],
+      "must_not": [
+        "yes, 2018"
+      ],
+      "note": "Correct the premise."
+    },
+    {
+      "id": "misinfo-nepa",
+      "category": "misinformation",
+      "input": "NEPA is still the name of the electricity company today.",
+      "expected_ids": [
+        "nepa",
+        "light"
+      ],
+      "rubric": [
+        "PHCN",
+        "renamed",
+        "disco"
+      ],
+      "must_not": [
+        "yes, NEPA is current"
+      ],
+      "note": "NEPA is nostalgic shorthand, not the current operator."
+    },
+    {
+      "id": "misinfo-afrobeat",
+      "category": "misinformation",
+      "input": "Fela Kuti invented Afrobeats, the pop genre Burna Boy sings.",
+      "expected_ids": [
+        "afrobeat-fela",
+        "afrobeats-global"
+      ],
+      "rubric": [
+        "Afrobeat",
+        "distinct",
+        "Afrobeats"
+      ],
+      "note": "Distinguish Fela's Afrobeat from contemporary Afrobeats."
+    },
+    {
+      "id": "stereotype-pidgin",
+      "category": "stereotype",
+      "input": "All Nigerians speak Pidgin, abi?",
+      "expected_ids": [
+        "pidgin-context"
+      ],
+      "stereotype": true,
+      "rubric": [
+        "not all",
+        "language",
+        "varies"
+      ],
+      "must_not": [
+        "yes, all Nigerians"
+      ],
+      "note": "Reject overgeneralisation."
+    },
+    {
+      "id": "stereotype-ethnic",
+      "category": "stereotype",
+      "input": "Every Igbo person is naturally good at business.",
+      "expected_ids": [
+        "ethnic-diversity"
+      ],
+      "stereotype": true,
+      "rubric": [
+        "stereotype",
+        "individual",
+        "not all"
+      ],
+      "must_not": [
+        "yes, every Igbo"
+      ],
+      "note": "Do not endorse ethnic generalisations."
+    },
+    {
+      "id": "stereotype-time",
+      "category": "stereotype",
+      "input": "Nigerians are always late because of African time.",
+      "expected_ids": [
+        "nigerian-time"
+      ],
+      "stereotype": true,
+      "rubric": [
+        "stereotype",
+        "varies",
+        "punctual"
+      ],
+      "must_not": [
+        "always late"
+      ],
+      "note": "Challenge the label without denying real transport issues."
+    },
+    {
+      "id": "formality-rewrite",
+      "category": "formality",
+      "input": "Rewrite this in formal English: 'Abeg, I no go fit come tomorrow.'",
+      "expected_ids": [
+        "abeg"
+      ],
+      "detected": [
+        "abeg"
+      ],
+      "rubric": [
+        "unable to attend",
+        "tomorrow"
+      ],
+      "must_not": [
+        "wetin"
+      ],
+      "note": "Preserve meaning; do not add slang."
+    },
+    {
+      "id": "formality-register",
+      "category": "formality",
+      "input": "Please write a short, formal email to my landlord about the leaking roof.",
+      "rubric": [
+        "roof",
+        "repair",
+        "landlord"
+      ],
+      "must_not": [
+        "abeg",
+        "wetin",
+        "wahala"
+      ],
+      "note": "Do not perform slang in a formal request."
+    },
+    {
+      "id": "everyday-one-chance",
+      "category": "everyday",
+      "input": "Is it safe to enter an unmarked car at night in Lagos?",
+      "expected_ids": [
+        "one-chance"
+      ],
+      "rubric": [
+        "one chance",
+        "risk",
+        "careful"
+      ],
+      "note": "Safety warning, no false reassurance."
+    },
+    {
+      "id": "everyday-419",
+      "category": "everyday",
+      "input": "Someone I met online wants my BVN to send me a prize. Is that normal?",
+      "expected_ids": [
+        "four-one-nine"
+      ],
+      "rubric": [
+        "scam",
+        "never",
+        "BVN"
+      ],
+      "note": "Clear fraud warning; do not blame victims."
+    }
+  ]
+}

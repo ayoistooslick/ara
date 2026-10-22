@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#08140f">
+  <meta name="description" content="Ara is a local-first Nigerian AI. It understands Nigerian context without performing slang, remembers what you approve, and runs with one shared core in the terminal and the browser.">
+  <title>Ara — the AI that belongs in Nigeria</title>
+  <link rel="icon" href="/frog.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div id="toast-region" class="toast-region" role="status" aria-live="polite"></div>
+
+  <section id="landing" class="landing" aria-label="About Ara">
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="Ara home">
+        <img src="/frog.svg" alt="" class="brand-frog" width="48" height="42">
+        <span class="brand-word">ara<span class="brand-dot">.</span></span>
+      </a>
+      <nav class="site-nav" aria-label="Sections">
+        <a href="#context">Context</a>
+        <a href="#memory">Memory</a>
+        <a href="#news">News</a>
+        <a href="#privacy">Privacy</a>
+      </nav>
+      <button class="button button-small button-green" id="open-app-top" type="button">Open Ara</button>
+    </header>
+
+    <main id="top" class="hero-wrap">
+      <div class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="tri-band" aria-hidden="true"></span> Built in Nigeria. Runs with you.</p>
+          <h1>The AI that <em>belongs</em> in Nigeria.</h1>
+          <p class="lede">Ara understands the way Nigerians actually speak, argue, joke, learn, and remember. Not a foreign chatbot wearing a Pidgin toggle. One local-first intelligence, in your terminal and your browser.</p>
+          <div class="hero-actions">
+            <button class="button button-green button-large" id="open-app" type="button">Start a conversation</button>
+            <a class="button button-ghost button-large" href="#context">See how it reads context</a>
+          </div>
+          <ul class="hero-facts" aria-label="Key facts">
+            <li><strong>Local by default</strong><span>Your model server, your machine.</span></li>
+            <li><strong>One memory</strong><span>Terminal and web share notes you approve.</span></li>
+            <li><strong>No caricature</strong><span>No compulsory slang, no fake accent.</span></li>
+          </ul>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="mascot-stage">
+            <span class="stage-label">Ara / the Nigerian frog</span>
+            <div class="hop-wrap">
+              <img class="mascot-hop" src="/frog.svg" alt="" width="320" height="280">
+            </div>
+            <div class="mascot-shadow"></div>
+            <div class="stage-caption">Green and white. Curious by design.</div>
+          </div>
+          <div class="floating-note note-one">“I don chop breakfast” <span>dumped, not fed</span></div>
+          <div class="floating-note note-two">“Na wa o” <span>admiration or exasperation</span></div>
+        </div>
+      </div>
+    </main>
+
+    <section class="context-section" id="context">
+      <div class="section-head">
+        <p class="eyebrow">Beyond the dictionary</p>
+        <h2>Meaning is rarely just the words.</h2>
+        <p>Ara separates literal sense, intended meaning, region, register, and uncertainty. When a phrase is genuinely ambiguous, it asks instead of guessing.</p>
+      </div>
+      <div class="reading-grid">
+        <article class="reading-card">
+          <p class="card-kicker">Figurative</p>
+          <blockquote>“I don chop breakfast this morning.”</blockquote>
+          <dl>
+            <div><dt>Literal</dt><dd>I ate a morning meal.</dd></div>
+            <div><dt>Intended</dt><dd>I was dumped or defeated — usually said with a wry laugh.</dd></div>
+          </dl>
+          <p class="fine">Register: informal · Nationwide · Confidence 0.92</p>
+        </article>
+        <article class="reading-card">
+          <p class="card-kicker">Ambiguous on purpose</p>
+          <blockquote>“Na wa o.”</blockquote>
+          <dl>
+            <div><dt>Literal</dt><dd>“It is something else.”</dd></div>
+            <div><dt>Possible</dt><dd>Exasperation at a price. Admiration of an outfit. Mild disbelief.</dd></div>
+          </dl>
+          <p class="fine">Ara asks for the cue it is missing. It does not invent one.</p>
+        </article>
+        <article class="reading-card reading-card-green">
+          <p class="card-kicker">Regional, not universal</p>
+          <blockquote>“Sannu da aiki.”</blockquote>
+          <dl>
+            <div><dt>Language</dt><dd>Hausa, not Pidgin.</dd></div>
+            <div><dt>Meaning</dt><dd>Well done at work — a greeting of appreciation.</dd></div>
+          </dl>
+          <p class="fine">Ara names the source language instead of flattening everything into “Nigerian”.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="capability-section" aria-labelledby="capability-title">
+      <div class="section-head">
+        <p class="eyebrow">One core, two interfaces</p>
+        <h2 id="capability-title">Built for the way the day actually goes.</h2>
+      </div>
+      <div class="capability-grid">
+        <article>
+          <span class="cap-number">01</span>
+          <h3>Talk, type, or speak</h3>
+          <p>Text in the terminal and browser. Voice input and spoken replies in the browser where the device supports them, with visible microphone state and an immediate stop.</p>
+        </article>
+        <article>
+          <span class="cap-number">02</span>
+          <h3>Read the room</h3>
+          <p>Standard English, Nigerian English, Pidgin, or another language — chosen from your register, not a stereotype. It will not force slang into a formal email.</p>
+        </article>
+        <article>
+          <span class="cap-number">03</span>
+          <h3>Remember with permission</h3>
+          <p>Corrections, preferences, and facts you explicitly approve. Inspect, correct, export, or delete them. Memories are notes, not hidden model training.</p>
+        </article>
+        <article>
+          <span class="cap-number">04</span>
+          <h3>Know what is current</h3>
+          <p>Headlines from Nigerian publishers with their names, links, and publication times. Cached stories are labelled with their real dates — never passed off as breaking news.</p>
+        </article>
+        <article>
+          <span class="cap-number">05</span>
+          <h3>Teach without showing off</h3>
+          <p>Explanations at your level, Nigerian examples when they help, practice questions, and honest uncertainty. Learning is a capability, not a costume.</p>
+        </article>
+        <article>
+          <span class="cap-number">06</span>
+          <h3>Work on real phones</h3>
+          <p>A small interface, no mandatory multi-gigabyte download to open the app, and model profiles that name their memory cost instead of promising magic.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="memory-section" id="memory">
+      <div class="memory-copy">
+        <p class="eyebrow">A memory you can hold</p>
+        <h2>It remembers. You decide what.</h2>
+        <p>Memory lives in a local SQLite database, shared by Terminal Ara and Web Ara on this installation. Every note carries a kind, source, and confidence; memory cards name how the current search works. You can see what Ara is using — and remove it.</p>
+        <ul class="check-list">
+          <li>Recent corrections are surfaced so they carry more weight than older notes.</li>
+          <li>Lexical and local vector retrieval when configured, with the method labelled honestly.</li>
+          <li>Export and delete controls in the browser and the CLI.</li>
+          <li>No automatic retraining from your conversations.</li>
+        </ul>
+      </div>
+      <div class="terminal-card" aria-label="Example terminal session">
+        <div class="terminal-bar"><span></span><span></span><span></span><em>ara — local session</em></div>
+        <pre><code>$ ara
+Ara is ready. Type /help for local commands.
+
+you&gt; remember that I prefer explanations in plain English
+ara&gt; Noted. I’ll keep that preference in mind.
+
+you&gt; wetin concern me with their family matter?
+ara&gt; You’re brushing it off — “not my business,” not a real question.
+     It’s Pidgin; I’ll reply in the same register unless you ask otherwise.
+
+you&gt; /memory
+#1 [preference; explicit-user-statement; confidence 0.85]
+   User prefers explanations in plain English</code></pre>
+      </div>
+    </section>
+
+    <section class="news-section" id="news">
+      <div class="section-head">
+        <p class="eyebrow">Ara’s news plate</p>
+        <h2>Today, with the receipt attached.</h2>
+        <p>Headlines come from Nigerian publishers’ own feeds. Every story keeps its source, link, and publication time. Offline, the last cache is shown with its age — not rewritten into fresh-sounding guesses.</p>
+      </div>
+      <div class="news-preview" aria-hidden="true">
+        <div class="news-preview-top">
+          <span class="live-dot"></span> Cached publisher feeds
+          <span class="preview-time">Updated moments ago</span>
+        </div>
+        <div class="preview-row"><span class="preview-source">Premium Times</span><span class="preview-headline">Headline, source, timestamp, link — retained together.</span></div>
+        <div class="preview-row"><span class="preview-source">Punch</span><span class="preview-headline">Duplicate stories collapse into one card, with related publishers listed.</span></div>
+        <div class="preview-row"><span class="preview-source">Daily Trust</span><span class="preview-headline">Older cached items keep their age label. No invented breaking news.</span></div>
+      </div>
+      <button class="button button-green" id="open-app-news" type="button">Open the news plate</button>
+    </section>
+
+    <section class="privacy-section" id="privacy">
+      <div class="privacy-card">
+        <p class="eyebrow">Private by architecture</p>
+        <h2>Your words stay where you put them.</h2>
+        <p>No external AI API is required. Images and audio are sent only to the local endpoints you configure, and are not stored by Ara. Camera and microphone start only when you press their buttons, show a visible indicator, and stop when you say so.</p>
+        <div class="privacy-grid">
+          <div><strong>Local model</strong><span>OpenAI-compatible server on your machine or network.</span></div>
+          <div><strong>Plain storage</strong><span>SQLite you can back up, inspect, and delete.</span></div>
+          <div><strong>Honest limits</strong><span>No vision or voice claim without a configured engine.</span></div>
+          <div><strong>Safe actions</strong><span>No shell or filesystem access from anonymous web users.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="closing">
+      <img src="/frog.svg" alt="" class="closing-frog" width="120" height="105">
+      <h2>Bring your own model. Keep your own mind.</h2>
+      <p>Ara is useful with a small local model, honest about what that model cannot do, and built to grow without changing its identity.</p>
+      <button class="button button-green button-large" id="open-app-bottom" type="button">Open Ara</button>
+    </section>
+
+    <footer class="site-footer">
+      <div class="brand brand-small"><img src="/frog.svg" alt="" width="32" height="28"><span class="brand-word">ara<span class="brand-dot">.</span></span></div>
+      <p>Local-first Nigerian AI. Built by Ayodele Ayokunle David. Green, white, and still curious.</p>
+      <p class="footer-links"><a href="/api/health">Health</a> · <a href="#top">Back to top</a></p>
+    </footer>
+  </section>
+
+  <section id="gate" class="gate" hidden aria-labelledby="gate-title">
+    <form class="gate-card" id="gate-form">
+      <img src="/frog.svg" alt="" width="88" height="77">
+      <h2 id="gate-title">Ara is password protected.</h2>
+      <p>This deployment requires the password set by its owner. It is sent only to this server.</p>
+      <label for="gate-password">Password</label>
+      <input id="gate-password" name="password" type="password" autocomplete="current-password" required>
+      <p class="form-error" id="gate-error" role="alert"></p>
+      <button class="button button-green" type="submit">Enter Ara</button>
+      <button class="button button-ghost" type="button" id="gate-cancel">Back</button>
+      <p class="fine">Use HTTPS when Ara is reachable beyond your own machine.</p>
+    </form>
+  </section>
+
+  <div class="app" id="app" hidden>
+    <aside class="rail" aria-label="Ara navigation">
+      <div class="rail-brand">
+        <img src="/frog.svg" alt="" width="44" height="39">
+        <span class="brand-word">ara<span class="brand-dot">.</span></span>
+      </div>
+      <nav class="rail-nav" aria-label="Workspace">
+        <button type="button" class="rail-link is-active" data-view="chat" aria-current="page">
+          <span class="rail-icon" aria-hidden="true">◍</span> Talk
+        </button>
+        <button type="button" class="rail-link" data-view="learn">
+          <span class="rail-icon" aria-hidden="true">✎</span> Study
+        </button>
+        <button type="button" class="rail-link" data-view="news">
+          <span class="rail-icon" aria-hidden="true">▤</span> News
+        </button>
+        <button type="button" class="rail-link" data-view="memory">
+          <span class="rail-icon" aria-hidden="true">◎</span> Memory
+        </button>
+        <button type="button" class="rail-link" data-view="about">
+          <span class="rail-icon" aria-hidden="true">ⓘ</span> About
+        </button>
+      </nav>
+      <div class="rail-foot">
+        <div class="rail-status" id="rail-status">
+          <span class="status-dot" id="rail-dot"></span>
+          <span id="rail-status-text">Checking the model…</span>
+        </div>
+        <button class="rail-link rail-quiet" type="button" id="leave-app">Back to the field</button>
+      </div>
+    </aside>
+
+    <main id="main" class="workspace">
+      <header class="topbar">
+        <div>
+          <p class="topbar-kicker" id="view-kicker">Local conversation</p>
+          <h1 id="view-title">Talk with Ara</h1>
+        </div>
+        <div class="topbar-actions">
+          <span class="pill" id="model-pill">model · checking</span>
+          <span class="pill pill-soft" id="mode-pill">Chat</span>
+          <button class="icon-button" type="button" id="new-chat" aria-label="Start a new conversation" title="New conversation">＋</button>
+        </div>
+      </header>
+
+      <section class="view view-chat" id="view-chat" aria-labelledby="view-title">
+        <div class="study-banner" id="study-banner" hidden>
+          <strong>Study mode.</strong> Ara explains in steps, asks what you already know, and ends with a check question. Learning is one thing it can do — not its whole personality.
+        </div>
+        <div class="chat-log" id="chat-log" aria-live="polite" aria-relevant="additions text">
+          <div class="chat-empty" id="chat-empty">
+            <div class="empty-frog-wrap">
+              <img src="/frog.svg" alt="Ara the frog" width="150" height="131" class="empty-frog">
+            </div>
+            <h2 id="empty-title">What are we looking at?</h2>
+            <p id="empty-sub">Ask in English or Pidgin. Ara will match your register, check its notes, and say when it is unsure.</p>
+            <div class="suggestions" id="suggestions">
+              <button type="button" data-prompt="Explain what “I don chop breakfast” means, and why it is not about food.">What does “I don chop breakfast” mean?</button>
+              <button type="button" data-prompt="Was Nigeria’s last census in 2018? Correct me if I am wrong.">Check a fact I half-remember</button>
+              <button type="button" data-prompt="Help me write a short, formal email to my landlord about a leaking roof.">Write a formal email</button>
+              <button type="button" data-prompt="Give me the latest Nigerian headlines you have cached, with sources and dates.">Read the news plate</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="composer-shell">
+          <div class="sensor-strip" id="sensor-strip" hidden>
+            <span class="sensor-badge"><span class="rec-dot"></span><span id="sensor-label">Microphone active</span></span>
+            <span id="sensor-time" class="sensor-time"></span>
+            <button class="sensor-stop" type="button" id="sensor-stop">Stop</button>
+          </div>
+          <form class="composer" id="composer">
+            <div class="composer-tools">
+              <button class="tool-button" type="button" id="mic-button" aria-pressed="false" aria-label="Record a voice message" title="Record voice">
+                <span aria-hidden="true">●</span><span class="tool-label">Voice</span>
+              </button>
+              <button class="tool-button" type="button" id="camera-button" aria-pressed="false" aria-label="Open camera for image analysis" title="Camera">
+                <span aria-hidden="true">▣</span><span class="tool-label">Camera</span>
+              </button>
+              <label class="tool-button" for="image-input" title="Upload an image for analysis">
+                <span aria-hidden="true">↑</span><span class="tool-label">Image</span>
+                <input id="image-input" type="file" accept="image/jpeg,image/png,image/gif,image/webp" hidden>
+              </label>
+              <span class="tool-spacer"></span>
+              <label class="speak-toggle" title="Read Ara's replies aloud using this device's speech engine">
+                <input type="checkbox" id="speak-toggle">
+                <span>Speak replies</span>
+              </label>
+            </div>
+            <div class="input-row">
+              <label class="sr-only" for="message">Message Ara</label>
+              <textarea id="message" name="message" rows="1" maxlength="8000" placeholder="Talk to Ara…" enterkeyhint="send" autocomplete="off"></textarea>
+              <button class="send-button" id="send-button" type="submit" aria-label="Send message">
+                <span class="send-icon" aria-hidden="true">→</span>
+              </button>
+              <button class="send-button stop-button" id="stop-button" type="button" hidden aria-label="Stop this reply">
+                <span aria-hidden="true">■</span>
+              </button>
+            </div>
+            <p class="composer-meta"><span id="composer-hint">Enter to send · Shift+Enter for a new line</span><span class="offline-chip" id="offline-chip" hidden>Offline — local features only</span></p>
+          </form>
+        </div>
+      </section>
+
+      <section class="view view-news" id="view-news" hidden aria-labelledby="news-title">
+        <div class="view-scroll">
+          <div class="news-head">
+            <div>
+              <h2 id="news-title">Ara’s news plate</h2>
+              <p id="news-meta">Publisher feeds, kept with their dates and links.</p>
+            </div>
+            <div class="news-actions">
+              <button class="button button-green button-small" type="button" id="refresh-news">Refresh feeds</button>
+              <button class="button button-ghost button-small" type="button" id="offline-news">Show cached</button>
+            </div>
+          </div>
+          <div class="topic-row" id="topic-row" aria-label="News topics">
+            <button type="button" class="topic is-active" data-topic="">All</button>
+          </div>
+          <p class="cache-note" id="news-cache-note" hidden></p>
+          <div class="news-grid" id="news-grid"></div>
+          <div class="empty-state" id="news-empty" hidden>
+            <img src="/frog.svg" alt="" width="96" height="84">
+            <h3>No stories cached yet.</h3>
+            <p>Refresh to pull the publisher feeds. If you are offline, Ara will tell you instead of inventing headlines.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="view view-memory" id="view-memory" hidden aria-labelledby="memory-title">
+        <div class="view-scroll">
+          <div class="view-intro">
+            <h2 id="memory-title">Memory, in your hands</h2>
+            <p>Shared with Terminal Ara on this installation. Each note is a note — not a hidden training example. About shows whether retrieval is semantic or a lexical fallback.</p>
+          </div>
+          <form class="memory-form" id="memory-form">
+            <div class="field">
+              <label for="memory-content">Add something Ara should remember</label>
+              <input id="memory-content" name="content" maxlength="1000" placeholder="e.g. I prefer explanations in plain English" required>
+            </div>
+            <div class="field field-small">
+              <label for="memory-kind">Kind</label>
+              <select id="memory-kind" name="kind">
+                <option value="preference">Preference</option>
+                <option value="fact">Fact</option>
+                <option value="personal_history">Personal history</option>
+                <option value="correction">Correction</option>
+              </select>
+            </div>
+            <button class="button button-green" type="submit">Save note</button>
+          </form>
+          <div class="memory-toolbar">
+            <p id="memory-count">Loading notes…</p>
+            <div class="memory-tools">
+              <a class="button button-ghost button-small" href="/api/memory/export" download>Export JSON</a>
+              <button class="button button-danger button-small" type="button" id="forget-all">Forget all</button>
+            </div>
+          </div>
+          <div class="memory-list" id="memory-list"></div>
+          <div class="empty-state" id="memory-empty" hidden>
+            <h3>Nothing stored yet.</h3>
+            <p>Corrections and preferences you state explicitly will appear here. You can add a note above.</p>
+          </div>
+          <div class="privacy-note">
+            <strong>What this does not do:</strong> saving a note does not change model weights or train a model. It changes the context Ara retrieves on later turns.
+          </div>
+        </div>
+      </section>
+
+      <section class="view view-about" id="view-about" hidden aria-labelledby="about-title">
+        <div class="view-scroll">
+          <div class="about-hero">
+            <img src="/frog.svg" alt="Ara the frog" width="120" height="105">
+            <div>
+              <p class="eyebrow">The Nigerian frog</p>
+              <h2 id="about-title">Ara, plainly</h2>
+              <p>One shared core: model adapter, memory, Nigerian knowledge, tools, and learning behaviour. Terminal and web are two doors into the same room.</p>
+            </div>
+          </div>
+          <div class="about-grid">
+            <article class="about-card">
+              <h3>Runtime</h3>
+              <dl id="about-runtime"><div><dt>Status</dt><dd>Loading…</dd></div></dl>
+            </article>
+            <article class="about-card">
+              <h3>Perception</h3>
+              <dl id="about-perception"><div><dt>Status</dt><dd>Loading…</dd></div></dl>
+            </article>
+            <article class="about-card">
+              <h3>Knowledge</h3>
+              <dl id="about-knowledge"><div><dt>Status</dt><dd>Loading…</dd></div></dl>
+              <p class="fine">Curated seed corpus with confidence scores and caveats. Retrieval accuracy is measured on a small suite and is not a claim of general cultural mastery.</p>
+            </article>
+            <article class="about-card">
+              <h3>Privacy &amp; permissions</h3>
+              <ul class="check-list compact">
+                <li>Camera and microphone start only from a button press.</li>
+                <li>Uploads are validated and sent only to configured local endpoints.</li>
+                <li>Images and audio are not stored by Ara.</li>
+                <li>No filesystem or shell tools are exposed to the web session.</li>
+              </ul>
+              <p class="fine" id="sensor-support"></p>
+            </article>
+          </div>
+          <div class="about-foot">
+            <p>Ara {version} · local-first · built by Ayodele Ayokunle David.</p>
+            <button class="button button-ghost button-small" type="button" id="logout">End session</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <dialog class="camera-dialog" id="camera-dialog" aria-labelledby="camera-title">
+    <div class="dialog-head">
+      <div>
+        <p class="eyebrow">Live camera</p>
+        <h2 id="camera-title">Look at something</h2>
+      </div>
+      <button class="icon-button" type="button" id="camera-close" aria-label="Stop camera and close">✕</button>
+    </div>
+    <div class="camera-stage">
+      <video id="camera-video" autoplay playsinline muted></video>
+      <div class="camera-idle" id="camera-idle">Camera is off. Nothing is being captured.</div>
+      <span class="live-badge" id="camera-live" hidden><span class="rec-dot"></span> Camera live</span>
+    </div>
+    <label class="sr-only" for="vision-prompt">What should Ara look for?</label>
+    <input id="vision-prompt" maxlength="500" placeholder="Optional: what should Ara look for?">
+    <p class="form-error" id="camera-error" role="alert"></p>
+    <div class="dialog-actions">
+      <button class="button button-ghost" type="button" id="camera-enable">Turn on camera</button>
+      <button class="button button-green" type="button" id="camera-capture" disabled>Analyse this frame</button>
+      <button class="button button-danger" type="button" id="camera-stop" hidden>Stop camera</button>
+    </div>
+    <p class="fine">Frames are sent once, only when you press “Analyse this frame”. Ara does not keep a recording.</p>
+  </dialog>
+
+  <dialog class="confirm-dialog" id="confirm-dialog" aria-labelledby="confirm-title">
+    <h2 id="confirm-title">Are you sure?</h2>
+    <p id="confirm-text"></p>
+    <label for="confirm-input" id="confirm-label" hidden>Type to confirm</label>
+    <input id="confirm-input" hidden autocomplete="off">
+    <p class="form-error" id="confirm-error" role="alert"></p>
+    <div class="dialog-actions">
+      <button class="button button-ghost" type="button" id="confirm-cancel">Cancel</button>
+      <button class="button button-danger" type="button" id="confirm-accept">Confirm</button>
+    </div>
+  </dialog>
+
+  <dialog class="correct-dialog" id="correct-dialog" aria-labelledby="correct-title">
+    <h2 id="correct-title">Correct this note</h2>
+    <p class="fine">The correction replaces the note’s content and marks its source as a user correction.</p>
+    <label for="correct-content">New text</label>
+    <textarea id="correct-content" rows="4" maxlength="1000"></textarea>
+    <p class="form-error" id="correct-error" role="alert"></p>
+    <div class="dialog-actions">
+      <button class="button button-ghost" type="button" id="correct-cancel">Cancel</button>
+      <button class="button button-green" type="button" id="correct-accept">Save correction</button>
+    </div>
+  </dialog>
+
+  <noscript>
+    <div class="noscript">Ara’s web interface needs JavaScript. The terminal app still works: run <code>ara</code>.</div>
+  </noscript>
+</body>
+</html>

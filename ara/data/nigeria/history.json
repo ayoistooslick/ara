@@ -1,0 +1,500 @@
+{
+  "version": 1,
+  "kind": "history",
+  "license": "Same licence as the Ara repository (see LICENSE).",
+  "provenance": "Maintainer-authored summaries of widely documented Nigerian history, with background reading links to Wikipedia articles. Dates are given where they are broadly agreed; disputed death tolls and contested events are labelled as disputed rather than presented as settled fact.",
+  "entries": [
+    {
+      "id": "amalgamation-1914",
+      "title": "The 1914 amalgamation",
+      "period": "1914",
+      "summary": "The British colonial administration merged the Northern and Southern Protectorates (with Lagos) into a single colony and protectorate of Nigeria under Governor-General Frederick Lugard.",
+      "context": "The merger was an administrative and fiscal decision by the colonial power. It joined regions with different political structures, legal systems, and majority religions; it did not create a shared national identity.",
+      "caution": "Avoid saying 1914 'created Nigeria as one people'. It created a colonial administrative unit whose internal boundaries and politics continued to change.",
+      "confidence": 0.97,
+      "sources": [
+        {
+          "label": "Wikipedia: History of Nigeria",
+          "url": "https://en.wikipedia.org/wiki/History_of_Nigeria"
+        }
+      ],
+      "tags": [
+        "1914",
+        "amalgamation",
+        "colonial",
+        "lugard"
+      ]
+    },
+    {
+      "id": "independence-1960",
+      "title": "Independence",
+      "period": "1 October 1960",
+      "summary": "Nigeria became independent from Britain. Abubakar Tafawa Balewa was the first Prime Minister; Nnamdi Azikiwe became Governor-General and then the first President when Nigeria became a republic in 1963.",
+      "context": "Independence followed negotiated constitutional conferences and a federal system of regions. The first decades were marked by regional political competition.",
+      "caution": "Independence Day is 1 October. Republic Day is a separate constitutional change in 1963.",
+      "confidence": 0.98,
+      "sources": [
+        {
+          "label": "Wikipedia: Nigeria",
+          "url": "https://en.wikipedia.org/wiki/Nigeria"
+        }
+      ],
+      "tags": [
+        "independence",
+        "1960",
+        "october",
+        "republic"
+      ]
+    },
+    {
+      "id": "coup-1966",
+      "title": "The 1966 coups",
+      "period": "15 January and 29 July 1966",
+      "summary": "A January coup led by junior officers killed Prime Minister Balewa and senior northern and western politicians; General Johnson Aguiyi-Ironsi took power. A July counter-coup installed Yakubu Gowon and intensified regional and ethnic tensions.",
+      "context": "The coups are often described through ethnic lenses, but the plotters and victims were mixed and the political causes included corruption, regional rivalry, and a disputed census.",
+      "caution": "Do not reduce 1966 to 'one ethnic group against another'. Historians disagree about motives and organisation.",
+      "confidence": 0.94,
+      "sources": [
+        {
+          "label": "Wikipedia: 1966 Nigerian coup d'état",
+          "url": "https://en.wikipedia.org/wiki/1966_Nigerian_coup_d%27%C3%A9tat"
+        }
+      ]
+    },
+    {
+      "id": "civil-war",
+      "title": "The Nigerian Civil War (Biafra)",
+      "period": "July 1967 - January 1970",
+      "summary": "The south-eastern region declared independence as Biafra under Odumegwu Ojukwu. A 30-month war, blockade, and famine followed. The federal side won, and Gowon declared 'no victor, no vanquished' with a reconciliation policy.",
+      "context": "The war caused a humanitarian crisis and a highly contested death toll, often estimated in the range of one to three million people including children. The figures and responsibility for the famine are still debated.",
+      "caution": "Treat casualty figures as estimates, not exact counts. The war remains painful and politically charged; do not use it for casual banter.",
+      "confidence": 0.96,
+      "sources": [
+        {
+          "label": "Wikipedia: Nigerian Civil War",
+          "url": "https://en.wikipedia.org/wiki/Nigerian_Civil_War"
+        }
+      ],
+      "tags": [
+        "biafra",
+        "civil war",
+        "1967",
+        "1970",
+        "war"
+      ]
+    },
+    {
+      "id": "oil-boom-1970s",
+      "title": "Oil and the 1970s boom",
+      "period": "1970s",
+      "summary": "Oil exports expanded rapidly after the war, especially after Nigeria joined OPEC in 1971. Revenue funded a construction boom, state expansion, and the move of the federal capital to Abuja (legislated in 1976, effective 1991).",
+      "context": "Dependence on oil revenue shaped federal allocations, import patterns, and the neglect of agriculture. The volatility of oil prices became a recurring national problem.",
+      "caution": "Oil was not the only cause of later economic problems; policy choices, debt, and governance also mattered.",
+      "confidence": 0.93,
+      "sources": [
+        {
+          "label": "Wikipedia: Petroleum industry in Nigeria",
+          "url": "https://en.wikipedia.org/wiki/Petroleum_industry_in_Nigeria"
+        }
+      ],
+      "tags": [
+        "oil",
+        "opec",
+        "1971",
+        "revenue"
+      ]
+    },
+    {
+      "id": "sap-1986",
+      "title": "Structural Adjustment Programme",
+      "period": "1986 onward",
+      "summary": "Under Ibrahim Babangida, Nigeria adopted a World Bank and IMF-backed structural adjustment programme: subsidy cuts, privatisation, trade liberalisation, and currency devaluation.",
+      "context": "SAP is remembered for inflation, reduced public spending, and hardship, and it reshaped debates about subsidies and the naira that continue today.",
+      "caution": "Supporters and critics disagree about its effects; present both rather than a single verdict.",
+      "confidence": 0.92,
+      "sources": [
+        {
+          "label": "Wikipedia: Structural adjustment",
+          "url": "https://en.wikipedia.org/wiki/Structural_adjustment"
+        }
+      ],
+      "tags": [
+        "sap",
+        "structural adjustment",
+        "1986",
+        "babangida"
+      ]
+    },
+    {
+      "id": "june-12",
+      "title": "June 12, 1993",
+      "period": "12 June 1993",
+      "summary": "Nigeria held what is widely regarded as its freest presidential election. Moshood Abiola of the SDP appeared to win against Bashir Tofa of the NRC; the military government annulled the result. Abiola died in detention in 1998.",
+      "context": "June 12 became a symbol of democracy and of the cost of military rule. In 2019 the federal government moved Democracy Day from 29 May to 12 June and posthumously honoured Abiola.",
+      "caution": "The annulment and its aftermath are well documented, but claims about who ordered what remain partly contested. Do not confuse June 12 with the 1999 transition.",
+      "confidence": 0.97,
+      "sources": [
+        {
+          "label": "Wikipedia: 1993 Nigerian presidential election",
+          "url": "https://en.wikipedia.org/wiki/1993_Nigerian_presidential_election"
+        }
+      ],
+      "tags": [
+        "june 12",
+        "1993",
+        "abiola",
+        "election",
+        "annulment"
+      ]
+    },
+    {
+      "id": "ogoni-1995",
+      "title": "Ken Saro-Wiwa and the Ogoni Nine",
+      "period": "10 November 1995",
+      "summary": "Writer and environmental activist Ken Saro-Wiwa was executed with eight other Ogoni activists after a trial widely criticised internationally. The case drew attention to oil pollution and the marginalisation of the Niger Delta.",
+      "context": "MOSOP campaigned against the environmental damage of oil extraction and for Ogoni self-determination. The executions led to Nigeria's suspension from the Commonwealth.",
+      "caution": "The trial's fairness was disputed; describe it as internationally condemned rather than as a settled legal finding.",
+      "confidence": 0.96,
+      "sources": [
+        {
+          "label": "Wikipedia: Ken Saro-Wiwa",
+          "url": "https://en.wikipedia.org/wiki/Ken_Saro-Wiwa"
+        }
+      ],
+      "tags": [
+        "ken saro-wiwa",
+        "ogoni",
+        "1995",
+        "environment",
+        "delta"
+      ]
+    },
+    {
+      "id": "return-1999",
+      "title": "Return to civilian rule",
+      "period": "29 May 1999",
+      "summary": "Olusegun Obasanjo was sworn in as president, ending a long period of military rule and beginning the Fourth Republic.",
+      "context": "The transition followed the 1998 death of Sani Abacha and a hurried transition programme. The 1999 constitution, with amendments, remains in force.",
+      "caution": "Civilian rule did not end all forms of political violence or corruption; avoid treating 1999 as a clean break.",
+      "confidence": 0.97,
+      "sources": [
+        {
+          "label": "Wikipedia: Fourth Nigerian Republic",
+          "url": "https://en.wikipedia.org/wiki/Fourth_Nigerian_Republic"
+        }
+      ],
+      "tags": [
+        "1999",
+        "democracy",
+        "obasanjo",
+        "civilian"
+      ]
+    },
+    {
+      "id": "nollywood",
+      "title": "The rise of Nollywood",
+      "period": "1990s onward",
+      "summary": "Nigerian film production expanded through direct-to-video releases; 'Living in Bondage' (1992) is widely cited as a landmark. Nollywood grew into one of the world's largest film industries by output.",
+      "context": "Early films were cheap, fast, and sold on VHS and DVD. Streaming and cinemas later changed distribution, and 'New Nollywood' films have larger budgets.",
+      "caution": "Rankings by output vary by year and by how films are counted. Do not state a fixed 'second largest' ranking as permanent fact.",
+      "confidence": 0.93,
+      "sources": [
+        {
+          "label": "Wikipedia: Cinema of Nigeria",
+          "url": "https://en.wikipedia.org/wiki/Cinema_of_Nigeria"
+        }
+      ],
+      "tags": [
+        "nollywood",
+        "film",
+        "movie",
+        "1992"
+      ]
+    },
+    {
+      "id": "boko-haram",
+      "title": "The Boko Haram insurgency",
+      "period": "2002 onward",
+      "summary": "The group founded around 2002 in Maiduguri became an armed insurgency after a 2009 crackdown. It has killed tens of thousands of people and displaced millions, mainly in the North-East. The 2014 abduction of schoolgirls from Chibok drew global attention.",
+      "context": "The conflict has regional, economic, and religious dimensions and has produced splinter factions. Military operations and civilian vigilante groups changed the balance over time.",
+      "caution": "Casualty and displacement figures are estimates that change. Do not attribute the group's actions to an entire region or religion.",
+      "confidence": 0.95,
+      "sources": [
+        {
+          "label": "Wikipedia: Boko Haram insurgency",
+          "url": "https://en.wikipedia.org/wiki/Boko_Haram_insurgency"
+        }
+      ],
+      "tags": [
+        "boko haram",
+        "insurgency",
+        "chibok",
+        "north east"
+      ]
+    },
+    {
+      "id": "gdp-rebasing-2014",
+      "title": "2014 GDP rebasing",
+      "period": "2014",
+      "summary": "Nigeria rebased its GDP calculation, adding sectors such as telecoms and film. The rebased figure made Nigeria Africa's largest economy at the time.",
+      "context": "Rebasing is a statistical update, not a sudden burst of growth. Exchange-rate movements later changed comparisons with South Africa and Egypt.",
+      "caution": "Do not present 'largest economy in Africa' as a permanent title; rankings move with exchange rates and revisions.",
+      "confidence": 0.94,
+      "sources": [
+        {
+          "label": "Wikipedia: Economy of Nigeria",
+          "url": "https://en.wikipedia.org/wiki/Economy_of_Nigeria"
+        }
+      ],
+      "tags": [
+        "gdp",
+        "economy",
+        "2014",
+        "rebasing"
+      ]
+    },
+    {
+      "id": "election-2015",
+      "title": "The 2015 election",
+      "period": "March-April 2015",
+      "summary": "Muhammadu Buhari of the APC defeated incumbent Goodluck Jonathan of the PDP. It was the first time an incumbent president lost a Nigerian general election.",
+      "context": "The result was notable for the incumbent's concession and for a relatively smooth transfer of power, despite logistical problems and violence in some areas.",
+      "caution": "Do not describe the election as flawless; observers reported irregularities alongside the credible outcome.",
+      "confidence": 0.97,
+      "sources": [
+        {
+          "label": "Wikipedia: 2015 Nigerian general election",
+          "url": "https://en.wikipedia.org/wiki/2015_Nigerian_general_election"
+        }
+      ],
+      "tags": [
+        "2015",
+        "election",
+        "buhari",
+        "jonathan"
+      ]
+    },
+    {
+      "id": "endsars-2020",
+      "title": "EndSARS protests",
+      "period": "October 2020",
+      "summary": "Nationwide protests demanded the disbandment of the Special Anti-Robbery Squad and broader police reform. On 20 October 2020, armed men opened fire at the Lekki toll gate in Lagos during protests. The government disbanded SARS and announced reforms, but many demands remained unmet.",
+      "context": "A judicial panel in Lagos heard evidence about the Lekki shooting. Official statements and protester accounts differ sharply on casualties and responsibility, and the episode remains contested.",
+      "caution": "Do not state a single death toll as settled. Distinguish documented findings from claims by either side, and avoid inciting language.",
+      "confidence": 0.9,
+      "sources": [
+        {
+          "label": "Wikipedia: End SARS",
+          "url": "https://en.wikipedia.org/wiki/End_SARS"
+        }
+      ],
+      "tags": [
+        "endsars",
+        "sars",
+        "police",
+        "lekki",
+        "2020",
+        "protest"
+      ]
+    },
+    {
+      "id": "election-2023",
+      "title": "The 2023 general election",
+      "period": "February-March 2023",
+      "summary": "Bola Ahmed Tinubu of the APC was declared winner of the presidential election ahead of Atiku Abubakar (PDP) and Peter Obi (Labour Party). The result was challenged and upheld by the presidential election tribunal, with appeals continuing.",
+      "context": "The election saw a large youth turnout and a strong third-party showing. Observers and opposition parties raised concerns about transmission of results and logistics.",
+      "caution": "Present the outcome as declared and litigated, not as universally accepted. Avoid repeating unverified claims about rigging as fact.",
+      "confidence": 0.93,
+      "sources": [
+        {
+          "label": "Wikipedia: 2023 Nigerian general election",
+          "url": "https://en.wikipedia.org/wiki/2023_Nigerian_general_election"
+        }
+      ],
+      "tags": [
+        "2023",
+        "election",
+        "tinubu",
+        "obi",
+        "atiku"
+      ]
+    },
+    {
+      "id": "subsidy-2023",
+      "title": "Fuel subsidy removal",
+      "period": "29 May 2023",
+      "summary": "In his inauguration speech, President Tinubu announced the end of the petrol subsidy. Pump prices rose sharply and transport and food costs followed, contributing to inflation.",
+      "context": "Nigeria had subsidised petrol for decades. Previous governments attempted partial reforms; the 2023 removal was abrupt and became a defining economic policy of the administration.",
+      "caution": "Prices and inflation figures change constantly; give a date for any figure and do not present old prices as current.",
+      "confidence": 0.95,
+      "sources": [
+        {
+          "label": "Wikipedia: Fuel subsidies in Nigeria",
+          "url": "https://en.wikipedia.org/wiki/Fuel_subsidies_in_Nigeria"
+        }
+      ],
+      "tags": [
+        "subsidy",
+        "fuel",
+        "petrol",
+        "2023",
+        "inflation"
+      ]
+    },
+    {
+      "id": "naira-history",
+      "title": "The naira",
+      "period": "1973 onward",
+      "summary": "The naira replaced the Nigerian pound on 1 January 1973. It is issued by the Central Bank of Nigeria. Redesigns, devaluations, and exchange-rate reforms have repeatedly changed its value and the way Nigerians use cash.",
+      "context": "The 2023 note redesign caused a cash shortage, and later foreign-exchange reforms allowed the currency to trade much weaker. POS agents and transfers became central to daily payments.",
+      "caution": "Exchange rates move daily. Never quote a rate as current without a date and a source. Do not imply that a proposed redenomination has happened.",
+      "confidence": 0.95,
+      "sources": [
+        {
+          "label": "Wikipedia: Nigerian naira",
+          "url": "https://en.wikipedia.org/wiki/Nigerian_naira"
+        }
+      ],
+      "tags": [
+        "naira",
+        "currency",
+        "money",
+        "1973",
+        "exchange rate"
+      ]
+    },
+    {
+      "id": "education-system",
+      "title": "The school system",
+      "period": "20th century onward",
+      "summary": "Nigeria has used 6-3-3-4 and later 9-3-4 structures, with six years of primary, three of junior secondary, three of senior secondary, and four of university. WAEC was established in 1952, JAMB in 1978, and NECO in 1999.",
+      "context": "Private schools, state schools, and federal unity schools differ widely. JAMB's UTME and post-UTME screening shape university admission, and ASUU strikes have repeatedly disrupted academic calendars.",
+      "caution": "Curricula and admission rules change. Do not state a cut-off mark or exam date without checking the current year's official source.",
+      "confidence": 0.93,
+      "sources": [
+        {
+          "label": "Wikipedia: Education in Nigeria",
+          "url": "https://en.wikipedia.org/wiki/Education_in_Nigeria"
+        }
+      ],
+      "tags": [
+        "school",
+        "education",
+        "waec",
+        "jamb",
+        "neco",
+        "9-3-4"
+      ]
+    },
+    {
+      "id": "nysc",
+      "title": "National Youth Service Corps",
+      "period": "1973 onward",
+      "summary": "NYSC requires many Nigerian graduates to serve for one year, usually outside their state of origin, with the stated aim of promoting national unity.",
+      "context": "Corps members are posted to schools, hospitals, offices, and communities. The scheme has critics who question its cost and relevance, and periodic calls for reform or scrapping.",
+      "caution": "Exemptions and rules change; check NYSC's current official guidance rather than relying on older practice.",
+      "confidence": 0.95,
+      "sources": [
+        {
+          "label": "Wikipedia: National Youth Service Corps",
+          "url": "https://en.wikipedia.org/wiki/National_Youth_Service_Corps"
+        }
+      ],
+      "tags": [
+        "nysc",
+        "service",
+        "graduate",
+        "youth corps",
+        "one year"
+      ]
+    },
+    {
+      "id": "afrobeat-fela",
+      "title": "Fela Kuti and Afrobeat",
+      "period": "1970s-1997",
+      "summary": "Fela Anikulapo Kuti (1938-1997) pioneered Afrobeat, a fusion of highlife, jazz, and funk with long instrumental grooves and political lyrics. Albums such as 'Zombie' (1976) attacked military rule.",
+      "context": "Fela's Kalakuta Republic was raided by soldiers in 1977, and his mother was fatally injured in the assault. His music remains a reference point for Nigerian political art.",
+      "caution": "Afrobeat (Fela's genre) is not the same as Afrobeats (the contemporary pop umbrella). Do not merge them.",
+      "confidence": 0.97,
+      "sources": [
+        {
+          "label": "Wikipedia: Fela Kuti",
+          "url": "https://en.wikipedia.org/wiki/Fela_Kuti"
+        }
+      ],
+      "tags": [
+        "afrobeat",
+        "fela",
+        "music",
+        "zombie"
+      ]
+    },
+    {
+      "id": "afrobeats-global",
+      "title": "Afrobeats goes global",
+      "period": "2010s onward",
+      "summary": "Contemporary Nigerian pop - labelled Afrobeats - gained worldwide audiences through artists such as Wizkid, Davido, Burna Boy, and Tems, streaming platforms, and collaborations with international acts.",
+      "context": "The genre blends Afropop, dancehall, R&B, and amapiano influences. Burna Boy won a Grammy for Best Global Music Album in 2021; Wizkid's 'Essence' with Tems became a global hit.",
+      "caution": "Awards and chart records change. Use 'Afrobeats' for the contemporary scene and 'Afrobeat' for Fela's tradition.",
+      "confidence": 0.94,
+      "sources": [
+        {
+          "label": "Wikipedia: Afrobeats",
+          "url": "https://en.wikipedia.org/wiki/Afrobeats"
+        }
+      ],
+      "tags": [
+        "afrobeats",
+        "burna boy",
+        "wizkid",
+        "davido",
+        "grammy",
+        "music"
+      ]
+    },
+    {
+      "id": "literature",
+      "title": "Nigerian literature",
+      "period": "1958 onward",
+      "summary": "Chinua Achebe's 'Things Fall Apart' (1958) became a foundational modern African novel. Wole Soyinka won the Nobel Prize in Literature in 1986. Later writers include Chimamanda Ngozi Adichie, Ben Okri, and Teju Cole.",
+      "context": "Nigerian writing has shaped global conversations about colonialism, migration, gender, and memory. It is not limited to one language or region.",
+      "caution": "Awards and 'firsts' are often misreported. Soyinka's 1986 Nobel is the verified Nigerian Nobel in Literature.",
+      "confidence": 0.96,
+      "sources": [
+        {
+          "label": "Wikipedia: Nigerian literature",
+          "url": "https://en.wikipedia.org/wiki/Nigerian_literature"
+        }
+      ],
+      "tags": [
+        "literature",
+        "achebe",
+        "soyinka",
+        "adichie",
+        "book"
+      ]
+    },
+    {
+      "id": "census-history",
+      "title": "Census controversies",
+      "period": "1962-2006",
+      "summary": "Nigerian censuses have repeatedly been politically contested because population figures affect revenue allocation and representation. The 1962/63 counts were disputed, and the last national census was in 2006; later planned exercises were postponed.",
+      "context": "Ethnic and religious composition estimates are often quoted without a reliable recent census. Treat precise population shares with caution.",
+      "caution": "Do not present invented population figures or exact ethnic/religious percentages. Say that the last census was 2006 and that later counts were postponed.",
+      "confidence": 0.9,
+      "sources": [
+        {
+          "label": "Wikipedia: Demographics of Nigeria",
+          "url": "https://en.wikipedia.org/wiki/Demographics_of_Nigeria"
+        }
+      ],
+      "tags": [
+        "census",
+        "population",
+        "2018",
+        "2006",
+        "count"
+      ]
+    }
+  ]
+}

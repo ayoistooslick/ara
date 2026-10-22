@@ -1,2 +1,3 @@
-"""Ara: a local-first conversational companion."""
-__version__ = "0.1.0"
+"""Ara: the AI that belongs in Nigeria."""
+
+__version__ = "0.3.0"

@@ -1,0 +1,1940 @@
+{
+  "version": 1,
+  "kind": "expressions",
+  "license": "Same licence as the Ara repository (see LICENSE).",
+  "provenance": "Maintainer-authored seed corpus written from widely documented public Nigerian usage. Not scraped from private messages or restricted groups. Items marked confidence below 0.9 are candidates for community review.",
+  "entries": [
+    {
+      "id": "wahala",
+      "term": "wahala",
+      "variants": [
+        "wahala dey",
+        "no wahala",
+        "wahala for who"
+      ],
+      "meaning": "Trouble, a problem, or a difficult situation. 'No wahala' means it is not a problem.",
+      "literal": "No literal English equivalent; it names trouble rather than a physical object.",
+      "usage": "Used for everything from a minor inconvenience to a serious crisis; tone decides the weight.",
+      "register": "informal",
+      "regions": [
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian Pidgin",
+        "Nigerian English"
+      ],
+      "examples": [
+        {
+          "text": "Transport wahala today.",
+          "reading": "Transport was a problem today, probably delays or cost."
+        },
+        {
+          "text": "No wahala, I go do am.",
+          "reading": "It is fine; I will handle it."
+        }
+      ],
+      "misreadings": [
+        "Do not treat it as a formal diagnosis of hardship.",
+        "'No wahala' can also close a conversation politely rather than promise action."
+      ],
+      "confidence": 0.98
+    },
+    {
+      "id": "abeg",
+      "term": "abeg",
+      "variants": [
+        "I beg"
+      ],
+      "meaning": "Please; also an appeal of disbelief, as in 'abeg, which kind thing is this'.",
+      "literal": "From 'I beg', but used far more broadly than a literal request.",
+      "usage": "Softens a request, protests an idea, or signals exasperation. Tone matters: it can be friendly or dismissive.",
+      "register": "informal",
+      "regions": [
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian Pidgin"
+      ],
+      "examples": [
+        {
+          "text": "Abeg help me hold this bag.",
+          "reading": "A casual request for help."
+        },
+        {
+          "text": "Abeg, who tell you that?",
+          "reading": "Disbelief or mild challenge, not a plea."
+        }
+      ],
+      "misreadings": [
+        "It is not always begging in the English sense; it often just means 'please' or 'come on'."
+      ],
+      "confidence": 0.97
+    },
+    {
+      "id": "oga",
+      "term": "oga",
+      "variants": [
+        "oga at the top",
+        "my oga"
+      ],
+      "meaning": "Boss, senior person, or a respectful way to address a man, including a stranger in a position of authority.",
+      "literal": "Boss or master, from Yoruba usage that spread nationally.",
+      "usage": "Can be respectful, neutral, or sarcastic depending on tone and context. 'My oga' often carries irony among peers.",
+      "register": "neutral",
+      "regions": [
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian Pidgin",
+        "Yoruba",
+        "Nigerian English"
+      ],
+      "examples": [
+        {
+          "text": "Oga, how far?",
+          "reading": "A casual greeting to a man, roughly 'boss, how are you'."
+        },
+        {
+          "text": "My oga, you have started again.",
+          "reading": "Sarcastic: here you go again, boss."
+        }
+      ],
+      "misreadings": [
+        "Not necessarily an employer. 'Oga' is often just a polite address to a man."
+      ],
+      "confidence": 0.96
+    },
+    {
+      "id": "wetin",
+      "term": "wetin",
+      "variants": [
+        "wetin dey happen",
+        "wetin concern me",
+        "wetin be this"
+      ],
+      "meaning": "What. 'Wetin dey happen' means 'what is happening'; 'wetin concern me' means 'that is not my business'.",
+      "literal": "A Pidgin form of 'what thing'.",
+      "usage": "Question word, exclamation, or a brush-off. The verb after it usually carries the meaning.",
+      "register": "informal",
+      "regions": [
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian Pidgin"
+      ],
+      "examples": [
+        {
+          "text": "Wetin dey happen?",
+          "reading": "What is going on?"
+        },
+        {
+          "text": "Wetin concern me?",
+          "reading": "Why should I care? It is not my business."
+        }
+      ],
+      "misreadings": [
+        "'Wetin concern me' is not a request for information; it dismisses the topic."
+      ],
+      "confidence": 0.97
+    },
+    {
+      "id": "shey",
+      "term": "shey",
+      "variants": [
+        "shey na",
+        "shebi"
+      ],
+      "meaning": "A tag question meaning 'right?', 'isn't it?', or 'after all'. It invites agreement or confirms a shared assumption.",
+      "literal": "No standalone literal meaning; it works like an English question tag.",
+      "usage": "Attached to a statement. 'Shey you know' can be a genuine check or mild pressure to agree.",
+      "register": "informal",
+      "regions": [
+        "nationwide",
+        "South-West"
+      ],
+      "languages": [
+        "Nigerian Pidgin",
+        "Yoruba"
+      ],
+      "examples": [
+        {
+          "text": "Shey you dey come?",
+          "reading": "You are coming, right?"
+        },
+        {
+          "text": "Shey na me talk am?",
+          "reading": "Was it me who said it? (mild challenge)"
+        }
+      ],
+      "misreadings": [
+        "It is not always a neutral question; it can be rhetorical or confrontational."
+      ],
+      "confidence": 0.93
+    },
+    {
+      "id": "na-wa",
+      "term": "na wa o",
+      "variants": [
+        "na wa",
+        "na wa for you"
+      ],
+      "meaning": "An expression of surprise, exasperation, or 'this is too much'. It can also express admiration in the right tone.",
+      "literal": "Roughly 'it is something else'.",
+      "usage": "The same words can be disapproval, shock, or impressed disbelief; context and tone decide.",
+      "register": "informal",
+      "regions": [
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian Pidgin"
+      ],
+      "examples": [
+        {
+          "text": "Na wa o, this price don double.",
+          "reading": "Exasperation at a price increase."
+        },
+        {
+          "text": "Na wa for your outfit o!",
+          "reading": "Could be admiration: your outfit is something else."
+        }
+      ],
+      "misreadings": [
+        "Do not automatically treat it as negative; it can be a compliment."
+      ],
+      "confidence": 0.9,
+      "tags": [
+        "exclamation",
+        "ambiguous",
+        "surprise",
+        "exasperation"
+      ]
+    },
+    {
+      "id": "e-choke",
+      "term": "e choke",
+      "variants": [
+        "e dey choke",
+        "choke"
+      ],
+      "meaning": "It is impressive, overwhelming, or 'too much' in a good way. Popularised by Nigerian internet and street culture.",
+      "literal": "'It chokes' - the effect is so strong it overwhelms.",
+      "usage": "Usually positive: praise for a look, performance, or achievement. Can be ironic in some contexts.",
+      "register": "informal",
+      "regions": [
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian Pidgin",
+        "Gen Z internet"
+      ],
+      "examples": [
+        {
+          "text": "Your performance e choke.",
+          "reading": "Your performance was outstanding."
+        }
+      ],
+      "misreadings": [
+        "It does not mean someone is physically choking.",
+        "Older speakers may not use it; do not assume everyone knows it."
+      ],
+      "confidence": 0.92
+    },
+    {
+      "id": "japa",
+      "term": "japa",
+      "variants": [
+        "japa syndrome",
+        "I wan japa"
+      ],
+      "meaning": "To leave, especially to emigrate in search of opportunity. 'Japa syndrome' describes the wave of Nigerians relocating abroad.",
+      "literal": "From Yoruba, meaning to run away or escape.",
+      "usage": "Can be light or serious. Usually implies leaving Nigeria or a bad situation, not a short trip.",
+      "register": "informal",
+      "regions": [
+        "nationwide",
+        "South-West"
+      ],
+      "languages": [
+        "Nigerian Pidgin",
+        "Yoruba"
+      ],
+      "examples": [
+        {
+          "text": "He don japa to Canada.",
+          "reading": "He has emigrated to Canada."
+        }
+      ],
+      "misreadings": [
+        "Not simply 'travel'. 'I want to japa' usually means relocation, often for work or study.",
+        "It can be a joke about leaving a boring gathering."
+      ],
+      "confidence": 0.96
+    },
+    {
+      "id": "sapa",
+      "term": "sapa",
+      "variants": [
+        "sapa dey",
+        "I dey sapa",
+        "sapa don catch me"
+      ],
+      "meaning": "Being broke or in a tight financial situation, often said with humour and self-awareness.",
+      "literal": "A slang term for lack of money, not a formal poverty measure.",
+      "usage": "Mostly self-deprecating among young people. Using it about someone else can sound mocking.",
+      "register": "informal",
+      "regions": [
+        "nationwide",
+        "Lagos"
+      ],
+      "languages": [
+        "Nigerian Pidgin",
+        "Gen Z internet"
+      ],
+      "examples": [
+        {
+          "text": "Sapa don catch me this month.",
+          "reading": "I am broke this month."
+        }
+      ],
+      "misreadings": [
+        "It is not a clinical or policy description of poverty.",
+        "It is usually light; do not turn it into a joke when someone describes real hardship."
+      ],
+      "confidence": 0.95
+    },
+    {
+      "id": "soft-life",
+      "term": "soft life",
+      "variants": [
+        "soft life only",
+        "I want soft life"
+      ],
+      "meaning": "A comfortable, low-stress life with money for nice things; often aspirational and sometimes ironic.",
+      "literal": "A life that is soft rather than hard.",
+      "usage": "Younger Nigerians use it about travel, comfort, and avoiding struggle. It can be playful when the person is clearly not living it.",
+      "register": "informal",
+      "regions": [
+        "nationwide",
+        "Lagos"
+      ],
+      "languages": [
+        "Nigerian English",
+        "Gen Z internet"
+      ],
+      "examples": [
+        {
+          "text": "This year na soft life only.",
+          "reading": "This year I am aiming for a comfortable life."
+        }
+      ],
+      "misreadings": [
+        "Not a political claim about inequality; usually personal aspiration."
+      ],
+      "confidence": 0.9
+    },
+    {
+      "id": "gbedu",
+      "term": "gbedu",
+      "variants": [
+        "gbedu dey burst",
+        "the gbedu"
+      ],
+      "meaning": "A big, heavy beat or good music; 'gbedu dey burst' means the music is loud and excellent.",
+      "literal": "From Yoruba, referring to a large traditional drum and the sound it makes.",
+      "usage": "Used at parties and online to praise a song or DJ. It can also mean a party itself.",
+      "register": "informal",
+      "regions": [
+        "nationwide",
+        "South-West",
+        "Lagos"
+      ],
+      "languages": [
+        "Nigerian Pidgin",
+        "Yoruba"
+      ],
+      "examples": [
+        {
+          "text": "The gbedu at that wedding was serious.",
+          "reading": "The music at the wedding was excellent."
+        }
+      ],
+      "misreadings": [
+        "Not a genre name; it describes a strong beat or good music generally."
+      ],
+      "confidence": 0.93
+    },
+    {
+      "id": "gist",
+      "term": "gist",
+      "variants": [
+        "gist me",
+        "what's the gist",
+        "gist partner"
+      ],
+      "meaning": "Chat, gossip, news, or a story. 'Gist me' means 'tell me what happened'.",
+      "literal": "Borrowed from English 'gist' but used as a noun and verb for social talk.",
+      "usage": "Can be harmless conversation or juicy gossip; context tells you which. 'Gist partner' is someone you share news with.",
+      "register": "informal",
+      "regions": [
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian Pidgin",
+        "Nigerian English"
+      ],
+      "examples": [
+        {
+          "text": "Gist me now, wetin happen?",
+          "reading": "Tell me what happened."
+        }
+      ],
+      "misreadings": [
+        "Not necessarily malicious gossip; often just conversation."
+      ],
+      "confidence": 0.96
+    },
+    {
+      "id": "yarn-dust",
+      "term": "yarn dust",
+      "variants": [
+        "you dey yarn dust",
+        "yarn"
+      ],
+      "meaning": "To talk nonsense, exaggerate, or brag without substance.",
+      "literal": "'Yarn' means to talk; 'dust' signals something worthless.",
+      "usage": "Usually a mild accusation of lying or waffling among friends. Tone can make it a joke or an insult.",
+      "register": "informal",
+      "regions": [
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian Pidgin"
+      ],
+      "examples": [
+        {
+          "text": "You dey yarn dust about that car.",
+          "reading": "You are exaggerating or lying about that car."
+        }
+      ],
+      "misreadings": [
+        "Not literal dust or neutral storytelling; it carries scepticism."
+      ],
+      "confidence": 0.9
+    },
+    {
+      "id": "comot",
+      "term": "comot",
+      "variants": [
+        "comot for road",
+        "comot there"
+      ],
+      "meaning": "Get out, leave, or move aside. 'Comot for road' means get out of the way.",
+      "literal": "Come out / get out.",
+      "usage": "Can be abrupt. To an elder or stranger it may sound rude unless softened.",
+      "register": "informal",
+      "regions": [
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian Pidgin"
+      ],
+      "examples": [
+        {
+          "text": "Comot for road, make the car pass.",
+          "reading": "Move out of the way so the car can pass."
+        }
+      ],
+      "misreadings": [
+        "Not always aggressive; among friends it can be casual."
+      ],
+      "confidence": 0.96
+    },
+    {
+      "id": "waka",
+      "term": "waka",
+      "variants": [
+        "waka pass",
+        "I waka"
+      ],
+      "meaning": "To walk or travel. 'Waka pass' means to pass by or drop in briefly.",
+      "literal": "Walk.",
+      "usage": "Common in Pidgin. 'I waka come' means I came on foot or made the journey.",
+      "register": "informal",
+      "regions": [
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian Pidgin"
+      ],
+      "examples": [
+        {
+          "text": "I waka pass your side yesterday.",
+          "reading": "I passed by your area yesterday."
+        }
+      ],
+      "misreadings": [
+        "Not always long-distance travel; often just walking or passing by."
+      ],
+      "confidence": 0.94
+    },
+    {
+      "id": "oya",
+      "term": "oya",
+      "variants": [
+        "oya now",
+        "oya make we go"
+      ],
+      "meaning": "Come on, let's go, or hurry up. It can also mean 'now then' when moving a conversation along.",
+      "literal": "From Yoruba, used as an urging word.",
+      "usage": "Friendly urgency. Repeated or sharp, it can sound impatient.",
+      "register": "informal",
+      "regions": [
+        "nationwide",
+        "South-West"
+      ],
+      "languages": [
+        "Nigerian Pidgin",
+        "Yoruba"
+      ],
+      "examples": [
+        {
+          "text": "Oya, let's go before traffic.",
+          "reading": "Come on, let's leave before traffic builds."
+        }
+      ],
+      "misreadings": [
+        "Not a name or a place in ordinary conversation."
+      ],
+      "confidence": 0.95
+    },
+    {
+      "id": "sha",
+      "term": "sha",
+      "variants": [
+        "sha sha"
+      ],
+      "meaning": "Anyway, regardless, or a softening filler. 'Sha sha' means roughly 'anyhow, regardless'.",
+      "literal": "No direct English equivalent; a discourse particle.",
+      "usage": "Often closes a point: 'E go better sha' means 'it will be fine anyway'. It can signal resignation.",
+      "register": "informal",
+      "regions": [
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian Pidgin"
+      ],
+      "examples": [
+        {
+          "text": "I no get money, but I go try sha.",
+          "reading": "I don't have money, but I will still try anyway."
+        }
+      ],
+      "misreadings": [
+        "It rarely carries a strong meaning alone; do not over-interpret it as agreement."
+      ],
+      "confidence": 0.91
+    },
+    {
+      "id": "sef",
+      "term": "sef",
+      "variants": [
+        "me sef",
+        "you sef"
+      ],
+      "meaning": "Even, too, or actually, used for emphasis. 'Me sef' means 'me too' or 'even I'.",
+      "literal": "From 'self', used as an intensifier.",
+      "usage": "Adds emphasis or solidarity: 'You sef no try' means 'you too, that was not good'.",
+      "register": "informal",
+      "regions": [
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian Pidgin"
+      ],
+      "examples": [
+        {
+          "text": "Me sef I tire.",
+          "reading": "I am tired too."
+        }
+      ],
+      "misreadings": [
+        "Not a literal reference to oneself as an object."
+      ],
+      "confidence": 0.94
+    },
+    {
+      "id": "wayo",
+      "term": "wayo",
+      "variants": [
+        "wayo man",
+        "wayo wayo"
+      ],
+      "meaning": "Trickery, cheating, or a deceitful person.",
+      "literal": "Cunning or fraud.",
+      "usage": "Accusatory but can be playful. 'Wayo man' is a cheat or a clever operator.",
+      "register": "informal",
+      "regions": [
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian Pidgin",
+        "Yoruba"
+      ],
+      "examples": [
+        {
+          "text": "That price na wayo.",
+          "reading": "That price is a rip-off."
+        }
+      ],
+      "misreadings": [
+        "Not a compliment about being clever unless the tone is clearly admiring."
+      ],
+      "confidence": 0.92
+    },
+    {
+      "id": "four-one-nine",
+      "term": "419",
+      "variants": [
+        "four one nine",
+        "419er"
+      ],
+      "meaning": "Advance-fee fraud and similar scams. The name comes from section 419 of Nigeria's Criminal Code.",
+      "literal": "A legal section number that became a national shorthand for fraud.",
+      "usage": "A serious accusation, not a joke about being street-smart. It names a real crime with real victims.",
+      "register": "neutral",
+      "regions": [
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian English"
+      ],
+      "examples": [
+        {
+          "text": "That message is a 419 scam.",
+          "reading": "That message is a fraudulent advance-fee scheme."
+        }
+      ],
+      "misreadings": [
+        "Do not use it casually about an entire ethnic group or region; fraud is not a cultural trait."
+      ],
+      "confidence": 0.97,
+      "tags": [
+        "scam",
+        "fraud",
+        "bvn",
+        "online",
+        "419",
+        "advance fee"
+      ]
+    },
+    {
+      "id": "gbam",
+      "term": "gbam",
+      "variants": [
+        "gbam!",
+        "gbam gbam"
+      ],
+      "meaning": "An exclamation for a hit, a punchline, or emphatic agreement: 'exactly!'",
+      "literal": "An onomatopoeia for a bang or impact.",
+      "usage": "Used when something lands perfectly, or when agreeing strongly. Often written with an exclamation mark.",
+      "register": "informal",
+      "regions": [
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian Pidgin"
+      ],
+      "examples": [
+        {
+          "text": "You hit the point. Gbam!",
+          "reading": "You made the point exactly."
+        }
+      ],
+      "misreadings": [
+        "Not necessarily violent; usually figurative."
+      ],
+      "confidence": 0.92
+    },
+    {
+      "id": "gbas-gbos",
+      "term": "gbas gbos",
+      "variants": [
+        "gbas gbos everywhere"
+      ],
+      "meaning": "Chaos, a fight, or heated drama.",
+      "literal": "Echoic words suggesting blows and disruption.",
+      "usage": "Describes conflict or disorder, often with a tone of amused observation.",
+      "register": "informal",
+      "regions": [
+        "nationwide",
+        "Lagos"
+      ],
+      "languages": [
+        "Nigerian Pidgin"
+      ],
+      "examples": [
+        {
+          "text": "It was gbas gbos in that group chat.",
+          "reading": "There was a heated argument in the group chat."
+        }
+      ],
+      "misreadings": [
+        "Can describe verbal drama, not only physical fighting."
+      ],
+      "confidence": 0.9
+    },
+    {
+      "id": "werey",
+      "term": "werey",
+      "variants": [
+        "werey ni",
+        "werey people"
+      ],
+      "meaning": "Mad or crazy person; used as an insult, sometimes affectionately among close friends.",
+      "literal": "From Yoruba, meaning a person with mental illness.",
+      "usage": "Potentially harmful. Mental-health insults are common in casual Nigerian banter but should not be aimed at strangers, and should not be used to stigmatise real illness.",
+      "register": "insult",
+      "regions": [
+        "nationwide",
+        "South-West",
+        "Lagos"
+      ],
+      "languages": [
+        "Nigerian Pidgin",
+        "Yoruba"
+      ],
+      "examples": [
+        {
+          "text": "You dey crase? Werey!",
+          "reading": "Are you mad? (playful or hostile depending on tone)"
+        }
+      ],
+      "misreadings": [
+        "Not a neutral word for a person with a mental-health condition.",
+        "Among friends it can be affectionate, but outsiders should not assume that."
+      ],
+      "confidence": 0.9
+    },
+    {
+      "id": "ode",
+      "term": "ode",
+      "variants": [
+        "ode ni",
+        "big ode"
+      ],
+      "meaning": "A fool or a naive person; an insult.",
+      "literal": "From Yoruba, meaning a fool or someone lacking sense.",
+      "usage": "Usually teasing among friends, but genuinely offensive to strangers. Do not translate it as merely 'silly'.",
+      "register": "insult",
+      "regions": [
+        "South-West",
+        "Lagos",
+        "nationwide"
+      ],
+      "languages": [
+        "Yoruba",
+        "Nigerian Pidgin"
+      ],
+      "examples": [
+        {
+          "text": "Ode, why you no check the price first?",
+          "reading": "Fool, why didn't you check the price first?"
+        }
+      ],
+      "misreadings": [
+        "It is not an affectionate word in every context; assess the relationship."
+      ],
+      "confidence": 0.9
+    },
+    {
+      "id": "mumu",
+      "term": "mumu",
+      "variants": [
+        "mumu button",
+        "don't be mumu"
+      ],
+      "meaning": "Foolish or gullible; an insult or a warning not to be taken advantage of.",
+      "literal": "A Pidgin word for a fool.",
+      "usage": "'Don't be mumu' means do not let yourself be cheated. Among friends it can be teasing.",
+      "register": "insult",
+      "regions": [
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian Pidgin"
+      ],
+      "examples": [
+        {
+          "text": "Don't be mumu; confirm the account name first.",
+          "reading": "Do not be gullible; verify the account name first."
+        }
+      ],
+      "misreadings": [
+        "Not a formal insult in every case; it is often a warning."
+      ],
+      "confidence": 0.93
+    },
+    {
+      "id": "area-boy",
+      "term": "area boy",
+      "variants": [
+        "area boys"
+      ],
+      "meaning": "A young man who controls or loiters around a neighbourhood, often associated with informal enforcement, extortion, or touting.",
+      "literal": "A boy of the area, but the term carries social and criminal connotations.",
+      "usage": "A description of a social role, not an ethnicity or a compliment. Avoid assuming every unemployed young man is one.",
+      "register": "informal",
+      "regions": [
+        "Lagos",
+        "South-West",
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian English",
+        "Nigerian Pidgin"
+      ],
+      "examples": [
+        {
+          "text": "Area boys were collecting money at the junction.",
+          "reading": "Local touts were demanding payments at the junction."
+        }
+      ],
+      "misreadings": [
+        "Do not use it as a generic insult for young men.",
+        "Not the same as every street trader or informal worker."
+      ],
+      "confidence": 0.88
+    },
+    {
+      "id": "agbero",
+      "term": "agbero",
+      "variants": [
+        "agberos"
+      ],
+      "meaning": "A motor-park tout who directs passengers and often collects informal fees; also used for political thugs.",
+      "literal": "A park worker or tout, with a strong informal-economy meaning.",
+      "usage": "Descriptive but loaded. It can be neutral about the job or critical about extortion.",
+      "register": "informal",
+      "regions": [
+        "Lagos",
+        "South-West",
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian Pidgin",
+        "Yoruba"
+      ],
+      "examples": [
+        {
+          "text": "The agbero helped us find the bus.",
+          "reading": "A park tout helped us locate the bus."
+        }
+      ],
+      "misreadings": [
+        "Not every bus conductor is an agbero.",
+        "The term can be used politically and should be handled carefully."
+      ],
+      "confidence": 0.88
+    },
+    {
+      "id": "danfo",
+      "term": "danfo",
+      "variants": [
+        "danfo bus"
+      ],
+      "meaning": "A yellow minibus used for public transport, especially in Lagos.",
+      "literal": "The common name for Lagos's painted commercial minibuses.",
+      "usage": "Neutral transport term. Fares vary by route and time; conductors shout destinations.",
+      "register": "neutral",
+      "regions": [
+        "Lagos"
+      ],
+      "languages": [
+        "Nigerian English",
+        "Nigerian Pidgin"
+      ],
+      "examples": [
+        {
+          "text": "I took a danfo from Oshodi.",
+          "reading": "I used a yellow minibus from Oshodi."
+        }
+      ],
+      "misreadings": [
+        "Not all minibuses are yellow or called danfo outside Lagos."
+      ],
+      "confidence": 0.96
+    },
+    {
+      "id": "keke",
+      "term": "keke",
+      "variants": [
+        "keke napep",
+        "tricycle"
+      ],
+      "meaning": "A three-wheeled motorised tricycle used as a taxi.",
+      "literal": "A tricycle taxi, called keke napep in many places.",
+      "usage": "Neutral. Availability and regulation differ by state; some cities restrict them.",
+      "register": "neutral",
+      "regions": [
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian English",
+        "Nigerian Pidgin"
+      ],
+      "examples": [
+        {
+          "text": "Keke dropped me at the junction.",
+          "reading": "A tricycle taxi took me to the junction."
+        }
+      ],
+      "misreadings": [
+        "Not the same as okada (motorcycle taxi)."
+      ],
+      "confidence": 0.96
+    },
+    {
+      "id": "okada",
+      "term": "okada",
+      "variants": [
+        "okada rider"
+      ],
+      "meaning": "A motorcycle taxi. Banned or restricted on many highways and in some states.",
+      "literal": "A commercial motorcycle.",
+      "usage": "Neutral transport term, but safety and legality vary. Do not recommend it without noting helmet and local restrictions.",
+      "register": "neutral",
+      "regions": [
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian English",
+        "Nigerian Pidgin"
+      ],
+      "examples": [
+        {
+          "text": "Okada is faster but risky on that road.",
+          "reading": "A motorcycle taxi is quicker but less safe on that road."
+        }
+      ],
+      "misreadings": [
+        "Not legal everywhere; several states restrict commercial motorcycles."
+      ],
+      "confidence": 0.95
+    },
+    {
+      "id": "buka",
+      "term": "buka",
+      "variants": [
+        "bukka",
+        "local buka"
+      ],
+      "meaning": "A small, cheap local eatery serving everyday Nigerian food.",
+      "literal": "An informal restaurant, often a roadside kitchen.",
+      "usage": "Neutral and often affectionate. Prices are usually low and menus change daily.",
+      "register": "informal",
+      "regions": [
+        "nationwide",
+        "Lagos"
+      ],
+      "languages": [
+        "Nigerian English",
+        "Nigerian Pidgin"
+      ],
+      "examples": [
+        {
+          "text": "Let's eat at that buka.",
+          "reading": "Let's eat at that small local restaurant."
+        }
+      ],
+      "misreadings": [
+        "Not a derogatory term by itself."
+      ],
+      "confidence": 0.95
+    },
+    {
+      "id": "suya",
+      "term": "suya",
+      "variants": [
+        "suya spot"
+      ],
+      "meaning": "Spicy grilled meat skewers, originally Hausa, sold in the evening at suya spots.",
+      "literal": "Grilled spiced meat, usually beef, sometimes chicken or ram.",
+      "usage": "Food term. Often wrapped in newspaper and served with onions and pepper.",
+      "register": "neutral",
+      "regions": [
+        "nationwide",
+        "North"
+      ],
+      "languages": [
+        "Hausa",
+        "Nigerian English"
+      ],
+      "examples": [
+        {
+          "text": "Let's buy suya on the way home.",
+          "reading": "Let's buy grilled spiced meat on the way home."
+        }
+      ],
+      "misreadings": [
+        "Not the same as barbecue; the spice mix (yaji) is distinctive."
+      ],
+      "confidence": 0.97
+    },
+    {
+      "id": "jollof",
+      "term": "jollof rice",
+      "variants": [
+        "jollof",
+        "jollof wars"
+      ],
+      "meaning": "A one-pot tomato-and-pepper rice dish. 'Jollof wars' is the playful Nigeria-Ghana rivalry over whose version is better.",
+      "literal": "A rice dish cooked in a seasoned tomato base.",
+      "usage": "Food and cultural pride. The rivalry is mostly banter, not a serious dispute.",
+      "register": "neutral",
+      "regions": [
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian English",
+        "West African English"
+      ],
+      "examples": [
+        {
+          "text": "Nigerian jollof is the best, no debate.",
+          "reading": "Playful food pride, inviting the Ghanaian rivalry."
+        }
+      ],
+      "misreadings": [
+        "Not a Nigerian invention claim to make without nuance; the dish has West African roots and many local versions."
+      ],
+      "confidence": 0.94
+    },
+    {
+      "id": "nepa",
+      "term": "NEPA",
+      "variants": [
+        "NEPA don take light",
+        "up NEPA"
+      ],
+      "meaning": "The old national power utility, now used as shorthand for electricity supply and outages. 'NEPA don take light' means the power has gone off.",
+      "literal": "National Electric Power Authority, renamed PHCN in 2005 and later unbundled.",
+      "usage": "Still the everyday word for the grid even though the company no longer exists under that name.",
+      "register": "informal",
+      "regions": [
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian English",
+        "Nigerian Pidgin"
+      ],
+      "examples": [
+        {
+          "text": "NEPA don take light again.",
+          "reading": "The power has gone out again."
+        }
+      ],
+      "misreadings": [
+        "NEPA is not the current name of the electricity company; using it is nostalgic shorthand, not a factual claim about the operator."
+      ],
+      "confidence": 0.97
+    },
+    {
+      "id": "light",
+      "term": "light",
+      "variants": [
+        "no light",
+        "up light"
+      ],
+      "meaning": "Electricity or mains power. 'No light' means a power outage; 'up light' means power is back.",
+      "literal": "Everyday metonymy: the light stands for the electricity supply.",
+      "usage": "Extremely common. It can also literally mean a lamp, so context matters.",
+      "register": "neutral",
+      "regions": [
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian English",
+        "Nigerian Pidgin"
+      ],
+      "examples": [
+        {
+          "text": "No light since morning.",
+          "reading": "There has been no electricity since morning."
+        }
+      ],
+      "misreadings": [
+        "Not always about a lamp or daylight."
+      ],
+      "confidence": 0.96
+    },
+    {
+      "id": "big-man",
+      "term": "big man",
+      "variants": [
+        "big woman",
+        "big man syndrome"
+      ],
+      "meaning": "A wealthy or influential person, or someone who expects deference. 'Big man syndrome' criticises entitled behaviour by the powerful.",
+      "literal": "A person of status, not necessarily physically large.",
+      "usage": "Can be respectful or critical. In 'big man syndrome' it is clearly disapproving.",
+      "register": "informal",
+      "regions": [
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian English"
+      ],
+      "examples": [
+        {
+          "text": "He is a big man in this town.",
+          "reading": "He is influential here."
+        }
+      ],
+      "misreadings": [
+        "Usually about status, not body size."
+      ],
+      "confidence": 0.93
+    },
+    {
+      "id": "ajebo",
+      "term": "ajebo",
+      "variants": [
+        "ajebutter"
+      ],
+      "meaning": "Someone seen as soft or sheltered, often raised in comfort and unfamiliar with street life.",
+      "literal": "A playful label for a pampered or posh person.",
+      "usage": "Teasing, not usually a serious insult. 'Ajebutter' is a close variant.",
+      "register": "informal",
+      "regions": [
+        "Lagos",
+        "South-West",
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian Pidgin",
+        "Yoruba"
+      ],
+      "examples": [
+        {
+          "text": "You no know how to enter danfo? Ajebo!",
+          "reading": "You don't know how to board a minibus? Sheltered!"
+        }
+      ],
+      "misreadings": [
+        "Not an ethnic or class slur in ordinary use, but it can sting if the person is struggling."
+      ],
+      "confidence": 0.87
+    },
+    {
+      "id": "shakara",
+      "term": "shakara",
+      "variants": [
+        "no do shakara",
+        "she dey shakara"
+      ],
+      "meaning": "Show-off behaviour, posing, or unnecessary attitude.",
+      "literal": "Showing off or forming importance.",
+      "usage": "'No do shakara' means stop posing. It can be playful or irritated.",
+      "register": "informal",
+      "regions": [
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian Pidgin"
+      ],
+      "examples": [
+        {
+          "text": "No do shakara, just answer the question.",
+          "reading": "Stop posing and answer the question."
+        }
+      ],
+      "misreadings": [
+        "Not a neutral word for confidence."
+      ],
+      "confidence": 0.93
+    },
+    {
+      "id": "forming",
+      "term": "forming",
+      "variants": [
+        "she dey form",
+        "forming posh"
+      ],
+      "meaning": "Pretending to be something you are not, especially pretending to be richer, more educated, or more important.",
+      "literal": "Putting on a form or act.",
+      "usage": "Teasing. Can be about accent, lifestyle, or behaviour.",
+      "register": "informal",
+      "regions": [
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian Pidgin",
+        "Nigerian English"
+      ],
+      "examples": [
+        {
+          "text": "Stop forming; we know you.",
+          "reading": "Stop pretending; we know who you are."
+        }
+      ],
+      "misreadings": [
+        "Not literal shape or formation."
+      ],
+      "confidence": 0.93
+    },
+    {
+      "id": "gbege",
+      "term": "gbege",
+      "variants": [
+        "gbege dey",
+        "e don gbege"
+      ],
+      "meaning": "Trouble, a scandal, or a serious complication.",
+      "literal": "From Yoruba, meaning a crisis or dispute.",
+      "usage": "Often used with a sense of drama: 'e don gbege' means trouble has started.",
+      "register": "informal",
+      "regions": [
+        "South-West",
+        "Lagos",
+        "nationwide"
+      ],
+      "languages": [
+        "Yoruba",
+        "Nigerian Pidgin"
+      ],
+      "examples": [
+        {
+          "text": "E don gbege between the two of them.",
+          "reading": "There is now a serious quarrel between them."
+        }
+      ],
+      "misreadings": [
+        "Not necessarily physical violence."
+      ],
+      "confidence": 0.88
+    },
+    {
+      "id": "e-go-be",
+      "term": "e go be",
+      "variants": [
+        "e go better",
+        "e must be"
+      ],
+      "meaning": "It will be fine; a reassurance that things will work out.",
+      "literal": "'It will be' - a short reassurance.",
+      "usage": "Used to comfort someone or to express hope. Not a promise or a prediction.",
+      "register": "informal",
+      "regions": [
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian Pidgin"
+      ],
+      "examples": [
+        {
+          "text": "Don't worry, e go be.",
+          "reading": "Don't worry, it will work out."
+        }
+      ],
+      "misreadings": [
+        "Do not present it as a factual guarantee; it is comfort language."
+      ],
+      "confidence": 0.95
+    },
+    {
+      "id": "god-abeg",
+      "term": "God abeg",
+      "variants": [
+        "God when",
+        "abeg God"
+      ],
+      "meaning": "An appeal or exclamation, often humorous, asking God for relief or a breakthrough. 'God when' asks when one's turn will come.",
+      "literal": "A religious appeal, used devotionally and as internet humour.",
+      "usage": "Common online. Handle religion respectfully; it is not automatically a joke.",
+      "register": "informal",
+      "regions": [
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian English",
+        "Gen Z internet"
+      ],
+      "examples": [
+        {
+          "text": "God abeg, let this week end.",
+          "reading": "A half-serious plea for relief."
+        }
+      ],
+      "misreadings": [
+        "Not evidence of a person's actual religious beliefs; it can be a meme."
+      ],
+      "confidence": 0.9
+    },
+    {
+      "id": "who-dey-breathe",
+      "term": "who dey breathe",
+      "variants": [
+        "who dey breath",
+        "who's breathing"
+      ],
+      "meaning": "A check-in meaning 'who is still here / who is okay?', used online during drama or after a shocking event.",
+      "literal": "'Who is breathing?' - an exaggerated check on survival.",
+      "usage": "Internet humour, usually about chaos or a shocking post, not a literal medical question.",
+      "register": "informal",
+      "regions": [
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian Pidgin",
+        "Gen Z internet"
+      ],
+      "examples": [
+        {
+          "text": "After that tweet, who dey breathe?",
+          "reading": "That tweet was so shocking; is everyone okay?"
+        }
+      ],
+      "misreadings": [
+        "Not a literal request for a health status."
+      ],
+      "confidence": 0.9
+    },
+    {
+      "id": "no-dey-whine-me",
+      "term": "no dey whine me",
+      "variants": [
+        "you dey whine me",
+        "whine"
+      ],
+      "meaning": "Don't mess with me, don't waste my time, or 'you must be joking'.",
+      "literal": "'Whine' here is not the dance; it means to tease or annoy.",
+      "usage": "Playful disbelief or mild annoyance. Context and tone decide.",
+      "register": "informal",
+      "regions": [
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian Pidgin"
+      ],
+      "examples": [
+        {
+          "text": "You bought it for that price? No dey whine me.",
+          "reading": "You paid that much? Don't joke with me."
+        }
+      ],
+      "misreadings": [
+        "Not related to the dance move called whining."
+      ],
+      "confidence": 0.9
+    },
+    {
+      "id": "chop-breakfast",
+      "term": "chop breakfast",
+      "variants": [
+        "I don chop breakfast",
+        "breakfast"
+      ],
+      "meaning": "To be dumped or defeated, usually in a relationship or a contest.",
+      "literal": "'Eat breakfast', but figuratively losing or being rejected.",
+      "usage": "Mostly humorous and self-deprecating. It rarely means a literal meal.",
+      "register": "informal",
+      "regions": [
+        "nationwide",
+        "Lagos"
+      ],
+      "languages": [
+        "Nigerian Pidgin"
+      ],
+      "examples": [
+        {
+          "text": "She broke up with him. He don chop breakfast.",
+          "reading": "She ended the relationship; he has been dumped."
+        }
+      ],
+      "misreadings": [
+        "Do not read it literally when it appears in relationship talk."
+      ],
+      "confidence": 0.92
+    },
+    {
+      "id": "chop-life",
+      "term": "chop life",
+      "variants": [
+        "chop and quench",
+        "life na chop"
+      ],
+      "meaning": "Enjoy life, spend on yourself, or celebrate while you can.",
+      "literal": "'Eat life' - enjoy it.",
+      "usage": "Encourages enjoyment, sometimes with a shrug at hardship. Not the same as 'chop breakfast'.",
+      "register": "informal",
+      "regions": [
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian Pidgin"
+      ],
+      "examples": [
+        {
+          "text": "After this salary, I wan chop life small.",
+          "reading": "After this salary, I want to enjoy myself a little."
+        }
+      ],
+      "misreadings": [
+        "The same verb 'chop' carries different meanings in different phrases."
+      ],
+      "confidence": 0.92
+    },
+    {
+      "id": "shine-your-eye",
+      "term": "shine your eye",
+      "variants": [
+        "shine your eyes"
+      ],
+      "meaning": "Be alert, pay attention, or watch out for cheating.",
+      "literal": "Make your eyes shine, i.e. be wide awake.",
+      "usage": "Advice or warning, often about money, travel, or dealings.",
+      "register": "informal",
+      "regions": [
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian Pidgin"
+      ],
+      "examples": [
+        {
+          "text": "When you enter that market, shine your eye.",
+          "reading": "In that market, stay alert and watch for cheating."
+        }
+      ],
+      "misreadings": [
+        "Not about literal eye care."
+      ],
+      "confidence": 0.93
+    },
+    {
+      "id": "carry-go",
+      "term": "carry go",
+      "variants": [
+        "carry go with it"
+      ],
+      "meaning": "Continue, go ahead, or keep doing what you are doing.",
+      "literal": "'Carry and go', but used as approval to proceed.",
+      "usage": "Encouraging. Can be used about a plan, a performance, or a conversation.",
+      "register": "informal",
+      "regions": [
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian Pidgin"
+      ],
+      "examples": [
+        {
+          "text": "That plan is good; carry go.",
+          "reading": "That plan is good; go ahead."
+        }
+      ],
+      "misreadings": [
+        "Not literally about carrying an object."
+      ],
+      "confidence": 0.92
+    },
+    {
+      "id": "no-shaking",
+      "term": "no shaking",
+      "variants": [
+        "no shaking at all"
+      ],
+      "meaning": "No problem, no cause for worry, or 'we are fine'.",
+      "literal": "'There is no shaking' - there is nothing to disturb us.",
+      "usage": "Reassurance. Often used to downplay a challenge or to show confidence.",
+      "register": "informal",
+      "regions": [
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian Pidgin"
+      ],
+      "examples": [
+        {
+          "text": "They criticised us, but no shaking.",
+          "reading": "They criticised us, but it is no problem."
+        }
+      ],
+      "misreadings": [
+        "Not a literal statement about physical movement."
+      ],
+      "confidence": 0.92
+    },
+    {
+      "id": "hammer",
+      "term": "hammer",
+      "variants": [
+        "I don hammer",
+        "hammering"
+      ],
+      "meaning": "To make a lot of money or land a big opportunity.",
+      "literal": "To strike it big, as if hitting a jackpot.",
+      "usage": "Financial slang, often celebratory or aspirational.",
+      "register": "informal",
+      "regions": [
+        "nationwide",
+        "Lagos"
+      ],
+      "languages": [
+        "Nigerian Pidgin",
+        "Nigerian English"
+      ],
+      "examples": [
+        {
+          "text": "That contract made him hammer.",
+          "reading": "That contract made him a lot of money."
+        }
+      ],
+      "misreadings": [
+        "Not about the tool or physical hitting."
+      ],
+      "confidence": 0.9
+    },
+    {
+      "id": "blow",
+      "term": "blow",
+      "variants": [
+        "blow up",
+        "he don blow"
+      ],
+      "meaning": "To become famous or suddenly successful, especially in music or entertainment.",
+      "literal": "To burst into prominence.",
+      "usage": "Common in entertainment talk. It implies a sudden rise, not just talent.",
+      "register": "informal",
+      "regions": [
+        "nationwide",
+        "Lagos"
+      ],
+      "languages": [
+        "Nigerian English",
+        "Nigerian Pidgin"
+      ],
+      "examples": [
+        {
+          "text": "The song made her blow.",
+          "reading": "The song made her suddenly famous."
+        }
+      ],
+      "misreadings": [
+        "Not about wind or an explosion in ordinary slang."
+      ],
+      "confidence": 0.92
+    },
+    {
+      "id": "owambe",
+      "term": "owambe",
+      "variants": [
+        "owambe party"
+      ],
+      "meaning": "A large, lavish Nigerian party, usually a wedding or celebration, with food, music, aso ebi, and spraying of money.",
+      "literal": "From Yoruba, 'it is there' - a party that is visibly happening.",
+      "usage": "Neutral or celebratory. It implies scale and expense, not just any gathering.",
+      "register": "informal",
+      "regions": [
+        "South-West",
+        "Lagos",
+        "nationwide"
+      ],
+      "languages": [
+        "Yoruba",
+        "Nigerian English"
+      ],
+      "examples": [
+        {
+          "text": "The owambe was packed till midnight.",
+          "reading": "The big party was full until midnight."
+        }
+      ],
+      "misreadings": [
+        "Not a small family gathering.",
+        "Spraying money is cultural but naira abuse rules may apply; do not present it as legally risk-free."
+      ],
+      "confidence": 0.94
+    },
+    {
+      "id": "aso-ebi",
+      "term": "aso ebi",
+      "variants": [
+        "asoebi"
+      ],
+      "meaning": "Matching fabric or outfits worn by family and friends at a Nigerian celebration.",
+      "literal": "From Yoruba, 'cloth for the family'.",
+      "usage": "A sign of belonging at weddings, funerals, and other events. Guests often pay for their own fabric.",
+      "register": "neutral",
+      "regions": [
+        "nationwide",
+        "South-West"
+      ],
+      "languages": [
+        "Yoruba",
+        "Nigerian English"
+      ],
+      "examples": [
+        {
+          "text": "We wore the same aso ebi at the wedding.",
+          "reading": "We wore matching celebration outfits at the wedding."
+        }
+      ],
+      "misreadings": [
+        "Not just any matching clothes; it is tied to a specific event and group."
+      ],
+      "confidence": 0.95
+    },
+    {
+      "id": "omo",
+      "term": "omo",
+      "variants": [
+        "omo mi",
+        "omo!"
+      ],
+      "meaning": "Child or person, literally in Yoruba; as an exclamation, 'wow' or 'oh my'. 'Omo mi' means my child.",
+      "literal": "Child, from Yoruba.",
+      "usage": "Widely used in Nigerian internet speech as an exclamation. The same word can be literal family language.",
+      "register": "informal",
+      "regions": [
+        "nationwide",
+        "South-West"
+      ],
+      "languages": [
+        "Yoruba",
+        "Nigerian Pidgin"
+      ],
+      "examples": [
+        {
+          "text": "Omo, that film was deep.",
+          "reading": "Wow, that film was profound."
+        }
+      ],
+      "misreadings": [
+        "As an exclamation it does not refer to a specific child."
+      ],
+      "confidence": 0.93
+    },
+    {
+      "id": "biko",
+      "term": "biko",
+      "variants": [
+        "bikonu"
+      ],
+      "meaning": "Please (Igbo). Used in Nigerian English and Pidgin as a polite appeal.",
+      "literal": "Please, in Igbo.",
+      "usage": "Polite, sometimes pleading. It is Igbo, not Pidgin, though widely understood in cities.",
+      "register": "polite",
+      "regions": [
+        "South-East",
+        "nationwide"
+      ],
+      "languages": [
+        "Igbo"
+      ],
+      "examples": [
+        {
+          "text": "Biko, help me with this.",
+          "reading": "Please help me with this."
+        }
+      ],
+      "misreadings": [
+        "Do not label every Igbo word as Pidgin; code-switching is common but the source language matters."
+      ],
+      "confidence": 0.97
+    },
+    {
+      "id": "sannu",
+      "term": "sannu",
+      "variants": [
+        "sannu da zuwa",
+        "sannu da aiki"
+      ],
+      "meaning": "Hello, sorry, or well done (Hausa). 'Sannu da aiki' means well done at work.",
+      "literal": "A Hausa greeting that also expresses sympathy or appreciation.",
+      "usage": "Respectful and warm. It is not Pidgin, although non-Hausa Nigerians may borrow it.",
+      "register": "polite",
+      "regions": [
+        "North"
+      ],
+      "languages": [
+        "Hausa"
+      ],
+      "examples": [
+        {
+          "text": "Sannu, yaya dai?",
+          "reading": "Hello, how are things?"
+        }
+      ],
+      "misreadings": [
+        "Can mean 'sorry' as sympathy, not an apology for a wrongdoing."
+      ],
+      "confidence": 0.96
+    },
+    {
+      "id": "bawo",
+      "term": "bawo",
+      "variants": [
+        "bawo ni",
+        "se daada ni"
+      ],
+      "meaning": "How, in Yoruba. 'Bawo ni?' means 'how are you?'.",
+      "literal": "How / how is it.",
+      "usage": "Friendly greeting among Yoruba speakers and widely borrowed. Tone is warm and casual.",
+      "register": "polite",
+      "regions": [
+        "South-West"
+      ],
+      "languages": [
+        "Yoruba"
+      ],
+      "examples": [
+        {
+          "text": "Bawo ni, se everything dey okay?",
+          "reading": "How are you, is everything okay?"
+        }
+      ],
+      "misreadings": [
+        "Not Pidgin; it is Yoruba, even though the rest of the sentence may be Pidgin."
+      ],
+      "confidence": 0.96
+    },
+    {
+      "id": "ndewo",
+      "term": "ndewo",
+      "variants": [
+        "ndewo nu"
+      ],
+      "meaning": "Hello, in Igbo. 'Ndewo nu' is a warmer plural greeting.",
+      "literal": "Hello / greetings.",
+      "usage": "Polite greeting. Not interchangeable with every Igbo greeting; context and time of day matter.",
+      "register": "polite",
+      "regions": [
+        "South-East"
+      ],
+      "languages": [
+        "Igbo"
+      ],
+      "examples": [
+        {
+          "text": "Ndewo, welcome.",
+          "reading": "Hello, welcome."
+        }
+      ],
+      "misreadings": [
+        "Not a universal Nigerian greeting; use it where it fits."
+      ],
+      "confidence": 0.94
+    },
+    {
+      "id": "oyinbo",
+      "term": "oyinbo",
+      "variants": [
+        "oyibo"
+      ],
+      "meaning": "A white person or foreigner, from Yoruba. It can be descriptive or, depending on tone, othering.",
+      "literal": "Originally referred to a light-skinned or foreign person.",
+      "usage": "Everyday descriptive use is common, but it can reduce people to appearance or foreignness. Prefer nationality or name when known.",
+      "register": "informal",
+      "regions": [
+        "South-West",
+        "nationwide"
+      ],
+      "languages": [
+        "Yoruba",
+        "Nigerian Pidgin"
+      ],
+      "examples": [
+        {
+          "text": "The oyinbo woman at the market speaks Yoruba.",
+          "reading": "The white/foreign woman at the market speaks Yoruba."
+        }
+      ],
+      "misreadings": [
+        "Do not assume it is always hostile, and do not translate it as a neutral official category either."
+      ],
+      "confidence": 0.9
+    },
+    {
+      "id": "one-chance",
+      "term": "one chance",
+      "variants": [
+        "one chance bus"
+      ],
+      "meaning": "A robbery carried out in a fake or complicit commercial vehicle, often after a passenger is picked up alone.",
+      "literal": "'One chance' - the one ride you should not take.",
+      "usage": "A serious safety warning, not a joke. Typical advice includes avoiding unmarked cars and sharing vehicle details.",
+      "register": "neutral",
+      "regions": [
+        "nationwide",
+        "Lagos",
+        "Abuja"
+      ],
+      "languages": [
+        "Nigerian English",
+        "Nigerian Pidgin"
+      ],
+      "examples": [
+        {
+          "text": "Be careful at night; one chance is real.",
+          "reading": "Be careful at night; fake-vehicle robberies happen."
+        }
+      ],
+      "misreadings": [
+        "Not a lottery or a single opportunity."
+      ],
+      "confidence": 0.96,
+      "tags": [
+        "safety",
+        "robbery",
+        "lagos",
+        "night",
+        "transport"
+      ]
+    },
+    {
+      "id": "go-slow",
+      "term": "go slow",
+      "variants": [
+        "traffic go slow"
+      ],
+      "meaning": "Heavy traffic or a traffic jam.",
+      "literal": "You go slowly because of congestion.",
+      "usage": "Everyday transport talk, especially in Lagos.",
+      "register": "informal",
+      "regions": [
+        "Lagos",
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian English"
+      ],
+      "examples": [
+        {
+          "text": "I'm stuck in go slow.",
+          "reading": "I am stuck in traffic."
+        }
+      ],
+      "misreadings": [
+        "Not an instruction to drive slowly, although the words suggest it."
+      ],
+      "confidence": 0.94
+    },
+    {
+      "id": "i-am-coming",
+      "term": "I'm coming",
+      "variants": [
+        "I dey come"
+      ],
+      "meaning": "I am on my way / I will be there soon. In Nigerian English it can also mean the speaker is about to leave where they are, not that they have arrived.",
+      "literal": "A statement of imminent movement.",
+      "usage": "Famously elastic about time. Do not treat it as a precise ETA; ask for one if it matters.",
+      "register": "neutral",
+      "regions": [
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian English"
+      ],
+      "examples": [
+        {
+          "text": "I'm coming, I just dey inside traffic.",
+          "reading": "I am on the way; I am stuck in traffic."
+        }
+      ],
+      "misreadings": [
+        "Not necessarily a promise of immediate arrival."
+      ],
+      "confidence": 0.92,
+      "tags": [
+        "time",
+        "on the way",
+        "nigerian english",
+        "traffic"
+      ]
+    },
+    {
+      "id": "well-done",
+      "term": "well done",
+      "variants": [
+        "well done o"
+      ],
+      "meaning": "A greeting or appreciation for someone who is working, not only praise for a finished task.",
+      "literal": "Praise for work.",
+      "usage": "Say it to a trader, colleague, or anyone working. It acknowledges effort.",
+      "register": "polite",
+      "regions": [
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian English"
+      ],
+      "examples": [
+        {
+          "text": "Well done o, you dey work late.",
+          "reading": "I acknowledge your effort; you are working late."
+        }
+      ],
+      "misreadings": [
+        "Not sarcasm by default."
+      ],
+      "confidence": 0.9
+    },
+    {
+      "id": "sorry",
+      "term": "sorry",
+      "variants": [
+        "sorry o"
+      ],
+      "meaning": "Sympathy or concern, often for someone else's misfortune, not an admission of wrongdoing.",
+      "literal": "An expression of sympathy in Nigerian English usage.",
+      "usage": "Say 'sorry' when someone trips, is ill, or has bad news. It can sound odd to outsiders who hear it as an apology.",
+      "register": "polite",
+      "regions": [
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian English"
+      ],
+      "examples": [
+        {
+          "text": "Sorry o, I heard about your loss.",
+          "reading": "I am sorry for your loss (sympathy)."
+        }
+      ],
+      "misreadings": [
+        "It does not always mean the speaker is apologising."
+      ],
+      "confidence": 0.9
+    },
+    {
+      "id": "how-far",
+      "term": "how far",
+      "variants": [
+        "how far now",
+        "wetin dey"
+      ],
+      "meaning": "A casual greeting meaning 'how are you?' or 'what's up?'.",
+      "literal": "Literally asks about distance, but functions as a greeting.",
+      "usage": "Friendly and informal. A reply can be 'I dey' or 'we dey'. It is not a request for directions.",
+      "register": "informal",
+      "regions": [
+        "nationwide"
+      ],
+      "languages": [
+        "Nigerian Pidgin",
+        "Nigerian English"
+      ],
+      "examples": [
+        {
+          "text": "How far? Long time.",
+          "reading": "How are you? It has been a while."
+        }
+      ],
+      "misreadings": [
+        "Not usually a literal question about distance."
+      ],
+      "confidence": 0.95
+    }
+  ]
+}

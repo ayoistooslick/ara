@@ -2,18 +2,26 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import shutil
+import sqlite3
 import sys
 import textwrap
 from datetime import datetime
 from pathlib import Path
 
 from . import __version__
-from .config import load_config, write_default_config
+from .brand import hop, static_frog
+from .config import compatibility_report, effective_profile, load_config, write_default_config
+from .embeddings import backfill_vectors, get_embedder, retrieval_report
 from .engine import BoundedActionLoop, ConversationEngine, evaluate_options, identify_learning, select_goal
 from .model import LocalChatModel, ModelError, runtime_diagnostics
+from .news import format_news, news_report
+from .nigeria import KnowledgeBase, evaluate
+from .nigeria_pipeline import ingest_jsonl, validate_corpus, write_manifest
+from .perception import PerceptionError, PerceptionUnavailable, Transcriber, VisionClient, perception_status
 from .safety import redact_sensitive
-from .store import Store
+from .store import SCHEMA_VERSION, Store
 from .tools import ToolError, ToolRegistry
 
 
@@ -29,6 +37,30 @@ def build_parser() -> argparse.ArgumentParser:
     sub.add_parser("conversations", help="List saved conversation threads")
     model = sub.add_parser("model", help="Inspect the configured local model")
     model.add_subparsers(dest="model_command", required=True).add_parser("status", help="Check model server and configured weights")
+    ask = sub.add_parser("ask", help="Send one message and print Ara's reply")
+    ask.add_argument("message", nargs="+")
+    ask.add_argument("--mode", choices=["chat", "learn"], default="chat")
+    ask.add_argument("--json", action="store_true", help="Print a JSON result")
+    nigeria = sub.add_parser("nigeria", help="Search and measure Ara's Nigerian-context knowledge")
+    ng = nigeria.add_subparsers(dest="nigeria_command", required=True)
+    ng_search = ng.add_parser("search"); ng_search.add_argument("query"); ng_search.add_argument("--limit", type=int, default=8)
+    ng_explain = ng.add_parser("explain"); ng_explain.add_argument("text", nargs="+"); ng_explain.add_argument("--json", action="store_true")
+    ng_eval = ng.add_parser("eval"); ng_eval.add_argument("--model", action="store_true", help="Also score actual model answers (slow, needs a running model)"); ng_eval.add_argument("--json", action="store_true")
+    ng.add_parser("stats")
+    ng.add_parser("validate")
+    ng.add_parser("manifest")
+    ng_ingest = ng.add_parser("ingest"); ng_ingest.add_argument("source"); ng_ingest.add_argument("--kind", choices=["expressions", "history", "culture"], required=True); ng_ingest.add_argument("--out", required=True); ng_ingest.add_argument("--license", required=True); ng_ingest.add_argument("--consent", required=True)
+    news = sub.add_parser("news", help="Read Nigerian headlines from publisher feeds")
+    news.add_argument("--refresh", action="store_true"); news.add_argument("--offline", action="store_true")
+    news.add_argument("--topic", default=None); news.add_argument("--limit", type=int, default=12); news.add_argument("--json", action="store_true")
+    web = sub.add_parser("web", help="Serve the shared-core web interface")
+    web.add_argument("--host", default=None); web.add_argument("--port", type=int, default=None)
+    animate = sub.add_parser("animate", help="Show the frog; animate in an interactive terminal")
+    animate.add_argument("--loops", type=int, default=2); animate.add_argument("--plain", action="store_true")
+    vision = sub.add_parser("vision", help="Analyse an image through the configured vision endpoint")
+    vision.add_argument("path"); vision.add_argument("--prompt", default="Describe this image accurately and name any uncertainty.")
+    audio = sub.add_parser("audio", help="Transcribe an audio file through the configured local endpoint")
+    audio.add_argument("path")
     memory = sub.add_parser("memory", help="Inspect, add, correct, or forget stored memories")
     msub = memory.add_subparsers(dest="memory_command", required=True)
     msub.add_parser("inspect", help="List active memories")
@@ -40,6 +72,9 @@ def build_parser() -> argparse.ArgumentParser:
     correct.add_argument("id", type=int); correct.add_argument("content")
     forget = msub.add_parser("forget", help="Forget an existing memory")
     forget.add_argument("id", type=int)
+    msub.add_parser("embed", help="Compute vectors for memories that need them")
+    mforget = msub.add_parser("forget-all", help="Forget every active memory")
+    mforget.add_argument("--yes", action="store_true", help="Confirm forgetting every active memory")
     backup = sub.add_parser("backup", help="Create a consistent local SQLite backup")
     backup.add_argument("destination", nargs="?")
     restore = sub.add_parser("restore", help="Restore from an Ara SQLite backup")
@@ -96,7 +131,10 @@ def interactive(config, store: Store, conversation_id: str | None = None) -> int
         print(f"Model configuration error: {exc}", file=sys.stderr)
         return 2
     engine = ConversationEngine(config, store, model, conversation_id)
-    print("Ara is ready. Type /help for local commands, or /exit to leave.")
+    if sys.stdout.isatty():
+        print(static_frog(color=True))
+    print(f"Ara {__version__} is ready. Type /help for local commands, or /exit to leave.")
+    mode = "chat"
     while True:
         try:
             text = input("you> ").strip()
@@ -109,7 +147,68 @@ def interactive(config, store: Store, conversation_id: str | None = None) -> int
             print("Ara session ended.")
             return 0
         if text == "/help":
-            print("/memory  /history  /new  /skills  /calc EXPR  /remember TEXT  /exit")
+            print("/memory  /history  /new  /skills  /calc EXPR  /remember TEXT")
+            print("/news [refresh]  /explain TEXT  /image PATH  /audio PATH  /study  /animate")
+            print("/embed  /doctor  /exit")
+            continue
+        if text == "/study":
+            mode = "learn" if mode == "chat" else "chat"
+            print("Study mode on. Ara will explain in steps and check understanding." if mode == "learn" else "Back to ordinary conversation.")
+            continue
+        if text == "/animate":
+            hop(loops=1)
+            continue
+        if text == "/doctor":
+            print(f"Database schema: {SCHEMA_VERSION}; knowledge entries: {len(engine.knowledge.entries)}")
+            for line in compatibility_report(config):
+                print(line)
+            ok, message = model.status()
+            print(message)
+            print(f"Retrieval: {json.dumps(retrieval_report(store, engine.embedder))}")
+            continue
+        if text == "/embed":
+            try:
+                count = backfill_vectors(store, engine.embedder)
+                print(f"Computed {count} new memory vector(s) with {engine.embedder.describe()}.")
+            except Exception as exc:
+                print(f"Embedding error: {exc}", file=sys.stderr)
+            continue
+        if text.startswith("/news"):
+            refresh = "refresh" in text.casefold()
+            report = news_report(store, config, refresh=refresh, knowledge=engine.knowledge)
+            if report.get("errors"):
+                print("Feed errors: " + "; ".join(report["errors"]), file=sys.stderr)
+            if not report["items"]:
+                print("No cached news. Run 'ara news --refresh' when online.")
+            for item in report["items"][:8]:
+                print(format_news(item))
+                print()
+            continue
+        if text.startswith("/explain "):
+            interpretation = engine.knowledge.interpret(text[9:].strip())
+            print(f"Register: {interpretation.register}" + (" (ambiguous; ask for context)" if interpretation.clarify else ""))
+            for entry in interpretation.detected:
+                print(f"- {entry.term}: {entry.summary} [{', '.join(entry.regions)}; confidence {entry.confidence:.2f}]")
+            for note in interpretation.guidance:
+                print(f"  note: {note}")
+            if not interpretation.detected:
+                print("No specific expression detected. Try a term or a short sentence.")
+            continue
+        if text.startswith("/image "):
+            parts = text[7:].strip().split(" ", 1)
+            try:
+                data = Path(parts[0]).expanduser().read_bytes()
+                result = VisionClient(config).describe(data, parts[1] if len(parts) > 1 else "Describe this image accurately and name any uncertainty.")
+                print(result["text"])
+            except (OSError, PerceptionError) as exc:
+                print(f"Vision error: {exc}", file=sys.stderr)
+            continue
+        if text.startswith("/audio "):
+            try:
+                data = Path(text[7:].strip()).expanduser().read_bytes()
+                print(Transcriber(config).transcribe(data)["text"])
+            except (OSError, PerceptionError) as exc:
+                print(f"Transcription error: {exc}", file=sys.stderr)
             continue
         if text == "/new":
             engine.start_new_conversation()
@@ -147,9 +246,14 @@ def interactive(config, store: Store, conversation_id: str | None = None) -> int
             print(f"Stored memory #{mid}." + (f" Possible related memories: {', '.join('#'+str(x['id']) for x in conflicts)}; inspect them for contradictions." if conflicts else ""))
             continue
         try:
-            answer, learning = engine.respond(text)
+            answer, learning = engine.respond(text, mode=mode)
             print("ara> ", end="")
             _print_wrapped(answer)
+            if engine.last_interpretation and engine.last_interpretation.detected:
+                terms = ", ".join(entry.term for entry in engine.last_interpretation.detected[:3])
+                print(f"[Context: {engine.last_interpretation.register} · {terms}]")
+            if engine.last_interpretation and engine.last_interpretation.clarify:
+                print("[The expression was ambiguous; ask for the missing context instead of assuming.]")
             if learning.saved_id:
                 print(f"[Stored {learning.kind} as memory #{learning.saved_id}.]" + (" Related memories may conflict; use ara memory inspect." if learning.conflicts else ""))
             if learning.sensitive_rejected:
@@ -179,7 +283,20 @@ def main(argv: list[str] | None = None) -> int:
             answer = input(f"Replace {config.db_path} with {source}? Type 'restore' to confirm: ")
             if answer != "restore": print("Restore cancelled."); return 1
             config.home.mkdir(parents=True, exist_ok=True)
-            import shutil
+            # Restore is destructive: keep a verified copy of the current data first.
+            if config.db_path.exists():
+                config.backup_dir.mkdir(parents=True, exist_ok=True)
+                safety = config.backup_dir / ("ara-pre-restore-" + datetime.now().strftime("%Y%m%d-%H%M%S") + ".sqlite3")
+                try:
+                    with sqlite3.connect(config.db_path) as live, sqlite3.connect(safety) as copy:
+                        live.backup(copy)
+                except (OSError, sqlite3.DatabaseError) as exc:
+                    print(f"Could not back up the current database; restore cancelled: {exc}", file=sys.stderr)
+                    return 2
+                if not Store.check_backup(safety):
+                    print("The pre-restore backup failed its integrity check; restore cancelled.", file=sys.stderr)
+                    return 2
+                print(f"Saved the current database to {safety}")
             temp_path = config.db_path.with_suffix(config.db_path.suffix + ".restore-tmp")
             shutil.copy2(source, temp_path)
             if not Store.check_backup(temp_path):
@@ -193,17 +310,148 @@ def main(argv: list[str] | None = None) -> int:
         store = Store(config.db_path)
         if args.command == "status":
             ok, message = _model(config).status()
-            print(f"Ara {__version__}\nData: {config.home}\nDatabase: {config.db_path}\nCounts: {json.dumps(store.counts())}\nModel: {message}")
+            knowledge = KnowledgeBase.load(config.knowledge_dir)
+            print(f"Ara {__version__}\nData: {config.home}\nDatabase: {config.db_path}\nSchema: {SCHEMA_VERSION}\nCounts: {json.dumps(store.counts())}\nKnowledge: {json.dumps(knowledge.stats()['by_kind'])}\nNews cached: {len(store.news_items(1))}\nProfile: {effective_profile(config)}\nModel: {message}")
             return 0 if ok else 1
         if args.command == "doctor":
-            print(f"Ara {__version__}; Python {sys.version.split()[0]}; database: OK ({config.db_path})")
+            print(f"Ara {__version__}; Python {sys.version.split()[0]}; database: OK ({config.db_path}); schema {SCHEMA_VERSION}")
             for line in runtime_diagnostics(config): print(line)
+            for line in compatibility_report(config): print(line)
+            validation = validate_corpus(config.knowledge_dir)
+            print(f"Nigerian knowledge: {validation['total']} entries; valid={validation['ok']}; warnings={len(validation['warnings'])}")
+            for problem in validation["errors"]:
+                print(f"  error: {problem}")
+            state = perception_status(config)
+            print(f"Vision: {state['vision']['note']}")
+            print(f"Transcription: {state['transcription']['note']}")
+            print(f"Web password: {'set' if config.web_password else 'not set (local-only binding)'}")
+            print(f"News cache: {len(store.news_items(1))} stories")
             ok, message = _model(config).status(); print(message)
             return 0 if ok else 1
         if args.command == "model":
             for line in runtime_diagnostics(config): print(line)
-            ok, message = _model(config).status(); print(message)
+            for line in compatibility_report(config): print(line)
+            model = _model(config)
+            print(json.dumps(model.capabilities(), indent=2))
+            ok, message = model.status(); print(message)
             return 0 if ok else 1
+        if args.command == "ask":
+            model = _model(config)
+            engine = ConversationEngine(config, store, model, args.conversation_id)
+            answer, learning = engine.respond(" ".join(args.message), mode=args.mode)
+            if args.json:
+                print(json.dumps({
+                    "answer": answer,
+                    "conversation_id": engine.conversation_id,
+                    "learning": {"saved": bool(learning.saved_id), "kind": learning.kind, "id": learning.saved_id},
+                    "interpretation": engine.last_interpretation.as_dict() if engine.last_interpretation else None,
+                }, ensure_ascii=False, indent=2))
+            else:
+                print(answer)
+            return 0
+        if args.command == "nigeria":
+            knowledge = KnowledgeBase.load(config.knowledge_dir)
+            if args.nigeria_command == "search":
+                for entry in knowledge.search(args.query, limit=args.limit):
+                    if entry.kind == "expressions":
+                        print(f"{entry.term} [{entry.register}; {', '.join(entry.regions)}; confidence {entry.confidence:.2f}]: {entry.summary}")
+                    else:
+                        print(f"{entry.title} [{entry.kind}; confidence {entry.confidence:.2f}]: {entry.summary}")
+                return 0
+            if args.nigeria_command == "explain":
+                interpretation = knowledge.interpret(" ".join(args.text))
+                payload = interpretation.as_dict()
+                payload["context"] = knowledge.context_for(" ".join(args.text))
+                if args.json:
+                    print(json.dumps(payload, ensure_ascii=False, indent=2))
+                else:
+                    print(f"Register: {interpretation.register}" + (" · ambiguous, clarify" if interpretation.clarify else ""))
+                    for entry in interpretation.detected:
+                        print(f"- {entry.term}: {entry.summary}")
+                        print(f"  regions: {', '.join(entry.regions)}; languages: {', '.join(entry.languages)}; confidence {entry.confidence:.2f}")
+                        for misreading in entry.misreadings:
+                            print(f"  avoid: {misreading}")
+                    for note in interpretation.guidance:
+                        print(f"note: {note}")
+                    if not interpretation.detected:
+                        print("No specific expression detected.")
+                return 0
+            if args.nigeria_command == "eval":
+                answer_fn = None
+                if args.model:
+                    model = _model(config)
+                    engine = ConversationEngine(config, store, model, conversation_id=f"evaluation-{datetime.now().strftime('%Y%m%d%H%M%S')}", knowledge=knowledge, activate=False)
+                    answer_fn = lambda question: model.generate(engine.preview_prompt(question))
+                report = evaluate(knowledge, answer_fn)
+                if args.json:
+                    print(json.dumps(report, ensure_ascii=False, indent=2))
+                else:
+                    print(f"Retrieval: {report['retrieval']['hits']}/{report['retrieval']['cases']} ({report['retrieval']['accuracy']:.1%})")
+                    for failure in report["retrieval"]["failures"]:
+                        print(f"  miss {failure['id']}: expected {failure['expected']}, got {failure['got']}")
+                    print(f"Interpretation: {report['interpretation']['hits']}/{report['interpretation']['cases']} ({report['interpretation']['accuracy']:.1%})")
+                    for failure in report["interpretation"]["failures"]:
+                        print(f"  fail {failure['id']}: {failure['problems']}")
+                    model_report = report["model"]
+                    if model_report.get("run"):
+                        print(f"Model keyword rubric: {model_report['passed']}/{model_report['cases']} ({model_report['accuracy']:.1%}) — not human evaluation")
+                        for category, values in sorted(model_report["by_category"].items()):
+                            print(f"  {category}: {values['passed']}/{values['cases']}")
+                        for failure in model_report["failures"][:10]:
+                            print(f"  fail {failure['id']}: {failure['reason']}")
+                    else:
+                        print("Model answers: not scored (run with --model and a running local model).")
+                return 0
+            if args.nigeria_command == "stats":
+                print(json.dumps(knowledge.stats(), indent=2))
+                print(f"Provenance: {knowledge.metadata.get('expressions', {}).get('provenance', '')}")
+                return 0
+            if args.nigeria_command == "validate":
+                report = validate_corpus(config.knowledge_dir)
+                print(json.dumps(report, indent=2))
+                return 0 if report["ok"] else 1
+            if args.nigeria_command == "manifest":
+                print(write_manifest(config.knowledge_dir))
+                return 0
+            if args.nigeria_command == "ingest":
+                report = ingest_jsonl(args.source, args.kind, args.out, args.license, args.consent)
+                print(json.dumps(report, indent=2))
+                return 0 if report["accepted"] else 1
+        if args.command == "news":
+            report = news_report(store, config, refresh=args.refresh, offline=args.offline, topic=args.topic, knowledge=KnowledgeBase.load(config.knowledge_dir))
+            if args.json:
+                print(json.dumps(report, ensure_ascii=False, indent=2))
+                return 0
+            for error in report.get("errors", []):
+                print(f"feed warning: {error}", file=sys.stderr)
+            if report.get("offline"):
+                print("Showing cached stories only; nothing was refreshed.")
+            items = report["items"][: args.limit]
+            if not items:
+                print("No news cached. Run 'ara news --refresh' when online.")
+            for item in items:
+                print(format_news(item))
+                print()
+            return 0
+        if args.command == "web":
+            from .web.server import serve
+            return serve(config, args.host, args.port)
+        if args.command == "animate":
+            if args.plain or not sys.stdout.isatty():
+                print(static_frog())
+            else:
+                hop(loops=args.loops)
+            return 0
+        if args.command == "vision":
+            data = Path(args.path).expanduser().read_bytes()
+            result = VisionClient(config).describe(data, args.prompt)
+            print(result["text"])
+            print(f"\n[image: {result['image']['width']}x{result['image']['height']} {result['image']['mime']}; not stored]", file=sys.stderr)
+            return 0
+        if args.command == "audio":
+            data = Path(args.path).expanduser().read_bytes()
+            print(Transcriber(config).transcribe(data)["text"])
+            return 0
         if args.command == "history":
             if args.limit < 1 or args.limit > 1000:
                 print("History limit must be between 1 and 1000.", file=sys.stderr); return 2
@@ -235,6 +483,16 @@ def main(argv: list[str] | None = None) -> int:
             elif args.memory_command == "forget":
                 if not store.forget_memory(args.id): print("No active memory with that id.", file=sys.stderr); return 1
                 print(f"Forgot memory #{args.id}.")
+            elif args.memory_command == "embed":
+                embedder = get_embedder(config)
+                count = backfill_vectors(store, embedder)
+                print(f"Computed {count} vector(s) with {embedder.describe()}.")
+                print(json.dumps(retrieval_report(store, embedder), indent=2))
+            elif args.memory_command == "forget-all":
+                if not args.yes:
+                    print("This marks every active memory forgotten. Re-run with --yes to confirm.", file=sys.stderr)
+                    return 2
+                print(f"Forgot {store.forget_all_memories()} active memories.")
             return 0
         if args.command == "backup":
             target = Path(args.destination).expanduser() if args.destination else config.backup_dir / ("ara-" + datetime.now().strftime("%Y%m%d-%H%M%S") + ".sqlite3")

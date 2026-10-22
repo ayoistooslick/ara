@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 210" role="img" aria-labelledby="frogTitle frogDesc">
+  <title id="frogTitle">Ara the frog</title>
+  <desc id="frogDesc">An original green and white frog mascot with wide expressive eyes, sitting confidently.</desc>
+
+  <ellipse cx="120" cy="196" rx="76" ry="9" fill="#04120c" opacity="0.32"/>
+
+  <!-- hind legs -->
+  <g stroke="#06251a" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M66 138c-26 6-40 24-36 42 3 12 17 15 32 12 13-3 22-12 24-28z" fill="#007a4a"/>
+    <path d="M174 138c26 6 40 24 36 42-3 12-17 15-32 12-13-3-22-12-24-28z" fill="#007a4a"/>
+    <!-- toes -->
+    <path d="M32 181c-8 1-11 7-9 11 3 5 11 4 16-1" fill="#f7f5ea"/>
+    <path d="M47 188c-7 3-8 9-5 12 4 4 11 1 14-4" fill="#f7f5ea"/>
+    <path d="M208 181c8 1 11 7 9 11-3 5-11 4-16-1" fill="#f7f5ea"/>
+    <path d="M193 188c7 3 8 9 5 12-4 4-11 1-14-4" fill="#f7f5ea"/>
+  </g>
+
+  <!-- body -->
+  <path d="M120 56c46 0 78 30 82 74 3 35-17 57-48 62-19 3-49 3-68 0-31-5-51-27-48-62 4-44 36-74 82-74z" fill="#008751" stroke="#06251a" stroke-width="5" stroke-linejoin="round"/>
+
+  <!-- painted white throat / chest -->
+  <path d="M120 106c17 0 29 14 30 33 1 22-10 38-30 38s-31-16-30-38c1-19 13-33 30-33z" fill="#f7f5ea" stroke="#06251a" stroke-width="4"/>
+  <path d="M108 121c4-5 10-6 14-2" fill="none" stroke="#cfd8c8" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- cheek marks -->
+  <path d="M58 112c8-4 16-2 19 4 2 5-2 9-9 9-7 1-13-2-15-6-1-3 1-5 5-7z" fill="#f7f5ea" opacity="0.92"/>
+  <path d="M182 112c-8-4-16-2-19 4-2 5 2 9 9 9 7 1 13-2 15-6 1-3-1-5-5-7z" fill="#f7f5ea" opacity="0.92"/>
+
+  <!-- arms -->
+  <g stroke="#06251a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M74 124c-12 14-16 28-13 43 2 10 9 14 17 11 7-3 10-10 9-21" fill="#008751"/>
+    <path d="M166 124c12 14 16 28 13 43-2 10-9 14-17 11-7-3-10-10-9-21" fill="#008751"/>
+    <path d="M70 171c-9 1-13 7-11 12 3 6 12 5 17-1" fill="#f7f5ea"/>
+    <path d="M170 171c9 1 13 7 11 12-3 6-12 5-17-1" fill="#f7f5ea"/>
+  </g>
+
+  <!-- white forearm stripes -->
+  <path d="M68 148c-2 8-2 15 0 21" fill="none" stroke="#f7f5ea" stroke-width="5" stroke-linecap="round"/>
+  <path d="M172 148c2 8 2 15 0 21" fill="none" stroke="#f7f5ea" stroke-width="5" stroke-linecap="round"/>
+
+  <!-- eye domes -->
+  <g stroke="#06251a" stroke-width="5">
+    <ellipse cx="81" cy="55" rx="29" ry="27" fill="#008751"/>
+    <ellipse cx="159" cy="55" rx="29" ry="27" fill="#008751"/>
+    <ellipse cx="81" cy="57" rx="19" ry="18" fill="#f7f5ea"/>
+    <ellipse cx="159" cy="57" rx="19" ry="18" fill="#f7f5ea"/>
+  </g>
+  <g fill="#0b1b14">
+    <circle cx="87" cy="56" r="8.5"/>
+    <circle cx="165" cy="56" r="8.5"/>
+  </g>
+  <g fill="#ffffff">
+    <circle cx="84" cy="52" r="3"/>
+    <circle cx="162" cy="52" r="3"/>
+  </g>
+
+  <!-- brow markings -->
+  <path d="M56 36c8-9 20-11 30-5" fill="none" stroke="#1fa86a" stroke-width="6" stroke-linecap="round"/>
+  <path d="M184 36c-8-9-20-11-30-5" fill="none" stroke="#1fa86a" stroke-width="6" stroke-linecap="round"/>
+
+  <!-- nostrils and mouth -->
+  <g fill="#06251a">
+    <circle cx="112" cy="86" r="2.6"/>
+    <circle cx="128" cy="86" r="2.6"/>
+  </g>
+  <path d="M96 96c12 8 36 8 48 0" fill="none" stroke="#06251a" stroke-width="4.5" stroke-linecap="round"/>
+
+  <!-- forehead white leaf mark -->
+  <path d="M120 26c8 4 11 12 8 19-5 6-13 6-18 0-3-7 2-15 10-19z" fill="#f7f5ea" opacity="0.95" stroke="#06251a" stroke-width="3"/>
+</svg>
