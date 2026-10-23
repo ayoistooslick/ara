@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from ara.config import Config, load_config
-from ara.downloads import DownloadError, download, human_size, probe
+from ara.downloads import MODELS, DownloadError, download, human_size, probe
 from ara.engine import ConversationEngine
 from ara.model import HostedChatModel, LocalChatModel, ModelError, backend_name, get_model
 from ara.store import Store
@@ -284,6 +284,19 @@ class DownloadTests(unittest.TestCase):
         self.assertEqual(target.read_bytes(), PAYLOAD)
         self.assertIn("SHA-256", result.stdout)
         self.assertIn(human_size(len(PAYLOAD)), result.stdout)
+
+
+class CatalogTests(unittest.TestCase):
+    def test_catalog_entries_are_https_and_sized(self):
+        names = set()
+        for name, entry in MODELS.items():
+            self.assertTrue(str(entry["url"]).startswith("https://"), name)
+            self.assertIsInstance(entry["bytes"], int)
+            self.assertGreater(entry["bytes"], 100_000_000)
+            self.assertTrue(str(entry["ram"]))
+            self.assertTrue(str(entry["license"]))
+            self.assertNotIn(name, names)
+            names.add(name)
 
 
 class ConfigBackendTests(unittest.TestCase):

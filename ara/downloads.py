@@ -11,18 +11,26 @@ from pathlib import Path
 from typing import Callable
 
 MODELS: dict[str, dict[str, object]] = {
+    "qwen3-0.6b": {
+        "label": "Qwen3 0.6B, 8-bit (610 MB)",
+        "url": "https://huggingface.co/Qwen/Qwen3-0.6B-GGUF/resolve/main/Qwen3-0.6B-Q8_0.gguf",
+        "bytes": 639_446_688,
+        "ram": "about 1.5 GB free RAM",
+        "license": "Apache-2.0",
+        "note": "Smallest option, and the one measured for this README. Expect simple answers and mistakes.",
+    },
     "qwen3-1.7b": {
         "label": "Qwen3 1.7B, 4-bit (about 1.1 GB)",
-        "url": "https://huggingface.co/Qwen/Qwen3-1.7B-GGUF/resolve/main/Qwen3-1.7B-Q4_K_M.gguf",
-        "bytes": 1_110_000_000,
+        "url": "https://huggingface.co/unsloth/Qwen3-1.7B-GGUF/resolve/main/Qwen3-1.7B-Q4_K_M.gguf",
+        "bytes": 1_107_409_472,
         "ram": "about 2 GB free RAM",
-        "license": "Apache-2.0",
-        "note": "Smallest useful chat option. Good starting point on a phone with swap.",
+        "license": "Apache-2.0 (quantised by unsloth)",
+        "note": "Better than 0.6B while still plausible on a phone with swap.",
     },
     "qwen3-4b": {
-        "label": "Qwen3 4B, 4-bit (about 2.5 GB)",
+        "label": "Qwen3 4B, 4-bit (about 2.3 GB)",
         "url": "https://huggingface.co/Qwen/Qwen3-4B-GGUF/resolve/main/Qwen3-4B-Q4_K_M.gguf",
-        "bytes": 2_500_000_000,
+        "bytes": 2_497_280_256,
         "ram": "about 4 GB free RAM",
         "license": "Apache-2.0",
         "note": "Better answers if your device has the memory. Slower on CPU.",

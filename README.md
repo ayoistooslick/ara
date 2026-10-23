@@ -6,7 +6,7 @@ It starts in well under a second and does **not** download model weights when yo
 
 ## Install
 
-On Android with Termux:
+You need Python 3.10 or newer. On Android with Termux:
 
 ```sh
 pkg update && pkg install python git
@@ -50,15 +50,17 @@ Me on this sandbox (2 vCPU, Qwen3-0.6B Q8, 2,048-token context, 160-token cap): 
 Only do this if you want offline inference. Àrà works without it.
 
 ```sh
-ara model download qwen3-1.7b
+ara model download qwen3-0.6b     # 610 MB, about 1.5 GB RAM
+ara model download qwen3-1.7b     # about 1.1 GB, about 2 GB RAM
+ara model download qwen3-4b       # about 2.3 GB, about 4 GB RAM
 ```
 
-It prints the download size (about 1.1 GB), the free storage it needs, the RAM it wants (about 2 GB), and the licence, then asks before starting. Downloads resume with HTTP Range requests, are checked against the publisher's SHA-256 when one is available, and only appear under their real name after the check passes. `qwen3-4b` is about 2.5 GB. You can also pass your own `.gguf` URL.
+It prints the exact download size, the free storage it needs, the RAM it wants, and the licence, then asks before starting. Downloads resume with HTTP Range requests, are checked against the publisher's SHA-256 when one is available, and only appear under their real name after the check passes. You can also pass your own `.gguf` URL with `--out` and `--sha256`. The catalogue sizes above were confirmed against Hugging Face without downloading the files.
 
 Then start llama.cpp yourself (Àrà does not start servers or download them silently):
 
 ```sh
-llama-server -m ~/.local/share/ara/models/Qwen3-1.7B-Q4_K_M.gguf --host 127.0.0.1 --port 8080 -c 4096
+llama-server -m ~/.local/share/ara/models/Qwen3-0.6B-Q8_0.gguf --host 127.0.0.1 --port 8080 -c 4096
 ara model status
 ```
 
@@ -84,7 +86,7 @@ ara nigeria eval                 # offline retrieval/interpretation eval
 ara web                          # browser interface on 127.0.0.1:8787
 ```
 
-Inside chat: `/model`, `/memory`, `/history`, `/new`, `/clear`, `/remember`, `/study`, `/news`, `/explain`, `/image`, `/audio`, `/doctor`, `/exit`. End a line with `\` to continue on the next one.
+Inside chat: `/model`, `/memory`, `/history`, `/new`, `/clear`, `/remember`, `/study`, `/news`, `/explain`, `/image`, `/audio`, `/doctor`, `/exit`. End a line with `\` to continue on the next one. `ara status` and `ara doctor` also show how much space the database, backups, models, and caches use.
 
 The browser version uses the same engine and the same memories. It asks for camera or microphone permission only after you press those controls, shows a strip while any sensor is active, and releases all of them with one stop control. See [docs/WEB.md](docs/WEB.md) for deployment and the security model.
 

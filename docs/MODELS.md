@@ -88,9 +88,12 @@ ara ask "Explain a Nigerian mortgage in simple English."
 ## Optional local downloads
 
 ```sh
+ara model download qwen3-0.6b     # 610 MB, about 1.5 GB free RAM
 ara model download qwen3-1.7b     # about 1.1 GB, about 2 GB free RAM
-ara model download qwen3-4b       # about 2.5 GB, about 4 GB free RAM
+ara model download qwen3-4b       # about 2.3 GB, about 4 GB free RAM
 ```
+
+The catalogue URLs were probed against Hugging Face while writing this: 639,446,688 bytes (0.6B Q8_0), 1,107,409,472 (1.7B Q4_K_M, unsloth), and 2,497,280,256 (4B Q4_K_M). The 1.7B files are not published in Qwen's own GGUF repo, which is why that entry points at the unsloth quantisation.
 
 Ara prints the size, required free storage, RAM guidance, and licence before asking. It resumes an interrupted `.part` file with a Range request, hashes as it writes, verifies against the publisher's SHA-256 (`x-linked-etag`) when available, and renames the file only after verification. A lock file prevents two downloads of the same target; a bad checksum deletes the partial file. Use `--out` and `--sha256` to supply your own URL and expected digest. Weights land in `$ARA_HOME/models` and are never committed.
 

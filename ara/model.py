@@ -5,7 +5,7 @@ import os
 import urllib.error
 import urllib.request
 from typing import Any, Callable, Iterator
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urlsplit, urlunsplit
 
 from .config import Config
 
@@ -16,6 +16,15 @@ class ModelError(RuntimeError):
 
 class BackendUnavailable(ModelError):
     """No configured backend answered, so Ara must not claim model inference."""
+
+
+def _safe_url(url: str) -> str:
+    """Show where a request goes without userinfo, query tokens, or fragments."""
+    parsed = urlsplit(url)
+    netloc = parsed.hostname or ""
+    if parsed.port:
+        netloc += f":{parsed.port}"
+    return urlunsplit((parsed.scheme, netloc, parsed.path.rstrip("/"), "", ""))
 
 
 def estimate_tokens(text: str) -> int:
@@ -90,6 +99,7 @@ class ChatCompletionsModel(ModelAdapter):
             raise ModelError("Model endpoint must be a valid http(s) URL")
         self.config = config
         self.url = url.rstrip("/")
+        self.display_url = _safe_url(url)
         self.model_name = model_name
         self.api_key = api_key or None
         self.timeout = timeout or config.request_timeout
@@ -108,13 +118,13 @@ class ChatCompletionsModel(ModelAdapter):
                 payload = json.loads(response.read(1_000_000).decode("utf-8"))
             names = [str(item.get("id", "")) for item in payload.get("data", []) if isinstance(item, dict)]
             where = "hosted ara-ng" if self.backend == "hosted" else "local inference"
-            return True, f"Connected to {where} server at {self.url}" + (f"; served model(s): {', '.join(names)}" if names else "")
+            return True, f"Connected to {where} server at {self.display_url}" + (f"; served model(s): {', '.join(names)}" if names else "")
         except urllib.error.HTTPError as exc:
-            return False, f"The {self.backend} server at {self.url} answered HTTP {exc.code}"
+            return False, f"The {self.backend} server at {self.display_url} answered HTTP {exc.code}"
         except (OSError, urllib.error.URLError, json.JSONDecodeError, TimeoutError) as exc:
             if self.backend == "hosted":
-                return False, f"No hosted ara-ng server responded at {self.url}: {exc}"
-            return False, f"No compatible model server responded at {self.url}: {exc}"
+                return False, f"No hosted ara-ng server responded at {self.display_url}: {exc}"
+            return False, f"No compatible model server responded at {self.display_url}: {exc}"
 
     def capabilities(self) -> dict[str, Any]:
         ok, message = self.status()
@@ -150,7 +160,7 @@ class ChatCompletionsModel(ModelAdapter):
             "vision_note": "This text endpoint is not assumed to understand images. Configure [vision].url for a real vision model.",
             "configured_model": self.model_name,
             "served_model": models[0] if models else None,
-            "endpoint": self.url,
+            "endpoint": self.display_url,
         }
 
     def _request_body(self, messages: list[dict[str, Any]], stream: bool) -> bytes:
@@ -183,7 +193,7 @@ class ChatCompletionsModel(ModelAdapter):
                 raise ModelError(f"The {self.backend} server is rate limiting requests (HTTP 429)") from exc
             raise ModelError(f"{self.backend.capitalize()} model request failed (HTTP {exc.code}): {detail}") from exc
         except (OSError, urllib.error.URLError, TimeoutError) as exc:
-            raise BackendUnavailable(f"Could not reach the {self.backend} model server at {self.url}: {exc}") from exc
+            raise BackendUnavailable(f"Could not reach the {self.backend} model server at {self.display_url}: {exc}") from exc
 
     def generate(self, messages: list[dict[str, str]]) -> str:
         response = self._open(self._request_body(messages, stream=False), stream=False)
@@ -312,8 +322,8 @@ def backend_summary(config: Config, model: ModelAdapter | None) -> str:
         return "retrieval-only (no model configured; answers are retrieved notes, not model text)"
     if getattr(model, "backend", "") == "hosted":
         key = "key set" if config.hosted_api_key else "no API key set"
-        return f"hosted ara-ng at {config.hosted_url} ({key})"
-    return f"local model at {config.model_url} (not checked yet)"
+        return f"hosted ara-ng at {getattr(model, 'display_url', config.hosted_url)} ({key})"
+    return f"local backend at {config.model_url} (not checked yet)"
 
 
 def runtime_diagnostics(config: Config) -> list[str]:
@@ -324,8 +334,8 @@ def runtime_diagnostics(config: Config) -> list[str]:
         pass
     lines = [
         f"Backend: {config.active_backend}",
-        f"Hosted ara-ng: {config.hosted_url or 'not configured'}; API key: {'set' if config.hosted_api_key else 'not set'}",
-        f"Local server: {config.model_url}",
+        f"Hosted ara-ng: {_safe_url(config.hosted_url) if config.hosted_url else 'not configured'}; API key: {'set' if config.hosted_api_key else 'not set'}",
+        f"Local server: {_safe_url(config.model_url)}",
         f"Local models folder: {config.local_models_dir}",
     ]
     if available is not None:
