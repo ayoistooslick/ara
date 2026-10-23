@@ -97,7 +97,7 @@ The catalogue URLs were probed against Hugging Face while writing this: 639,446,
 
 Ara prints the size, required free storage, RAM guidance, and licence before asking. It resumes an interrupted `.part` file with a Range request, hashes as it writes, verifies against the publisher's SHA-256 (`x-linked-etag`) when available, and renames the file only after verification. A lock file prevents two downloads of the same target; a bad checksum deletes the partial file. Use `--out` and `--sha256` to supply your own URL and expected digest. Weights land in `$ARA_HOME/models` and are never committed.
 
-On this sandbox, a real Qwen3-0.6B Q8_0 server answered a two-sentence NEPA question with a 23.5 s first token and 32 s completion at 2,048 context on 2 vCPU. This is a measurement of one small model, not a general speed or quality claim.
+On this sandbox, a real Qwen3-0.6B Q8_0 server answered NEPA questions with a first token after 23.5–37.2 s and a full answer after 32–44 s at 2,048 context on 2 vCPU, using about 1.27 GiB of RAM. This is a measurement of one small model, not a general speed or quality claim.
 
 Ara's test suite uses local stub servers to exercise request encoding, streaming, malformed responses, timeouts, unreachable servers, hosted auth, and downloads. Those tests do **not** establish answer quality, African-language fluency, or speed on larger weights.
 

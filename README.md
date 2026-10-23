@@ -19,7 +19,7 @@ On Linux or macOS the same clone-and-install line works if `python3` and `git` a
 git clone https://github.com/ayoistooslick/ara.git && cd ara && python3 -m pip install .
 ```
 
-That is the whole install. It downloads this repository (about 1.5 MB) and one small dependency (`tomli`, only on Python 3.10). The installed package is 918 KB; a fresh virtualenv around it is 18 MB, mostly pip itself. **No model weights, datasets, or training dependencies are downloaded.** On this machine the install took 2.5 seconds.
+That is the whole install. It downloads this repository (about 1.5 MB) and one small dependency (`tomli`, only on Python 3.10). The installed package is 918 KB; a fresh virtualenv around it is 20 MB, mostly pip itself. **No model weights, datasets, or training dependencies are downloaded.** `pip install` took 2.5 s here; creating a fresh venv and installing took 6.7 s.
 
 ## Start chatting
 
@@ -27,7 +27,7 @@ That is the whole install. It downloads this repository (about 1.5 MB) and one s
 ara
 ```
 
-That opens chat directly, in 0.11 s to the welcome screen on this sandbox. You get the frog, one line telling you which backend is active, and a `you>` prompt. Type `/help` inside chat for commands, `/exit` to leave.
+That opens chat directly, about 0.13 s to the welcome screen on this sandbox. You get the frog, one line telling you which backend is active, and a `you>` prompt. Type `/help` inside chat for commands, `/exit` to leave.
 
 If something looks broken, run `ara doctor`. It checks Python, the database, the backend, memory, news cache, and the knowledge corpus, and tells you what to fix in plain English.
 
@@ -43,7 +43,7 @@ Your data lives in `~/.local/share/ara/` (SQLite database plus `config.toml`). S
 
 The active backend is shown at startup, in `/model`, in `ara status`, and in the web interface. You can force one with `ARA_BACKEND=hosted|local|retrieval`.
 
-Me on this sandbox (2 vCPU, Qwen3-0.6B Q8, 2,048-token context, 160-token cap): first token after 23.5 s, full answer after 32 s. The model process used about 1.27 GiB of RAM. That is a real local-model measurement, not a promise; a phone is slower, a laptop is faster, and a hosted endpoint skips the local compute entirely. Retrieval-only replies arrive immediately. No live hosted ara-ng service was available here, so hosted latency is unmeasured.
+Me on this sandbox (2 vCPU, Qwen3-0.6B Q8, 2,048-token context): across runs, first token arrived after 23.5–37.2 s and a full answer after 32–44 s. The model process used about 1.27 GiB of RAM. That is a real local-model measurement, not a promise; a phone is slower, a laptop is faster, and a hosted endpoint skips the local compute entirely. Retrieval-only replies took about 0.13 s. No live hosted ara-ng service was available here, so hosted latency against the real service is unmeasured.
 
 ## Optional local models
 
