@@ -1,6 +1,6 @@
 # Architecture
 
-Ara is one local-first application with two interfaces. The terminal and the web server both construct a `ConversationEngine` over the same `Store`, `KnowledgeBase`, model adapter, memory retriever, safety functions, and configuration. There is no second prompt stack in the browser and no separate web database.
+Ara is one web-first application: the browser interface is primary, and the terminal (`ara chat`) is a secondary maintenance interface. Both construct a `ConversationEngine` over the same `Store`, `KnowledgeBase`, model adapter, memory retriever, safety functions, and configuration. There is no second prompt stack in the browser and no separate web database.
 
 ## Module map
 
@@ -19,16 +19,16 @@ Ara is one local-first application with two interfaces. The terminal and the web
 | `ara/tools.py` | Restricted file tools, safe arithmetic, skill execution |
 | `ara/safety.py` | Credential-assignment redaction |
 | `ara/brand.py` | ASCII frog, terminal hop animation, fallback rules |
-| `ara/cli.py` | Terminal interface and maintenance commands |
+| `ara/cli.py` | Maintenance commands; plain `ara` serves the web app, `ara chat` opens the terminal chat |
 | `ara/web/server.py` | HTTP/SSE server, auth, CSRF, sessions, upload limits, static assets |
 | `ara/web/static/` | HTML, CSS, original frog SVG, browser client |
 | `ara/training/` | Tokenizer, dataset preparation, CPU baseline, checkpoints, export, model card |
 
 ## Request flow
 
-### Terminal
+### Terminal (`ara chat`)
 
-1. `ara` loads `Config`, opens `Store` (migrating if needed), and calls `get_model`: hosted ara-ng when configured, else the local server, else no model.
+1. `ara chat` loads `Config`, opens `Store` (migrating if needed), and calls `get_model`: hosted ara-ng when configured, else the local server, else no model.
 2. `ConversationEngine.respond` or `stream_response` saves the user message, detects explicitly signalled learning, and retrieves relevant memories. If no model is reachable, it returns a reply that starts with `[retrieval-only]` and records that backend, instead of pretending retrieval is generated text.
 3. `KnowledgeBase.interpret` and `context_for` add only relevant Nigerian-context entries; news context is added when the message clearly asks about current events and a cache exists.
 4. The system prompt, bounded history, memories, corrections, and user turn go through the adapter.

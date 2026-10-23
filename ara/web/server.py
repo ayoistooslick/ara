@@ -468,7 +468,7 @@ class AraRequestHandler(BaseHTTPRequestHandler):
             "memory": {
                 "count": len(self.server.store.list_memories(limit=10_000)),
                 "retrieval": retrieval_report(self.server.store, self.server.embedder),
-                "shared_note": "Memory is shared between Terminal Ara and Web Ara on this installation. Conversation threads are isolated per web session.",
+                "shared_note": "Memory notes are shared across every session on this installation (web and local CLI). Conversation threads are isolated per web session.",
             },
             "perception": perception_status(self.server.config),
             "knowledge": self.server.knowledge.stats(),
@@ -724,13 +724,14 @@ class AraRequestHandler(BaseHTTPRequestHandler):
 
 
 def create_server(config: Config, host: str | None = None, port: int | None = None) -> AraServer:
-    bind_host = host or config.web_host
-    bind_port = port or config.web_port
+    bind_host = host if host is not None else config.web_host
+    bind_port = port if port is not None else config.web_port
     loopback = bind_host in {"127.0.0.1", "::1", "localhost"}
-    if not loopback and not config.web_password:
+    if not loopback and not config.web_password and not config.web_insecure_bind:
         raise ValueError(
             "Refusing to bind Ara to a non-loopback address without ARA_WEB_PASSWORD. "
-            "Set a strong password in the environment, then use HTTPS through a reverse proxy."
+            "Set a strong password in the environment, then use HTTPS through a reverse proxy. "
+            "For an isolated container whose platform owns the port, set ARA_WEB_INSECURE_BIND=1."
         )
     return AraServer((bind_host, bind_port), config)
 
@@ -738,9 +739,12 @@ def create_server(config: Config, host: str | None = None, port: int | None = No
 def serve(config: Config, host: str | None = None, port: int | None = None) -> int:
     server = create_server(config, host, port)
     address, actual_port = server.server_address[:2]
+    loopback = address in {"127.0.0.1", "::1", "localhost"}
     print(static_frog())
-    print(f"\nAra web is listening on http://{address}:{actual_port}")
-    print("Local-only by default. Web and terminal share memory; conversations are per session.")
+    print(f"\nÀrà is listening on http://{address}:{actual_port}")
+    print("Open that address in a browser — the web interface is Àrà. 'ara chat' is the secondary terminal interface.")
+    if not loopback and not config.web_password and config.web_insecure_bind:
+        print("ARA_WEB_INSECURE_BIND is on: anyone who can reach this port reaches Àrà. Use only where the platform isolates it.")
     if config.web_password:
         print("Password protection is on (ARA_WEB_PASSWORD). Use HTTPS through a reverse proxy when exposed.")
     print("Press Ctrl+C to stop.")

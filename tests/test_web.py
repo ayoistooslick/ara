@@ -327,10 +327,24 @@ class WebTests(unittest.TestCase):
     def test_non_loopback_requires_a_password(self):
         with patch.dict(os.environ, {}, clear=False):
             os.environ.pop("ARA_WEB_PASSWORD", None)
+            os.environ.pop("ARA_WEB_INSECURE_BIND", None)
             with tempfile.TemporaryDirectory() as tmp:
                 config = Config(home=Path(tmp), allowed_roots=(Path(tmp),))
                 with self.assertRaises(ValueError):
                     create_server(config, host="0.0.0.0", port=0)
+
+    def test_insecure_bind_opt_in_allows_public_bind_without_password(self):
+        # Isolated containers (managed previews) may opt in explicitly.
+        with patch.dict(os.environ, {"ARA_WEB_INSECURE_BIND": "1"}, clear=False):
+            os.environ.pop("ARA_WEB_PASSWORD", None)
+            with tempfile.TemporaryDirectory() as tmp:
+                config = Config(home=Path(tmp), allowed_roots=(Path(tmp),))
+                server = create_server(config, host="0.0.0.0", port=0)
+                try:
+                    self.assertFalse(server.password_required)
+                    self.assertEqual(server.server_address[0], "0.0.0.0")
+                finally:
+                    server.server_close()
 
     def test_memory_controls_and_export(self):
         self.h.session()

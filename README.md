@@ -1,107 +1,45 @@
-# Àrà (`ara`)
+# Àrà
 
-Àrà is a Nigerian AI I'm building in the open. It lives in your terminal and your browser, keeps its own local memory, knows Nigerian expressions and history, and reads Nigerian news without inventing headlines.
+Àrà is a Nigerian AI you can use right now, in a browser. Open the site, type or speak, and it answers with Nigerian context: expressions with their real registers and regions, history and culture notes, and news from Nigerian publishers kept with their sources, links, and dates. It remembers what you explicitly tell it to — and lets you correct, export, or delete every note.
 
-It starts in well under a second and does **not** download model weights when you install it. The hosted model I'm building it around is called **ara-ng**; locally it can talk through any compatible model you run yourself. You can use hosted ara-ng, a local model, or no model at all — in which case Àrà says plainly that it is showing retrieved notes, not generated answers.
+No install and no gigabyte downloads for the user. When the model is unreachable, Àrà says so plainly and shows retrieved notes labelled `[retrieval-only]` — never dressed up as generated answers.
 
-## Install
+## Access the web app
 
-You need Python 3.10 or newer. On Android with Termux:
+The web interface **is** Àrà. On a deployment, open the site URL and start talking — no account is created or required (an operator may put a shared password in front of it).
 
-```sh
-pkg update && pkg install python git
-git clone https://github.com/ayoistooslick/ara.git && cd ara && python3 -m pip install .
-```
-
-On Linux or macOS the same clone-and-install line works if `python3` and `git` are already there:
+To run it yourself:
 
 ```sh
-git clone https://github.com/ayoistooslick/ara.git && cd ara && python3 -m pip install .
+git clone https://github.com/ayoistooslick/ara.git && cd ara
+python3 -m pip install .      # Python 3.10+; downloads ~1.5 MB, no weights
+ara                           # serves the web app at http://127.0.0.1:8787
 ```
 
-That is the whole install. It downloads this repository (about 1.5 MB) and one small dependency (`tomli`, only on Python 3.10). The installed package is 918 KB; a fresh virtualenv around it is 20 MB, mostly pip itself. **No model weights, datasets, or training dependencies are downloaded.** `pip install` took 2.5 s here; creating a fresh venv and installing took 6.7 s.
+Open that address in a browser. Your data lives in `~/.local/share/ara/` (set `ARA_HOME` to move it); upgrades never delete it. `ara doctor` checks the installation in plain English. `ara chat` opens a secondary terminal interface for maintenance and offline use — it is not the product.
 
-## Start chatting
+## What ara-ng is
 
-```sh
-ara
-```
+**ara-ng is my own model, trained by me on my own training data.** It is the model Àrà replies through and the only model name the product shows: the website, the model pill, the About panel, and the API all say `ara-ng`. The server holds the model; the user's phone downloads nothing.
 
-That opens chat directly, about 0.13 s to the welcome screen on this sandbox. You get the frog, one line telling you which backend is active, and a `you>` prompt. Type `/help` inside chat for commands, `/exit` to leave.
+Technically, the backend is an OpenAI-compatible hosted endpoint: set `ARA_HOSTED_URL` (HTTPS) and, if it needs one, `ARA_HOSTED_API_KEY` — the key is read only from the environment and never written to config or backups. The optional `ara model download` catalogue (third-party Qwen GGUF files, Apache-2.0, licences in `THIRD_PARTY_NOTICES.md`) is a local **offline fallback** for people who want inference without any server; it is not Àrà's identity and is never presented as ara-ng.
 
-If something looks broken, run `ara doctor`. It checks Python, the database, the backend, memory, news cache, and the knowledge corpus, and tells you what to fix in plain English.
+## Genuine limitations
 
-Your data lives in `~/.local/share/ara/` (SQLite database plus `config.toml`). Set `ARA_HOME` to keep it somewhere else. Upgrading the app never deletes it; the database migrates itself with a backup first.
+- **A deployment with no reachable model** answers in retrieval-only mode, clearly labelled on every reply. The operator must configure `ARA_HOSTED_URL` for real ara-ng answers.
+- **Vision and voice input** need operator-configured endpoints; camera and microphone work in the browser only in secure contexts (HTTPS or localhost).
+- **Memory is per installation** (one SQLite file), not a cloud account. Web sessions are separate conversation threads; there are no user accounts and no telemetry.
+- **The knowledge corpus is curated and fallible** — reference notes with confidence scores, not the final word on Nigeria. News is cached with real publication dates and is never invented.
+- **ara-ng's weights and training data are not in this repository**; the hosted service is configured externally by whoever runs it.
 
-## How inference works
-
-Àrà picks the first backend that is set up:
-
-1. **Hosted ara-ng.** Set `ARA_HOSTED_URL` to an OpenAI-compatible endpoint and `ARA_HOSTED_API_KEY` if it needs a key. The model name sent to it is `ara-ng`. Hosted is used automatically when configured, must be HTTPS, and the key is read only from the environment — never written to `config.toml` or a backup.
-2. **A local model server.** Any OpenAI-compatible server works; the default is llama.cpp at `http://127.0.0.1:8080/v1`. Point it elsewhere with `ARA_MODEL_URL`.
-3. **Retrieval-only.** With no model, replies come from your saved notes and the Nigerian knowledge corpus. Every such reply starts with `[retrieval-only]` and is never counted or styled as model output.
-
-The active backend is shown at startup, in `/model`, in `ara status`, and in the web interface. You can force one with `ARA_BACKEND=hosted|local|retrieval`.
-
-Me on this sandbox (2 vCPU, Qwen3-0.6B Q8, 2,048-token context): across runs, first token arrived after 23.5–37.2 s and a full answer after 32–44 s. The model process used about 1.27 GiB of RAM. That is a real local-model measurement, not a promise; a phone is slower, a laptop is faster, and a hosted endpoint skips the local compute entirely. Retrieval-only replies took about 0.13 s. No live hosted ara-ng service was available here, so hosted latency against the real service is unmeasured.
-
-## Optional local models
-
-Only do this if you want offline inference. Àrà works without it.
-
-```sh
-ara model download qwen3-0.6b     # 610 MB, about 1.5 GB RAM
-ara model download qwen3-1.7b     # about 1.1 GB, about 2 GB RAM
-ara model download qwen3-4b       # about 2.3 GB, about 4 GB RAM
-```
-
-It prints the exact download size, the free storage it needs, the RAM it wants, and the licence, then asks before starting. Downloads resume with HTTP Range requests, are checked against the publisher's SHA-256 when one is available, and only appear under their real name after the check passes. You can also pass your own `.gguf` URL with `--out` and `--sha256`. The catalogue sizes above were confirmed against Hugging Face without downloading the files.
-
-Then start llama.cpp yourself (Àrà does not start servers or download them silently):
-
-```sh
-llama-server -m ~/.local/share/ara/models/Qwen3-0.6B-Q8_0.gguf --host 127.0.0.1 --port 8080 -c 4096
-ara model status
-```
-
-`ara model status` reports the live server, the served model, and the context size. More detail, including sizing and quantisation notes, is in [docs/MODELS.md](docs/MODELS.md).
-
-## Your stuff stays yours
-
-- Conversations, memories, corrections, goals, and sessions are in one SQLite file under your home directory.
-- Memories can be inspected, corrected, forgotten, and exported: `ara memory inspect`, `ara memory export notes.json`, `ara memory forget-all --yes`.
-- `ara backup` makes a consistent copy; `ara restore FILE` verifies the backup and saves a pre-restore copy of your current data before replacing anything.
-- Model weights live in `models/` (ignored by git); caches are separate. Upgrades do not touch either.
-- No telemetry. Network requests happen only for a backend you configured, news you asked to refresh, or a perception endpoint you configured.
-
-## The rest of the terminal
-
-```sh
-ara ask "How far?"               # one message
-ara conversations                # saved threads
-ara history --limit 20
-ara news --refresh               # publisher feeds; cached reading offline
-ara nigeria search "no wahala"   # curated context, with confidence
-ara nigeria eval                 # offline retrieval/interpretation eval
-ara web                          # browser interface on 127.0.0.1:8787
-```
-
-Inside chat: `/model`, `/memory`, `/history`, `/new`, `/clear`, `/remember`, `/study`, `/news`, `/explain`, `/image`, `/audio`, `/doctor`, `/exit`. End a line with `\` to continue on the next one. `ara status` and `ara doctor` also show how much space the database, backups, models, and caches use.
-
-The browser version uses the same engine and the same memories. It asks for camera or microphone permission only after you press those controls, shows a strip while any sensor is active, and releases all of them with one stop control. See [docs/WEB.md](docs/WEB.md) for deployment and the security model.
-
-## Tests and honest limits
+## Tests
 
 ```sh
 python -m unittest discover -s tests
 ```
 
-The suite runs offline and needs no API key or model weights. It covers CLI and chat persistence, memory and migrations, backup/restore, model streaming and failure against local HTTP stubs, hosted ara-ng selection and auth headers, retrieval-only labelling, resumable checksum-verified downloads, Nigerian corpus validation and evaluation, news parsing and offline reading, web auth/CSRF/rate limits/uploads, and brand rendering.
+The suite runs offline with no API key and no weights. It covers web sessions, CSRF, rate limits, streaming, retrieval-only labelling, memory persistence and corrections, news parsing, uploads, the model adapter against local HTTP stubs, corpus validation, and downloads.
 
-What I could not verify here: a live hosted ara-ng service, a physical Android phone or Termux install, real camera/microphone capture on a device, and real speech/vision quality. The local model number above is from a 0.6B model on this sandbox and says nothing about larger models or phones.
+More detail: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), [docs/MODELS.md](docs/MODELS.md), [docs/WEB.md](docs/WEB.md), [docs/NIGERIAN_KNOWLEDGE.md](docs/NIGERIAN_KNOWLEDGE.md), [docs/NEWS.md](docs/NEWS.md), [docs/TRAINING.md](docs/TRAINING.md), [deploy/README.md](deploy/README.md).
 
-More detail lives in `docs/`: [architecture](docs/ARCHITECTURE.md), [models](docs/MODELS.md), [web](docs/WEB.md), [Nigerian knowledge](docs/NIGERIAN_KNOWLEDGE.md), [news](docs/NEWS.md), [training](docs/TRAINING.md), and [deployment](deploy/README.md).
-
-## What Àrà is not
-
-Àrà is not a model trained from scratch. It is an application around a pretrained model, with a curated Nigerian-context layer, memory, news, and two interfaces. The small training pipeline in `ara/training/` is a CPU teaching baseline for learning how training works; it is not the brain you chat with. The knowledge corpus is fallible reference material with confidence levels, not the final word on Nigeria.
+Àrà is built by Ayodele Ayokunle David. Green, white, and still curious.

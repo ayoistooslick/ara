@@ -1,25 +1,27 @@
 # Web Ara
 
-Web Ara is a browser interface over the same `ConversationEngine`, `Store`, `KnowledgeBase`, and model adapter as Terminal Ara. It is not a separate chatbot and has no separate memory store.
+The web interface is Àrà's primary experience: plain `ara` starts it, and users open a browser — no install, no weight downloads.
+
+It is a browser interface over the same `ConversationEngine`, `Store`, `KnowledgeBase`, and model adapter as the secondary terminal interface (`ara chat`). It is not a separate chatbot and has no separate memory store.
 
 ```sh
-ara web
+ara              # same as 'ara web'
 # http://127.0.0.1:8787
 ```
 
-Options: `ara web --host 127.0.0.1 --port 8787`. Configuration also lives under `[web]` in `config.toml` (`host`, `port`, `session_hours`, `rate_limit`).
+Options: `ara web --host 127.0.0.1 --port 8787`. Configuration also lives under `[web]` in `config.toml` (`host`, `port`, `session_hours`, `rate_limit`). Managed containers (e.g. a sandboxed preview that owns the port) can bind `0.0.0.0` without a password by setting `ARA_WEB_INSECURE_BIND=1`; do that only where the platform isolates the port from untrusted networks.
 
 ## First run and sessions
 
 On first load the client calls `POST /api/session`. On loopback, no password is required. The server creates a random 32-byte token, stores only its SHA-256 hash, and returns an HttpOnly, SameSite=Strict cookie plus a CSRF token. The CSRF token is required in `X-Ara-CSRF` for state-changing requests; same-origin checks are also enforced.
 
 - Sessions expire after `web.session_hours` (default 72).
-- Each session has its own conversation ID. Memory is shared across sessions and with the terminal on the same installation.
+- Each session has its own conversation ID. Memory is shared across sessions and with the local CLI on the same installation.
 - Logging out deletes the session row and clears the cookie.
 - Session attempts are limited per client IP. Chat has a per-session rate limit.
 - These limits are in-memory and reset when the server restarts. They are not a substitute for a reverse-proxy rate limit.
 
-To expose Ara beyond loopback, set `ARA_WEB_PASSWORD` and use HTTPS. The server refuses a non-loopback bind without a password. A `Secure` cookie is set when the request arrives with `X-Forwarded-Proto: https`.
+To expose Ara beyond loopback, set `ARA_WEB_PASSWORD` and use HTTPS. The server refuses a non-loopback bind without a password unless `ARA_WEB_INSECURE_BIND=1` is set for an isolated container. A `Secure` cookie is set when the request arrives with `X-Forwarded-Proto: https`.
 
 ```sh
 ARA_WEB_PASSWORD='a long random password' ara web --host 127.0.0.1 --port 8787

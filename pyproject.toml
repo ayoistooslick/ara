@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ara-companion"
-version = "0.4.0"
-description = "Ara: a local-first Nigerian AI with shared terminal and web interfaces, memory, Nigerian-context knowledge, and honest perception boundaries"
+version = "0.5.0"
+description = "Àrà: a web-first Nigerian AI powered by ara-ng, with memory, Nigerian-context knowledge, source-attributed news, and honest fallbacks"
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [{ name = "Ayodele Ayokunle David" }]

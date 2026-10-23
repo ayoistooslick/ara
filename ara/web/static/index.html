@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#08140f">
-  <meta name="description" content="Ara is a local-first Nigerian AI. It understands Nigerian context without performing slang, remembers what you approve, and runs with one shared core in the terminal and the browser.">
-  <title>Ara — the AI that belongs in Nigeria</title>
+  <meta name="description" content="Àrà is a web-first Nigerian AI. It understands Nigerian context without performing slang, remembers what you approve, and replies through the hosted ara-ng model — no downloads, no install.">
+  <title>Àrà — the AI that belongs in Nigeria</title>
   <link rel="icon" href="/frog.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/styles.css">
   <script src="/app.js" defer></script>
@@ -35,14 +35,14 @@
         <div class="hero-copy">
           <p class="eyebrow"><span class="tri-band" aria-hidden="true"></span> Built in Nigeria. Runs with you.</p>
           <h1>The AI that <em>belongs</em> in Nigeria.</h1>
-          <p class="lede">Ara understands the way Nigerians actually speak, argue, joke, learn, and remember. Not a foreign chatbot wearing a Pidgin toggle. One local-first intelligence, in your terminal and your browser.</p>
+          <p class="lede">Àrà understands the way Nigerians actually speak, argue, joke, learn, and remember. Not a foreign chatbot wearing a Pidgin toggle. Open the page on your phone and talk — no install, no gigabytes to download.</p>
           <div class="hero-actions">
             <button class="button button-green button-large" id="open-app" type="button">Start a conversation</button>
             <a class="button button-ghost button-large" href="#context">See how it reads context</a>
           </div>
           <ul class="hero-facts" aria-label="Key facts">
-            <li><strong>Local by default</strong><span>Your model server, your machine.</span></li>
-            <li><strong>One memory</strong><span>Terminal and web share notes you approve.</span></li>
+            <li><strong>Fast start</strong><span>Open the page and talk. Nothing to install.</span></li>
+            <li><strong>One memory</strong><span>Conversations build notes you approve and can delete.</span></li>
             <li><strong>No caricature</strong><span>No compulsory slang, no fake accent.</span></li>
           </ul>
         </div>
@@ -100,14 +100,14 @@
 
     <section class="capability-section" aria-labelledby="capability-title">
       <div class="section-head">
-        <p class="eyebrow">One core, two interfaces</p>
+        <p class="eyebrow">Web-first. Phone-ready.</p>
         <h2 id="capability-title">Built for the way the day actually goes.</h2>
       </div>
       <div class="capability-grid">
         <article>
           <span class="cap-number">01</span>
           <h3>Talk, type, or speak</h3>
-          <p>Text in the terminal and browser. Voice input and spoken replies in the browser where the device supports them, with visible microphone state and an immediate stop.</p>
+          <p>Type in your browser, or use voice input and spoken replies where your device supports them — with a visible microphone state and an immediate stop.</p>
         </article>
         <article>
           <span class="cap-number">02</span>
@@ -141,29 +141,27 @@
       <div class="memory-copy">
         <p class="eyebrow">A memory you can hold</p>
         <h2>It remembers. You decide what.</h2>
-        <p>Memory lives in a local SQLite database, shared by Terminal Ara and Web Ara on this installation. Every note carries a kind, source, and confidence; memory cards name how the current search works. You can see what Ara is using — and remove it.</p>
+        <p>Memory lives in one SQLite database behind Àrà. Every note carries a kind, source, and confidence; memory cards name how the current search works. You can see what Àrà is using — and remove it.</p>
         <ul class="check-list">
           <li>Recent corrections are surfaced so they carry more weight than older notes.</li>
           <li>Lexical and local vector retrieval when configured, with the method labelled honestly.</li>
-          <li>Export and delete controls in the browser and the CLI.</li>
+          <li>Export and delete controls right in the app.</li>
           <li>No automatic retraining from your conversations.</li>
         </ul>
       </div>
-      <div class="terminal-card" aria-label="Example terminal session">
-        <div class="terminal-bar"><span></span><span></span><span></span><em>ara — local session</em></div>
-        <pre><code>$ ara
-Ara is ready. Type /help for local commands.
+      <div class="terminal-card" aria-label="Example conversation">
+        <div class="terminal-bar"><span></span><span></span><span></span><em>ara — web chat</em></div>
+        <pre><code>you: remember that I prefer explanations in plain English
+ara: Noted. I’ll keep that preference in mind.
 
-you&gt; remember that I prefer explanations in plain English
-ara&gt; Noted. I’ll keep that preference in mind.
-
-you&gt; wetin concern me with their family matter?
-ara&gt; You’re brushing it off — “not my business,” not a real question.
+you: wetin concern me with their family matter?
+ara: You’re brushing it off — “not my business,” not a real question.
      It’s Pidgin; I’ll reply in the same register unless you ask otherwise.
 
-you&gt; /memory
-#1 [preference; explicit-user-statement; confidence 0.85]
-   User prefers explanations in plain English</code></pre>
+you: what do you remember about me?
+ara: #1 [preference; confidence 0.85]
+     User prefers explanations in plain English
+     You can correct or delete it in the Memory tab.</code></pre>
       </div>
     </section>
 
@@ -189,9 +187,9 @@ you&gt; /memory
       <div class="privacy-card">
         <p class="eyebrow">Private by architecture</p>
         <h2>Your words stay where you put them.</h2>
-        <p>No external AI API is required. Images and audio are sent only to the local endpoints you configure, and are not stored by Ara. Camera and microphone start only when you press their buttons, show a visible indicator, and stop when you say so.</p>
+        <p>Your message goes to Àrà's server and, only when you send it, to the ara-ng inference endpoint. Images and audio go only to configured endpoints and are not stored by Àrà. Camera and microphone start only when you press their buttons, show a visible indicator, and stop when you say so.</p>
         <div class="privacy-grid">
-          <div><strong>Local model</strong><span>OpenAI-compatible server on your machine or network.</span></div>
+          <div><strong>ara-ng inference</strong><span>Called only when you send a message. Keys stay on the server, never in the page.</span></div>
           <div><strong>Plain storage</strong><span>SQLite you can back up, inspect, and delete.</span></div>
           <div><strong>Honest limits</strong><span>No vision or voice claim without a configured engine.</span></div>
           <div><strong>Safe actions</strong><span>No shell or filesystem access from anonymous web users.</span></div>
@@ -201,14 +199,14 @@ you&gt; /memory
 
     <section class="closing">
       <img src="/frog.svg" alt="" class="closing-frog" width="120" height="105">
-      <h2>Bring your own model. Keep your own mind.</h2>
-      <p>Ara talks through hosted ara-ng or a local model you choose, works without weights using clearly labelled retrieval, and stays honest about what it cannot do.</p>
+      <h2>Powered by ara-ng. Nothing to install.</h2>
+      <p>Àrà replies through the hosted ara-ng model the moment you open the page. When inference is unavailable, replies come back clearly labelled as retrieval — never dressed up as model text.</p>
       <button class="button button-green button-large" id="open-app-bottom" type="button">Open Ara</button>
     </section>
 
     <footer class="site-footer">
       <div class="brand brand-small"><img src="/frog.svg" alt="" width="32" height="28"><span class="brand-word">ara<span class="brand-dot">.</span></span></div>
-      <p>Local-first Nigerian AI. Built by Ayodele Ayokunle David. Green, white, and still curious.</p>
+      <p>Web-first Nigerian AI, powered by ara-ng. Built by Ayodele Ayokunle David. Green, white, and still curious.</p>
       <p class="footer-links"><a href="/api/health">Health</a> · <a href="#top">Back to top</a></p>
     </footer>
   </section>
@@ -360,7 +358,7 @@ you&gt; /memory
         <div class="view-scroll">
           <div class="view-intro">
             <h2 id="memory-title">Memory, in your hands</h2>
-            <p>Shared with Terminal Ara on this installation. Each note is a note — not a hidden training example. About shows whether retrieval is semantic or a lexical fallback.</p>
+            <p>Shared across every session on this installation. Each note is a note — not a hidden training example. About shows whether retrieval is semantic or a lexical fallback.</p>
           </div>
           <form class="memory-form" id="memory-form">
             <div class="field">
@@ -403,7 +401,7 @@ you&gt; /memory
             <div>
               <p class="eyebrow">The Nigerian frog</p>
               <h2 id="about-title">Ara, plainly</h2>
-              <p>One shared core: model adapter, memory, Nigerian knowledge, tools, and learning behaviour. Terminal and web are two doors into the same room.</p>
+              <p>One core: the hosted ara-ng model, memory, Nigerian knowledge, and learning behaviour. The website is the front door; the terminal is a side door for maintenance.</p>
             </div>
           </div>
           <div class="about-grid">
@@ -489,7 +487,7 @@ you&gt; /memory
   </dialog>
 
   <noscript>
-    <div class="noscript">Ara’s web interface needs JavaScript. The terminal app still works: run <code>ara</code>.</div>
+    <div class="noscript">Àrà’s web interface needs JavaScript enabled in your browser.</div>
   </noscript>
 </body>
 </html>

@@ -105,6 +105,16 @@ class Config:
         value = os.environ.get("ARA_WEB_PASSWORD")
         return value if value else None
 
+    @property
+    def web_insecure_bind(self) -> bool:
+        """Explicit opt-in for a non-loopback bind without a password.
+
+        Only for isolated containers (e.g. a managed preview sandbox) where the
+        platform owns the port and terminates all outside access. Never set it on
+        a host that is reachable from an untrusted network.
+        """
+        return os.environ.get("ARA_WEB_INSECURE_BIND", "").strip().lower() in {"1", "true", "yes"}
+
 
 def _env(name: str, fallback: Any) -> Any:
     value = os.environ.get(name)
@@ -213,7 +223,7 @@ def load_config(home: str | Path | None = None) -> Config:
         news_max_items=_int(news.get("max_items", 40), "news.max_items"),
         news_feeds=tuple(feeds),
         web_host=str(_env("ARA_WEB_HOST", web.get("host", "127.0.0.1"))),
-        web_port=_int(_env("ARA_WEB_PORT", web.get("port", 8787)), "web.port"),
+        web_port=_int(_env("ARA_WEB_PORT", web.get("port", _env("PORT", 8787))), "web.port"),
         web_session_hours=_int(web.get("session_hours", 72), "web.session_hours"),
         web_rate_limit=_int(web.get("rate_limit", 60), "web.rate_limit"),
         knowledge_dir=Path(knowledge_dir).expanduser().resolve() if knowledge_dir else None,

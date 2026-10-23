@@ -27,9 +27,10 @@ from .tools import ToolError, ToolRegistry
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog="ara", description="Ara is a local-first conversational companion.")
+    parser = argparse.ArgumentParser(prog="ara", description="Àrà is a web-first Nigerian AI. Plain 'ara' serves the web interface; 'ara chat' opens the terminal chat.")
     parser.add_argument("--conversation-id", help="Resume a specific saved conversation")
     sub = parser.add_subparsers(dest="command")
+    sub.add_parser("chat", help="Open the terminal chat interface (secondary; the web app is primary)")
     sub.add_parser("status", help="Show local data and model status")
     sub.add_parser("doctor", help="Check the local installation and model connection")
     history = sub.add_parser("history", help="Show recent messages in the active conversation")
@@ -60,7 +61,7 @@ def build_parser() -> argparse.ArgumentParser:
     news = sub.add_parser("news", help="Read Nigerian headlines from publisher feeds")
     news.add_argument("--refresh", action="store_true"); news.add_argument("--offline", action="store_true")
     news.add_argument("--topic", default=None); news.add_argument("--limit", type=int, default=12); news.add_argument("--json", action="store_true")
-    web = sub.add_parser("web", help="Serve the shared-core web interface")
+    web = sub.add_parser("web", help="Serve the web interface (the same thing plain 'ara' does)")
     web.add_argument("--host", default=None); web.add_argument("--port", type=int, default=None)
     animate = sub.add_parser("animate", help="Show the frog; animate in an interactive terminal")
     animate.add_argument("--loops", type=int, default=2); animate.add_argument("--plain", action="store_true")
@@ -388,6 +389,12 @@ def main(argv: list[str] | None = None) -> int:
     try:
         config = load_config()
         if args.command is None:
+            # Web-first: plain 'ara' serves the browser interface.
+            config.home.mkdir(parents=True, exist_ok=True)
+            write_default_config(config)
+            from .web.server import serve
+            return serve(config)
+        if args.command == "chat":
             config.home.mkdir(parents=True, exist_ok=True)
             write_default_config(config)
             store = Store(config.db_path)

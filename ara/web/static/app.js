@@ -380,15 +380,15 @@
     if (navigator.permissions && navigator.permissions.query) {
       pieces.push("You can revoke camera or microphone access in your browser's site settings at any time.");
     }
-    if (!data.perception.vision.available) pieces.push("Image analysis is disabled until a vision endpoint is configured in the terminal.");
+    if (!data.perception.vision.available) pieces.push("Image analysis is disabled until a vision endpoint is configured by the operator.");
     if (!data.perception.transcription.available) pieces.push("Voice input needs a configured local speech-to-text endpoint; typing always works.");
     support.textContent = pieces.join(" ");
   }
 
   /* ------------------------------------------------------------------ router */
   const viewCopy = {
-    chat: { title: "Talk with Ara", kicker: "Local conversation", mode: "chat" },
-    learn: { title: "Study with Ara", kicker: "Learning conversation", mode: "learn" },
+    chat: { title: "Talk with Ara", kicker: "ara-ng · web chat", mode: "chat" },
+    learn: { title: "Study with Ara", kicker: "ara-ng · study mode", mode: "learn" },
     news: { title: "Ara’s news plate", kicker: "Nigerian publishers", mode: null },
     memory: { title: "Memory", kicker: "You decide what stays", mode: null },
     about: { title: "About Ara", kicker: "One shared core", mode: null },
@@ -1224,7 +1224,7 @@
       $("#memory-content").value = "";
       await loadMemory();
       await loadState();
-      toast("Note saved. It will be available to both terminal and web Ara.");
+      toast("Note saved. Àrà will use it in later conversations.");
     } catch (error) {
       toast(error.message, "bad");
     } finally {

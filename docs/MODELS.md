@@ -1,6 +1,8 @@
 # Models, adapters, and hardware
 
-Ara separates its identity and behaviour from the underlying language model. The model is a replaceable component reached through `ara.model.ModelAdapter`; the adapters are OpenAI-compatible HTTP clients for a hosted ara-ng endpoint or a local server.
+**ara-ng is Àrà's own model** — trained by Àrà's builder on his own training data. It is the product identity: the web app, the model selector, and every user-facing label say `ara-ng`. It is reached through a hosted OpenAI-compatible endpoint (`ARA_HOSTED_URL`, model name `ara-ng`, key in `ARA_HOSTED_API_KEY`). The weights and training data are not in this repository.
+
+Under the product identity, the engine treats the model as a replaceable component reached through `ara.model.ModelAdapter`; the adapters are OpenAI-compatible HTTP clients for the hosted ara-ng endpoint or a local fallback server. Third-party model names (e.g. the Qwen GGUF catalogue) appear in this repository only as optional local fallbacks and their legally required licence information — never as Àrà's identity.
 
 ## What Ara does and does not do
 
@@ -150,6 +152,8 @@ Browser speech recognition is not used. Recording is the input path; the server 
 
 ## Identity and provenance
 
-No model is Ara's permanent identity. The default configuration names Qwen because Qwen3 GGUF models are a practical local starting point, but nothing in the engine requires Qwen. A model card, licence, and quantization should travel with any weights you distribute.
+ara-ng is Àrà's model and its only user-facing model name. Nothing in the engine requires any particular architecture: `hosted_model` defaults to `ara-ng` and is what the UI shows when the hosted backend is active.
+
+The Qwen references that remain (the `ara model download` catalogue, the local-profile suggestions) describe **optional local fallback weights** published by third parties. They carry their own Apache-2.0 licences and notices (see `THIRD_PARTY_NOTICES.md`); they are not presented as Àrà's model, and Àrà claims no authorship over them. A model card, licence, and quantization should travel with any weights you distribute.
 
 The training baseline in `ara/training` is separate from the inference adapter. It is an n-gram teaching model, not a production chat model. See [TRAINING.md](TRAINING.md).
