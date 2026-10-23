@@ -249,6 +249,12 @@ class DownloadTests(unittest.TestCase):
         self.assertEqual(result["bytes"], len(PAYLOAD))
         self.assertIn(f"bytes=1234-", RangeHandler.requests)
 
+    def test_uppercase_expected_checksum_is_accepted(self):
+        target = self.root / "model.gguf"
+        result = download(self.url, target, expected_sha256=PAYLOAD_SHA.upper())
+        self.assertTrue(result["checksum_verified"])
+        self.assertEqual(target.read_bytes(), PAYLOAD)
+
     def test_bad_checksum_deletes_partial(self):
         target = self.root / "model.gguf"
         with self.assertRaises(DownloadError):

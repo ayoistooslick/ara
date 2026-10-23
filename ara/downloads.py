@@ -134,6 +134,10 @@ def download(
         info = probe(url, timeout=timeout)
         size = expected_size or (info["size"] if isinstance(info["size"], int) else None)
         sha_expected = (expected_sha256 or (info["sha256"] if isinstance(info["sha256"], str) else None))
+        if sha_expected:
+            sha_expected = sha_expected.strip().lower()
+            if not re.fullmatch(r"[0-9a-f]{64}", sha_expected):
+                raise DownloadError("The expected SHA-256 must be 64 hexadecimal characters.")
         started = part.stat().st_size if part.exists() else 0
         if size and started > size:
             part.unlink()
